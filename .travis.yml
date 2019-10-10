@@ -11,4 +11,4 @@ addons:
 
 
 script:
-  - ./gradlew sonarqube
+  - ./gradlew test
