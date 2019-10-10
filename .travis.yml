@@ -3,5 +3,12 @@ jdk: openjdk11
 
 dist: bionic
 
+addons:
+  sonarcloud:
+    organization: "bartoszkruba-github"
+    token:
+      secure: "01Wf1MTkCMSZurJWQ+h9SeheIxjyekrFG60fBFt4FMQVru7bBAUXleXfYc84r4aSQTwfffDvoqmrrJ5jbz+uYf3mpVttGz8tuEVYBkKgaZcQ3jnJnSCzCcrqcB7el3z46Pa8gkyAclPur0Ix4KPoG1irgxJnfEhGjG9fJxobudUtawrjkvJtTBmXvZCfzjzDnwpXlX3FpNwL0jE238PbFAoTB8AGFptVEA6DUZOpEY2+J2emTqZk7zhll2X51cDBWBxu37V3sLH8F0lrPkmkxe34B4totl12R1zsR6JLFTi4GzV2K1Qjd6jOjBSdiuiEhmiNiUrfOLWzqpDjg7aKvCzEZj9Sey36K/B17g9BpXQCZ66aNidvDZchF8qoTyvhvFCx4Fdi4WiubtQNOBk/R4MesfWQp1hY6BvMxtYebq1PLiu1h1YNhNxLMDuXU90Ny7my3W9RQKylPjn5rpVUJ3JLR7fGNxaX4nYbl/rspjzKjWHr2LHwLzuMKHN3c/c9pZP/D6kKd8KTpZGw4sCCkXpEZ8D+OR0qbvglxOCOZgv1uPlBHrkYOubwlgahwvZbB2oM5/KdEq9l6RqGwGUE3E/E4dsSRIBXQdp5mxy2LxmzflATPLycPmdr4pScaiEQSmtCxxriYgaJ9h7e2NDf8W2riEFf60fG18UIRJwXjaE="
+
+
 script:
-  - gradle test
+  - gradle test sonarqube
