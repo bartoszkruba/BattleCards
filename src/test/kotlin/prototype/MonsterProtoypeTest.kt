@@ -21,7 +21,7 @@ internal class MonsterPrototypeTest {
     }
 
     @Test
-    internal fun testConstructor() {
+    internal fun `Constructor works as it should`() {
         val monsterPrototype = MonsterPrototype(ID, NAME, MIN_HEALTH, MIN_ATTACK)
 
         assertEquals(NAME, monsterPrototype.name)
@@ -31,7 +31,7 @@ internal class MonsterPrototypeTest {
     }
 
     @Test
-    internal fun testEquals() {
+    internal fun `Test equals return true`() {
         val monsterOne = MonsterPrototype(ID, "potato one", MAX_HEALTH, MAX_ATTACK)
 
         val monsterTwo = MonsterPrototype(ID, "potato two", MAX_HEALTH, MAX_ATTACK)
@@ -41,7 +41,7 @@ internal class MonsterPrototypeTest {
     }
 
     @Test
-    internal fun testNotEquals() {
+    internal fun `Test equals returns false`() {
         val monsterOne = MonsterPrototype(1, NAME, MAX_HEALTH, MAX_ATTACK)
         val monsterTwo = MonsterPrototype(2, NAME, MAX_HEALTH, MAX_ATTACK)
 
@@ -50,27 +50,27 @@ internal class MonsterPrototypeTest {
     }
 
     @Test
-    internal fun testCreateMonsterWithTooHighBaseHealth() = shouldThrowRuntimeException(Executable {
+    internal fun `Constructor with too high base health throws exception`() = shouldThrowRuntimeException(Executable {
         MonsterPrototype(ID, NAME, MAX_HEALTH + 1, MAX_ATTACK)
     })
 
     @Test
-    internal fun testCreateMonsterWithTooHighAttack() = shouldThrowRuntimeException(Executable {
+    internal fun `Constructor with too high attack throws exception`() = shouldThrowRuntimeException(Executable {
         MonsterPrototype(ID, NAME, MAX_HEALTH, MAX_ATTACK + 1)
     })
 
     @Test
-    internal fun testCreateMonsterWithTooLowAttack() = shouldThrowRuntimeException(Executable {
+    internal fun `Constructor with too low attack throws exception`() = shouldThrowRuntimeException(Executable {
         MonsterPrototype(ID, NAME, MAX_HEALTH, MIN_ATTACK - 1)
     })
 
     @Test
-    internal fun testCreateMonsterWithTooLowBaseHealth() = shouldThrowRuntimeException(Executable {
+    internal fun `Constructor with too low base health throws exception`() = shouldThrowRuntimeException(Executable {
         MonsterPrototype(ID, NAME, MIN_HEALTH - 1, MIN_ATTACK)
     })
 
     @Test
-    internal fun testCreateMonsterWithTooShortName() = shouldThrowRuntimeException(Executable {
+    internal fun `Constructor with too short name throws exception`() = shouldThrowRuntimeException(Executable {
         val stringBuilder = StringBuilder()
         repeat(MIN_NAME_LENGTH - 1) { stringBuilder.append("a") }
         val name = stringBuilder.toString()
@@ -79,7 +79,7 @@ internal class MonsterPrototypeTest {
     })
 
     @Test
-    internal fun testCreateMonsterWithTooLongName() = shouldThrowRuntimeException(Executable {
+    internal fun `Constructor with too long name throws exception`() = shouldThrowRuntimeException(Executable {
         val stringBuilder = StringBuilder()
         repeat(MAX_NAME_LENGTH + 1) { stringBuilder.append("a") }.toString()
         val name = stringBuilder.toString()
@@ -88,7 +88,7 @@ internal class MonsterPrototypeTest {
     })
 
     @Test
-    internal fun testCreateMonsterWithInvalidName() = shouldThrowRuntimeException(Executable {
+    internal fun `Constructor with invalid name throws exception`() = shouldThrowRuntimeException(Executable {
         MonsterPrototype(ID, " 2#_?!<.)", MAX_HEALTH, MAX_ATTACK)
     })
 
