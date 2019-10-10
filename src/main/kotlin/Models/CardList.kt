@@ -1,29 +1,19 @@
 package Models
 
-abstract class CardList{
+import Card
 
-    private var empty:Boolean
-    private var cards:List<Card>
+abstract class CardList(var empty: Boolean = true,
+                        var cards: ArrayList<Card> = ArrayList()) {
 
-    constructor(){
-        this.empty = true
-        this.cards = emptyList()
-    }
-
-    constructor(empty:Boolean,cards:List<Card>){
-        this.empty = empty
-        this.cards = cards
-    }
-
-    fun cardsInList():List<Card> {
+    fun cardsInList(): ArrayList<Card> {
         return cards
     }
 
-    fun addCard(card:Card):Boolean{
+    fun addCard(card: Card): Boolean {
         return false
     }
 
-    fun removeCard(card:Card):Card{
-        return null
+    fun removeCard(card: Card): Card {
+        return card
     }
 }
