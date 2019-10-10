@@ -8,6 +8,6 @@ internal class HelloWorldTest {
     fun helloWorld() {
         val helloWorld = HelloWorld()
 
-        assertEquals(helloWorld.helloWorld(), "Hello Word", "Hello World")
+        assertEquals(helloWorld.helloWorld(), "Hello World", "Hello World")
     }
 }
