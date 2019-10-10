@@ -28,7 +28,7 @@ test {
 
 sonarqube {
     properties {
-        sonar.projectKey bartoszkruba_BattleCards
+//        sonar.projectKey bartoszkruba_BattleCards
     }
 }
 
