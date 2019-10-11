@@ -2,8 +2,8 @@ package prototype
 
 class PrototypeFileWriter {
 
-    fun writeFile(filePath: String): Boolean {
-        return false
+    fun writeFile( filePath: String, file: String){
+
     }
 
     fun readFile(filePath: String): String? {

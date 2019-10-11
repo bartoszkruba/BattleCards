@@ -3,17 +3,23 @@ package prototype
 import com.fasterxml.jackson.databind.ObjectMapper
 
 class CardLoader(
-    val objectMapper: ObjectMapper = ObjectMapper(),
-    val fileWriter: PrototypeFileWriter = PrototypeFileWriter()
+    private val objectMapper: ObjectMapper = ObjectMapper(),
+    private val fileWriter: PrototypeFileWriter = PrototypeFileWriter()
 ) {
 
-    fun saveCard(card: CardPrototype): Boolean {
+    fun deleteCard(id: Int) {
 
-        return false
     }
 
-    fun saveCards(cards: Collection<CardPrototype>): Boolean {
-        return false
+    fun deleteCards(ids: Collection<Int>) {
+
+    }
+
+    fun saveCard(card: CardPrototype){
+
+    }
+
+    fun saveCards(cards: Collection<CardPrototype>){
     }
 
     fun loadCards(): ArrayList<CardPrototype> {
@@ -21,9 +27,8 @@ class CardLoader(
         return ArrayList()
     }
 
-    fun saveDeck(deckName: String, deck: DeckProtoype): Boolean {
+    fun saveDeck(deckName: String, deck: DeckProtoype){
 
-        return false
     }
 
     fun loadDeck(): DeckProtoype {
