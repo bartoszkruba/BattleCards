@@ -2,17 +2,19 @@ class Monster (name: String = "something",
                type: CardType = CardType.MONSTER,
                cardId: Int = 546,
                var attack: Int = 7,
-               var health: Int = 5) : Card(name, type, cardId){
+               var health: Int = 5) : Card(name, type, cardId) {
 
     fun takeDamge(card: Monster): Boolean {
-        if(this.health < 0){return false}
-        else {
+        if (this.health <= 0) {
+            return false
+        } else {
             this.health = this.health - card.attack
             return true
         }
     }
 
-    fun isDead() : Boolean {
+    fun isDead(): Boolean {
+        if (this.health <= 0) { return true }
         return false
     }
 }
