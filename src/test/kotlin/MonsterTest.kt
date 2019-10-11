@@ -44,5 +44,16 @@ internal class MonsterTest {
 
     @Test
     fun isDead() {
+        var monster1 = Monster("", CardType.MONSTER,235,4, 3);
+        var monster2 = Monster("", CardType.MONSTER,235,7,10);
+
+        monster2.takeDamge(monster1)
+        assertFalse(monster2.isDead())
+
+        monster2.takeDamge(monster1)
+        assertFalse(monster2.isDead())
+
+        monster2.takeDamge(monster1)
+        assertTrue(monster2.isDead())
     }
 }
