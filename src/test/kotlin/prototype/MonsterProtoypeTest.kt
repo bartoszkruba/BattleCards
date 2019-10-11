@@ -31,17 +31,17 @@ internal class MonsterPrototypeTest {
     }
 
     @Test
-    internal fun `Test equals return true`() {
-        val monsterOne = MonsterPrototype(ID, "potato one", MAX_HEALTH, MAX_ATTACK)
+    internal fun `Equals method returns true`() {
+        val monsterOne = MonsterPrototype(ID, "o ne", MAX_HEALTH, MAX_ATTACK)
 
-        val monsterTwo = MonsterPrototype(ID, "potato two", MAX_HEALTH, MAX_ATTACK)
+        val monsterTwo = MonsterPrototype(ID, "two", MAX_HEALTH, MAX_ATTACK)
 
         assertEquals(monsterOne, monsterTwo)
         assertEquals(monsterTwo, monsterOne)
     }
 
     @Test
-    internal fun `Test equals returns false`() {
+    internal fun `Equals method returns false`() {
         val monsterOne = MonsterPrototype(1, NAME, MAX_HEALTH, MAX_ATTACK)
         val monsterTwo = MonsterPrototype(2, NAME, MAX_HEALTH, MAX_ATTACK)
 
@@ -81,7 +81,7 @@ internal class MonsterPrototypeTest {
     @Test
     internal fun `Constructor with too long name throws exception`() = shouldThrowRuntimeException(Executable {
         val stringBuilder = StringBuilder()
-        repeat(MAX_NAME_LENGTH + 1) { stringBuilder.append("a") }.toString()
+        repeat(MAX_NAME_LENGTH + 1) { stringBuilder.append("a") }
         val name = stringBuilder.toString()
 
         MonsterPrototype(ID, name, MAX_HEALTH, MAX_ATTACK)
