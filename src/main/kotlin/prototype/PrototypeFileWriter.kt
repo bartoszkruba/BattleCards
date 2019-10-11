@@ -1,12 +1,11 @@
 package prototype
 
-class PrototypeFileWriter {
+open class PrototypeFileWriter {
 
-    fun writeFile( filePath: String, file: String){
-
+    open fun writeFile( filePath: String, file: String){
     }
 
-    fun readFile(filePath: String): String? {
+    open fun readFile(filePath: String): String? {
         return null
     }
 }

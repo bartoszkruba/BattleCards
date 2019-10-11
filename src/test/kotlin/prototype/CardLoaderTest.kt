@@ -7,11 +7,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.function.Executable
 import org.mockito.BDDMockito.*
-import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.times
-import org.mockito.MockitoAnnotations
 import java.nio.file.Path
 
 internal class CardLoaderTest {
@@ -39,7 +37,6 @@ internal class CardLoaderTest {
     @Mock
     lateinit var fileWriter: PrototypeFileWriter
 
-    @InjectMocks
     lateinit var cardLoader: CardLoader
 
     init {
@@ -61,7 +58,10 @@ internal class CardLoaderTest {
 
     @BeforeEach
     fun setUp() {
-        MockitoAnnotations.initMocks(this)
+        objectMapper = Mockito.mock(ObjectMapper::class.java)
+        fileWriter = Mockito.mock(PrototypeFileWriter::class.java)
+
+        cardLoader = CardLoader(objectMapper, fileWriter)
     }
 
     @Test
@@ -130,13 +130,13 @@ internal class CardLoaderTest {
 
         val path = Path.of("json", "cards.json").toAbsolutePath().toString()
 
-        given(fileWriter.readFile(path)).willThrow(Exception::class.java)
+        given(fileWriter.readFile(path)).willThrow(RuntimeException::class.java)
 
         shouldThrowRuntimeException(Executable { cardLoader.saveCard(monsterOne) })
 
         verify(fileWriter, times(1)).readFile(path)
         verifyNoMoreInteractions(fileWriter)
-        verifyNoInteractions(objectMapper)
+        verifyNoMoreInteractions(objectMapper)
     }
 
     @Test
@@ -242,8 +242,8 @@ internal class CardLoaderTest {
         shouldThrowRuntimeException(Executable { cardLoader.saveCards(list) })
 
         verify(fileWriter, times(1)).readFile(path)
-        Mockito.verifyNoMoreInteractions(fileWriter)
-        Mockito.verifyNoInteractions(objectMapper)
+        verifyNoMoreInteractions(fileWriter)
+        verifyNoMoreInteractions(objectMapper)
     }
 
     @Test
@@ -386,7 +386,7 @@ internal class CardLoaderTest {
 
         verify(fileWriter, times(1)).readFile(path)
         verifyNoMoreInteractions(fileWriter)
-        verifyNoInteractions(objectMapper)
+        verifyNoMoreInteractions(objectMapper)
     }
 
     @Test
