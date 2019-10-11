@@ -1,6 +1,8 @@
+import java.util.*
+
 class Monster (name: String = "something",
                type: CardType = CardType.MONSTER,
-               cardId: Int = 546,
+               cardId: UUID = UUID.randomUUID(),
                var attack: Int = 7,
                var health: Int = 5) : Card(name, type, cardId) {
 
