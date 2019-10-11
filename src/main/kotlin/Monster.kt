@@ -5,7 +5,11 @@ class Monster (name: String = "something",
                var health: Int = 5) : Card(name, type, cardId){
 
     fun takeDamge(card: Monster): Boolean {
-        return false
+        if(this.health < 0){return false}
+        else {
+            this.health = this.health - card.attack
+            return true
+        }
     }
 
     fun isDead() : Boolean {

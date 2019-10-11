@@ -39,7 +39,7 @@ internal class MonsterTest {
         assertTrue(a)
 
         var s = monster2.takeDamge(monster1)
-        assertEquals("Monster is already dead", s)
+        assertFalse(s)
     }
 
     @Test
