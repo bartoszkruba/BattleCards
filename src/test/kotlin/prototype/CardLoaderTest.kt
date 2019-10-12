@@ -91,7 +91,7 @@ internal class CardLoaderTest {
         verify(fileWriter, times(1)).readFile(path)
         verify(objectMapper, times(1)).readValue<ArrayList<CardPrototype>>(initialJSON, type)
 
-        verify(objectMapper, times(1)).writeValueAsString(newJSON)
+        verify(objectMapper, times(1)).writeValueAsString(newCardList)
         verify(fileWriter, times(1)).writeFile(path, newJSON)
         verifyNoMoreInteractions(fileWriter)
         verifyNoMoreInteractions(objectMapper)
@@ -154,7 +154,7 @@ internal class CardLoaderTest {
         given(fileWriter.readFile(path)).willReturn(initialJSON)
         given(objectMapper.readValue<ArrayList<CardPrototype>>(initialJSON, type)).willReturn(initialCardList)
         given(objectMapper.writeValueAsString(newCardList)).willReturn(newJSON)
-        given(fileWriter.writeFile(path, newJSON)).willThrow(Exception::class.java)
+        given(fileWriter.writeFile(path, newJSON)).willThrow(RuntimeException::class.java)
 
         // Testing
 
@@ -163,7 +163,7 @@ internal class CardLoaderTest {
         verify(fileWriter, times(1)).readFile(path)
         verify(objectMapper, times(1)).readValue<ArrayList<CardPrototype>>(initialJSON, type)
 
-        verify(objectMapper, times(1)).writeValueAsString(newJSON)
+        verify(objectMapper, times(1)).writeValueAsString(newCardList)
         verify(fileWriter, times(1)).writeFile(path, newJSON)
         verifyNoMoreInteractions(fileWriter)
         verifyNoMoreInteractions(objectMapper)
