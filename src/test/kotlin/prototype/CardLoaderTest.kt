@@ -25,6 +25,9 @@ internal class CardLoaderTest {
         private const val ID_ONE = 1
         private const val ID_TWO = 2
         private const val ID_THREE = 3
+        private val type =
+            ObjectMapper().typeFactory.constructCollectionType(ArrayList::class.java, CardPrototype::class.java)
+        private val cardsPath = Path.of("json", "cards.json").toAbsolutePath().toString()
     }
 
     private val NAME_ONE: String
@@ -70,16 +73,13 @@ internal class CardLoaderTest {
         // Preparation
 
         val monsterPrototype = MonsterPrototype(ID_ONE, NAME_ONE, MAX_HEALTH, MAX_ATTACK)
-        val path = Path.of("json", "cards.json").toAbsolutePath().toString()
         val initialCardList = ArrayList<CardPrototype>()
         val newCardList = ArrayList(listOf<CardPrototype>(monsterPrototype))
 
         val initialJSON = ob.writeValueAsString(initialCardList)
         val newJSON = ob.writeValueAsString(newCardList)
 
-        val type = ob.typeFactory.constructCollectionType(ArrayList::class.java, CardPrototype::class.java)
-
-        given(fileWriter.readFile(path)).willReturn(initialJSON)
+        given(fileWriter.readFile(cardsPath)).willReturn(initialJSON)
         given(objectMapper.readValue<ArrayList<CardPrototype>>(initialJSON, type)).willReturn(initialCardList)
 
         given(objectMapper.writeValueAsString(newCardList)).willReturn(newJSON)
@@ -88,11 +88,11 @@ internal class CardLoaderTest {
 
         cardLoader.saveCard(monsterPrototype)
 
-        verify(fileWriter, times(1)).readFile(path)
+        verify(fileWriter, times(1)).readFile(cardsPath)
         verify(objectMapper, times(1)).readValue<ArrayList<CardPrototype>>(initialJSON, type)
 
         verify(objectMapper, times(1)).writeValueAsString(newCardList)
-        verify(fileWriter, times(1)).writeFile(path, newJSON)
+        verify(fileWriter, times(1)).writeFile(cardsPath, newJSON)
         verifyNoMoreInteractions(fileWriter)
         verifyNoMoreInteractions(objectMapper)
     }
@@ -103,21 +103,18 @@ internal class CardLoaderTest {
         // Preparation
 
         val monsterPrototype = MonsterPrototype(ID_ONE, NAME_ONE, MAX_HEALTH, MAX_ATTACK)
-        val path = Path.of("json", "cards.json").toAbsolutePath().toString()
 
         val initialList = ArrayList(listOf<CardPrototype>(monsterPrototype))
         val initialJSON = ob.writeValueAsString(initialList)
 
-        val type = ob.typeFactory.constructCollectionType(ArrayList::class.java, CardPrototype::class.java)
-
-        given(fileWriter.readFile(path)).willReturn(initialJSON)
+        given(fileWriter.readFile(cardsPath)).willReturn(initialJSON)
         given(objectMapper.readValue<ArrayList<CardPrototype>>(initialJSON, type)).willReturn(initialList)
 
         // Testing
 
         shouldThrowRuntimeException(Executable { cardLoader.saveCard(monsterPrototype) })
 
-        verify(fileWriter, times(1)).readFile(path)
+        verify(fileWriter, times(1)).readFile(cardsPath)
         verify(objectMapper, times(1)).readValue<ArrayList<CardPrototype>>(initialJSON, type)
 
         verifyNoMoreInteractions(fileWriter)
@@ -128,13 +125,11 @@ internal class CardLoaderTest {
     internal fun `Saving prototype filewriter throws exception`() {
         val monsterOne = MonsterPrototype(ID_ONE, NAME_ONE, MAX_HEALTH, MAX_ATTACK)
 
-        val path = Path.of("json", "cards.json").toAbsolutePath().toString()
-
-        given(fileWriter.readFile(path)).willThrow(RuntimeException::class.java)
+        given(fileWriter.readFile(cardsPath)).willThrow(RuntimeException::class.java)
 
         shouldThrowRuntimeException(Executable { cardLoader.saveCard(monsterOne) })
 
-        verify(fileWriter, times(1)).readFile(path)
+        verify(fileWriter, times(1)).readFile(cardsPath)
         verifyNoMoreInteractions(fileWriter)
         verifyNoMoreInteractions(objectMapper)
     }
@@ -142,29 +137,26 @@ internal class CardLoaderTest {
     @Test
     internal fun `Saving prototype filewriter throws exception during saving`() {
         val monsterPrototype = MonsterPrototype(ID_ONE, NAME_ONE, MAX_HEALTH, MAX_ATTACK)
-        val path = Path.of("json", "cards.json").toAbsolutePath().toString()
         val initialCardList = ArrayList<CardPrototype>()
         val newCardList = ArrayList(listOf<CardPrototype>(monsterPrototype))
 
         val initialJSON = ob.writeValueAsString(initialCardList)
         val newJSON = ob.writeValueAsString(newCardList)
 
-        val type = ob.typeFactory.constructCollectionType(ArrayList::class.java, CardPrototype::class.java)
-
-        given(fileWriter.readFile(path)).willReturn(initialJSON)
+        given(fileWriter.readFile(cardsPath)).willReturn(initialJSON)
         given(objectMapper.readValue<ArrayList<CardPrototype>>(initialJSON, type)).willReturn(initialCardList)
         given(objectMapper.writeValueAsString(newCardList)).willReturn(newJSON)
-        given(fileWriter.writeFile(path, newJSON)).willThrow(RuntimeException::class.java)
+        given(fileWriter.writeFile(cardsPath, newJSON)).willThrow(RuntimeException::class.java)
 
         // Testing
 
         shouldThrowRuntimeException(Executable { cardLoader.saveCard(monsterPrototype) })
 
-        verify(fileWriter, times(1)).readFile(path)
+        verify(fileWriter, times(1)).readFile(cardsPath)
         verify(objectMapper, times(1)).readValue<ArrayList<CardPrototype>>(initialJSON, type)
 
         verify(objectMapper, times(1)).writeValueAsString(newCardList)
-        verify(fileWriter, times(1)).writeFile(path, newJSON)
+        verify(fileWriter, times(1)).writeFile(cardsPath, newJSON)
         verifyNoMoreInteractions(fileWriter)
         verifyNoMoreInteractions(objectMapper)
     }
@@ -177,25 +169,21 @@ internal class CardLoaderTest {
         val initialList = ArrayList<CardPrototype>()
         val newList = ArrayList(listOf(monsterOne, monsterTwo))
 
-        val path = Path.of("json", "cards.json").toAbsolutePath().toString()
-
         val initialJSON = ob.writeValueAsString(initialList)
         val newJSON = ob.writeValueAsString(newList)
 
-        val type = objectMapper.typeFactory.constructCollectionType(ArrayList::class.java, CardPrototype::class.java)
-
-        given(fileWriter.readFile(path)).willReturn(initialJSON)
+        given(fileWriter.readFile(cardsPath)).willReturn(initialJSON)
         given(objectMapper.readValue<ArrayList<CardPrototype>>(initialJSON, type)).willReturn(initialList)
 
         given(objectMapper.writeValueAsString(newList)).willReturn(newJSON)
 
         cardLoader.saveCards(newList)
 
-        verify(fileWriter, times(1)).readFile(path)
+        verify(fileWriter, times(1)).readFile(cardsPath)
         verify(objectMapper, times(1)).readValue<ArrayList<CardPrototype>>(initialJSON, type)
 
         verify(objectMapper, times(1)).writeValueAsString(newList)
-        verify(fileWriter, times(1)).writeFile(path, newJSON)
+        verify(fileWriter, times(1)).writeFile(cardsPath, newJSON)
 
         verifyNoMoreInteractions(fileWriter)
         verifyNoMoreInteractions(objectMapper)
@@ -210,21 +198,18 @@ internal class CardLoaderTest {
         val monsterTwo = MonsterPrototype(ID_TWO, NAME_TWO, MAX_HEALTH, MAX_ATTACK)
         val monsterThree = MonsterPrototype(ID_ONE, NAME_TWO, MAX_HEALTH, MAX_ATTACK)
 
-        val type = objectMapper.typeFactory.constructCollectionType(ArrayList::class.java, CardPrototype::class.java)
-
         val initialList = ArrayList<CardPrototype>(listOf(monsterOne, monsterTwo))
         val cardsToAdd = ArrayList<CardPrototype>(listOf(monsterTwo, monsterThree))
-        val path = Path.of("json", "cards.json").toAbsolutePath().toString()
         val initialJSON = ob.writeValueAsString(initialList)
 
-        given(fileWriter.readFile(path)).willReturn(initialJSON)
+        given(fileWriter.readFile(cardsPath)).willReturn(initialJSON)
         given(objectMapper.readValue<ArrayList<CardPrototype>>(initialJSON, type)).willReturn(initialList)
 
         // Testing
 
         shouldThrowRuntimeException(Executable { cardLoader.saveCards(cardsToAdd) })
 
-        verify(fileWriter, times(1)).readFile(path)
+        verify(fileWriter, times(1)).readFile(cardsPath)
         verify(objectMapper, times(1)).readValue<ArrayList<CardPrototype>>(initialJSON, type)
         verifyNoMoreInteractions(fileWriter)
         verifyNoMoreInteractions(objectMapper)
@@ -235,13 +220,12 @@ internal class CardLoaderTest {
         val monsterOne = MonsterPrototype(ID_ONE, NAME_ONE, MAX_HEALTH, MAX_ATTACK)
         val monsterTwo = MonsterPrototype(ID_TWO, NAME_TWO, MAX_HEALTH, MAX_ATTACK)
         val list = ArrayList<CardPrototype>(listOf(monsterOne, monsterTwo))
-        val path = Path.of("json", "cards.json").toAbsolutePath().toString()
 
-        given(fileWriter.readFile(path)).willThrow(Exception::class.java)
+        given(fileWriter.readFile(cardsPath)).willThrow(RuntimeException::class.java)
 
         shouldThrowRuntimeException(Executable { cardLoader.saveCards(list) })
 
-        verify(fileWriter, times(1)).readFile(path)
+        verify(fileWriter, times(1)).readFile(cardsPath)
         verifyNoMoreInteractions(fileWriter)
         verifyNoMoreInteractions(objectMapper)
     }
@@ -254,25 +238,21 @@ internal class CardLoaderTest {
         val initialList = ArrayList<CardPrototype>()
         val newList = ArrayList(listOf(monsterOne, monsterTwo))
 
-        val path = Path.of("json", "cards.json").toAbsolutePath().toString()
-
         val initialJSON = ob.writeValueAsString(initialList)
         val newJSON = ob.writeValueAsString(newList)
 
-        val type = objectMapper.typeFactory.constructCollectionType(ArrayList::class.java, CardPrototype::class.java)
-
-        given(fileWriter.readFile(path)).willReturn(initialJSON)
+        given(fileWriter.readFile(cardsPath)).willReturn(initialJSON)
         given(objectMapper.readValue<ArrayList<CardPrototype>>(initialJSON, type)).willReturn(initialList)
         given(objectMapper.writeValueAsString(newList)).willReturn(newJSON)
-        given(fileWriter.writeFile(path, newJSON)).willThrow(Exception::class.java)
+        given(fileWriter.writeFile(cardsPath, newJSON)).willThrow(RuntimeException::class.java)
 
         shouldThrowRuntimeException(Executable { cardLoader.saveCards(newList) })
 
-        verify(fileWriter, times(1)).readFile(path)
+        verify(fileWriter, times(1)).readFile(cardsPath)
         verify(objectMapper, times(1)).readValue<ArrayList<CardPrototype>>(initialJSON, type)
 
         verify(objectMapper, times(1)).writeValueAsString(newList)
-        verify(fileWriter, times(1)).writeFile(path, newJSON)
+        verify(fileWriter, times(1)).writeFile(cardsPath, newJSON)
 
         verifyNoMoreInteractions(fileWriter)
         verifyNoMoreInteractions(objectMapper)
@@ -284,18 +264,16 @@ internal class CardLoaderTest {
         // Preparation
 
         val testString = "test"
-        val path = Path.of("json", "cards.json").toAbsolutePath().toString()
 
         val monsterOne = MonsterPrototype(ID_ONE, NAME_ONE, MAX_HEALTH, MAX_ATTACK)
         val monsterTwo = MonsterPrototype(ID_TWO, NAME_TWO, MAX_HEALTH, MAX_ATTACK)
         val monsterThree = MonsterPrototype(ID_THREE, NAME_TWO, MAX_HEALTH, MAX_ATTACK)
 
         val list = ArrayList<CardPrototype>(listOf(monsterOne, monsterTwo, monsterThree))
-        val type = objectMapper.typeFactory.constructCollectionType(ArrayList::class.java, CardPrototype::class.java)
 
         // Testing
 
-        given(fileWriter.readFile(path)).willReturn(testString)
+        given(fileWriter.readFile(cardsPath)).willReturn(testString)
         given(objectMapper.readValue<ArrayList<CardPrototype>>(testString, type)).willReturn(list)
 
         val returnedList = cardLoader.loadCards()
@@ -304,7 +282,7 @@ internal class CardLoaderTest {
         assertEquals(list.size, 3)
         assertTrue(list.containsAll(listOf(monsterOne, monsterTwo, monsterThree)))
 
-        verify(fileWriter, times(1)).readFile(path)
+        verify(fileWriter, times(1)).readFile(cardsPath)
         verify(objectMapper, times(1)).readValue<ArrayList<CardPrototype>>(testString, type)
         verifyNoMoreInteractions(fileWriter)
         verifyNoMoreInteractions(objectMapper)
@@ -325,10 +303,7 @@ internal class CardLoaderTest {
         val testStringOne = "testOne"
         val testStringTwo = "testTwo"
 
-        val type = objectMapper.typeFactory.constructCollectionType(ArrayList::class.java, CardPrototype::class.java)
-        val path = Path.of("json", "cards.json").toAbsolutePath().toString()
-
-        given(fileWriter.readFile(path)).willReturn(testStringOne)
+        given(fileWriter.readFile(cardsPath)).willReturn(testStringOne)
         given(objectMapper.readValue<ArrayList<CardPrototype>>(testStringOne, type)).willReturn(listBefore)
         given(objectMapper.writeValueAsString(listAfter)).willReturn(testStringTwo)
 
@@ -336,10 +311,10 @@ internal class CardLoaderTest {
 
         cardLoader.deleteCard(ID_THREE)
 
-        verify(fileWriter, times(1)).readFile(path)
+        verify(fileWriter, times(1)).readFile(cardsPath)
         verify(objectMapper, times(1)).readValue<ArrayList<CardPrototype>>(testStringOne, type)
         verify(objectMapper, times(1)).writeValueAsString(listAfter)
-        verify(fileWriter, times(1)).writeFile(path, testStringTwo)
+        verify(fileWriter, times(1)).writeFile(cardsPath, testStringTwo)
         verifyNoMoreInteractions(fileWriter)
         verifyNoMoreInteractions(objectMapper)
     }
@@ -356,17 +331,14 @@ internal class CardLoaderTest {
 
         val testString = "test"
 
-        val type = objectMapper.typeFactory.constructCollectionType(ArrayList::class.java, CardPrototype::class.java)
-        val path = Path.of("json", "cards.json").toAbsolutePath().toString()
-
-        given(fileWriter.readFile(path)).willReturn(testString)
+        given(fileWriter.readFile(cardsPath)).willReturn(testString)
         given(objectMapper.readValue<ArrayList<CardPrototype>>(testString, type)).willReturn(list)
 
         // Testing
 
         shouldThrowRuntimeException(Executable { cardLoader.deleteCard(ID_THREE) })
 
-        verify(fileWriter, times(1)).readFile(path)
+        verify(fileWriter, times(1)).readFile(cardsPath)
         verify(objectMapper, times(1)).readValue<ArrayList<CardPrototype>>(testString, type)
     }
 
@@ -375,16 +347,12 @@ internal class CardLoaderTest {
 
         // Preparation
 
-        val testString = "test"
-
-        val path = Path.of("json", "cards.json").toAbsolutePath().toString()
-
-        given(fileWriter.readFile(path)).willThrow(Exception::class.java)
+        given(fileWriter.readFile(cardsPath)).willThrow(Exception::class.java)
 
         // Testing
         cardLoader.deleteCard(ID_ONE)
 
-        verify(fileWriter, times(1)).readFile(path)
+        verify(fileWriter, times(1)).readFile(cardsPath)
         verifyNoMoreInteractions(fileWriter)
         verifyNoMoreInteractions(objectMapper)
     }
@@ -403,22 +371,19 @@ internal class CardLoaderTest {
         val testStringOne = "testOne"
         val testStringTwo = "testTwo"
 
-        val type = objectMapper.typeFactory.constructCollectionType(ArrayList::class.java, CardPrototype::class.java)
-        val path = Path.of("json", "cards.json").toAbsolutePath().toString()
-
-        given(fileWriter.readFile(path)).willReturn(testStringOne)
+        given(fileWriter.readFile(cardsPath)).willReturn(testStringOne)
         given(objectMapper.readValue<ArrayList<CardPrototype>>(testStringOne, type)).willReturn(listBefore)
         given(objectMapper.writeValueAsString(listAfter)).willReturn(testStringTwo)
-        given(fileWriter.writeFile(path, testStringTwo)).willThrow(Exception::class.java)
+        given(fileWriter.writeFile(cardsPath, testStringTwo)).willThrow(Exception::class.java)
 
         // Testing
 
         shouldThrowRuntimeException(Executable { cardLoader.deleteCard(ID_THREE) })
 
-        verify(fileWriter, times(1)).readFile(path)
+        verify(fileWriter, times(1)).readFile(cardsPath)
         verify(objectMapper, times(1)).readValue<ArrayList<CardPrototype>>(testStringOne, type)
         verify(objectMapper, times(1)).writeValueAsString(listAfter)
-        verify(fileWriter, times(1)).writeFile(path, testStringTwo)
+        verify(fileWriter, times(1)).writeFile(cardsPath, testStringTwo)
         verifyNoMoreInteractions(fileWriter)
         verifyNoMoreInteractions(objectMapper)
     }
