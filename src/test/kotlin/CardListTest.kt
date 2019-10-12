@@ -6,6 +6,6 @@ internal class CardListTest {
 
     @Test
     fun removeCardTest() {
-
+        
     }
 }

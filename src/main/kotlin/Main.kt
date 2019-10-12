@@ -8,5 +8,3 @@ class HelloWorld {
     fun helloWorld(): String = "Hello World"
 }
 
-class Card {}
-
