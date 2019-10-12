@@ -22,6 +22,6 @@ abstract class CardList(
             if (cards.size == 0) empty = true
             return removedCard
         }
-        throw RuntimeException()
+        throw RuntimeException("Card cannot be removed, it doesn't exist")
     }
 }
