@@ -29,7 +29,11 @@ class CardLoader(
     fun loadCards(): ArrayList<CardPrototype> = loadCardsFile()
 
     fun deleteCard(id: Int) {
-
+        val loaded = loadCards()
+        loaded.find { it.id == id }?.let {
+            loaded.remove(it)
+            saveCardsFile(loaded)
+        } ?: kotlin.run { throw RuntimeException("Card do not exist!") }
     }
 
     fun deleteCards(ids: Collection<Int>) {

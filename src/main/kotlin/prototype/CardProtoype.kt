@@ -1,7 +1,10 @@
 package prototype
 
+import java.util.prefs.Preferences.MAX_NAME_LENGTH
+
+
 // todo add type
-abstract class CardPrototype(id: Int, name: String) {
+abstract class CardPrototype(open val id: Int, open val name: String) {
 
     companion object {
         // todo get information from settings
@@ -9,10 +12,4 @@ abstract class CardPrototype(id: Int, name: String) {
         val MIN_NAME_LENGTH = 1
         val NAME_REGEX = Regex("[a-zA-z ]*")
     }
-
-    init {
-        if (name.length < MIN_NAME_LENGTH || name.length > MAX_NAME_LENGTH || !name.matches(NAME_REGEX))
-            throw RuntimeException("Invalid Name")
-    }
-
 }

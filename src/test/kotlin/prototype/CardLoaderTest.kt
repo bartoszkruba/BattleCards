@@ -358,10 +358,10 @@ internal class CardLoaderTest {
 
         // Preparation
 
-        given(fileWriter.readFile(cardsPath)).willThrow(Exception::class.java)
+        given(fileWriter.readFile(cardsPath)).willThrow(RuntimeException::class.java)
 
         // Testing
-        cardLoader.deleteCard(ID_ONE)
+        shouldThrowRuntimeException(Executable { cardLoader.deleteCard(ID_ONE) })
 
         verify(fileWriter, times(1)).readFile(cardsPath)
         verifyNoMoreInteractions(fileWriter)
@@ -385,7 +385,7 @@ internal class CardLoaderTest {
         given(fileWriter.readFile(cardsPath)).willReturn(testStringOne)
         given(objectMapper.readValue<ArrayList<CardPrototype>>(testStringOne, type)).willReturn(listBefore)
         given(objectMapper.writeValueAsString(listAfter)).willReturn(testStringTwo)
-        given(fileWriter.writeFile(cardsPath, testStringTwo)).willThrow(Exception::class.java)
+        given(fileWriter.writeFile(cardsPath, testStringTwo)).willThrow(RuntimeException::class.java)
 
         // Testing
 
