@@ -14,6 +14,13 @@ abstract class CardList(var empty: Boolean = true,
     }
 
     fun removeCard(card: Card): Card {
-        return card
+        val indexToRemoveFrom = cards.indexOf(card)
+        if(indexToRemoveFrom != -1){
+            val removedCard:Card = cards.removeAt(indexToRemoveFrom);
+            if(cards.size == 0) empty = true
+            return removedCard
+        }else{
+            throw RuntimeException()
+        }
     }
 }
