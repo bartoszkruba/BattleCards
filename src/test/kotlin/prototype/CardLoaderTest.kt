@@ -289,6 +289,17 @@ internal class CardLoaderTest {
     }
 
     @Test
+    internal fun `Loading cards filewriter throws exception`() {
+        given(fileWriter.readFile(cardsPath)).willThrow(RuntimeException::class.java)
+
+        shouldThrowRuntimeException(Executable { cardLoader.loadCards() })
+
+        verify(fileWriter, times(1)).readFile(cardsPath)
+        verifyNoMoreInteractions(fileWriter)
+        verifyNoMoreInteractions(objectMapper)
+    }
+
+    @Test
     internal fun `Delete card goes right`() {
 
         // Preparation

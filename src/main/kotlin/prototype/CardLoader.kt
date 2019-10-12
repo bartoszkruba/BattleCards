@@ -26,10 +26,7 @@ class CardLoader(
         saveCardsFile(loaded)
     }
 
-    fun loadCards(): ArrayList<CardPrototype> {
-
-        return ArrayList()
-    }
+    fun loadCards(): ArrayList<CardPrototype> = loadCardsFile()
 
     fun deleteCard(id: Int) {
 
