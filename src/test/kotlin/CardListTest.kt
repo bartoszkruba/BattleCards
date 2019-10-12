@@ -8,7 +8,7 @@ import java.lang.RuntimeException
 internal class CardListTest {
 
     @Test
-    fun removeCardTest() {
+    internal fun removeCardTest() {
         var pigMonster: Card = Monster("Pig")
         var rabbitMonster: Card = Monster("Rabbit")
         var deck: Deck = Deck(false, arrayListOf(pigMonster))
