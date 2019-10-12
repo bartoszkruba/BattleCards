@@ -2,10 +2,12 @@ package Models
 
 import Card
 
-abstract class CardList(
-    var empty: Boolean = true,
+abstract class CardList(var empty: Boolean, cards: ArrayList<Card>) {
     var cards: ArrayList<Card> = ArrayList()
-) {
+
+    init {
+        this.cards = ArrayList(cards)
+    }
 
     fun cardsInList(): ArrayList<Card> {
         return cards
