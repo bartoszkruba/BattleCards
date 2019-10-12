@@ -1,6 +1,7 @@
 package Models
 
 import Card
+import Monster
 
 class Deck(
     empty: Boolean = true,
@@ -11,6 +12,6 @@ class Deck(
     fun shuffleDeck() {}
 
     fun drawCard(): Card {
-        return Card()
+        return Monster()
     }
 }
