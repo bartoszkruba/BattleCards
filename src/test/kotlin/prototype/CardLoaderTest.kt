@@ -402,6 +402,114 @@ internal class CardLoaderTest {
     }
 
     @Test
+    internal fun `Deleting cards goes right`() {
+
+        // Preparation
+
+        val monsterOne = MonsterPrototype(ID_ONE, NAME_ONE, MAX_HEALTH, MAX_ATTACK)
+        val monsterTwo = MonsterPrototype(ID_TWO, NAME_TWO, MAX_HEALTH, MAX_ATTACK)
+        val monsterThree = MonsterPrototype(ID_THREE, NAME_THREE, MAX_HEALTH, MAX_ATTACK)
+
+        val testStringOne = "test one"
+        val testStringTwo = "test two"
+
+        val initialList = ArrayList<CardPrototype>(listOf(monsterOne, monsterTwo, monsterThree))
+        val newList = ArrayList<CardPrototype>(listOf(monsterThree))
+
+        given(fileWriter.readFile(cardsPath)).willReturn(testStringOne)
+        given(objectMapper.readValue<ArrayList<CardPrototype>>(testStringOne, type)).willReturn(initialList)
+        given(objectMapper.writeValueAsString(newList)).willReturn(testStringTwo)
+
+        // Testing
+
+        cardLoader.deleteCards(listOf(ID_ONE, ID_TWO, 123))
+
+        verify(fileWriter, times(1)).readFile(cardsPath)
+        verify(objectMapper, times(1)).readValue<ArrayList<CardPrototype>>(testStringOne, type)
+        verify(objectMapper, times(1)).writeValueAsString(newList)
+        verify(fileWriter, times(1)).writeFile(cardsPath, testStringTwo)
+
+        verifyNoMoreInteractions(fileWriter)
+        verifyNoMoreInteractions(objectMapper)
+    }
+
+    @Test
+    internal fun `Deleting cards filewriter throws exception`() {
+        given(fileWriter.readFile(cardsPath)).willThrow(RuntimeException::class.java)
+
+        shouldThrowRuntimeException(Executable { cardLoader.deleteCards(listOf(1, 2, 3)) })
+
+        verify(fileWriter, times(1)).readFile(cardsPath)
+        verifyNoMoreInteractions(fileWriter)
+        verifyNoMoreInteractions(objectMapper)
+    }
+
+    @Test
+    internal fun `Deleting cards filewriter throws exception during saving`() {
+
+        // Preparation
+
+        val monsterOne = MonsterPrototype(ID_ONE, NAME_ONE, MAX_HEALTH, MAX_ATTACK)
+        val monsterTwo = MonsterPrototype(ID_TWO, NAME_TWO, MAX_HEALTH, MAX_ATTACK)
+        val monsterThree = MonsterPrototype(ID_THREE, NAME_THREE, MAX_HEALTH, MAX_ATTACK)
+
+        val testStringOne = "test one"
+        val testStringTwo = "test two"
+
+        val initialList = ArrayList<CardPrototype>(listOf(monsterOne, monsterTwo, monsterThree))
+        val newList = ArrayList<CardPrototype>(listOf(monsterThree))
+
+        given(fileWriter.readFile(cardsPath)).willReturn(testStringOne)
+        given(objectMapper.readValue<ArrayList<CardPrototype>>(testStringOne, type)).willReturn(initialList)
+        given(objectMapper.writeValueAsString(newList)).willReturn(testStringTwo)
+        given(fileWriter.writeFile(cardsPath, testStringTwo)).willThrow(RuntimeException::class.java)
+
+        // Testing
+
+        shouldThrowRuntimeException(Executable { cardLoader.deleteCards(listOf(ID_ONE, ID_TWO, 123)) })
+
+        verify(fileWriter, times(1)).readFile(cardsPath)
+        verify(objectMapper, times(1)).readValue<ArrayList<CardPrototype>>(testStringOne, type)
+        verify(objectMapper, times(1)).writeValueAsString(newList)
+        verify(fileWriter, times(1)).writeFile(cardsPath, testStringTwo)
+
+        verifyNoMoreInteractions(fileWriter)
+        verifyNoMoreInteractions(objectMapper)
+    }
+
+    @Test
+    internal fun `Deleting cards no matching id`() {
+
+        // Preparation
+
+        val monsterOne = MonsterPrototype(ID_ONE, NAME_ONE, MAX_HEALTH, MAX_ATTACK)
+        val monsterTwo = MonsterPrototype(ID_TWO, NAME_TWO, MAX_HEALTH, MAX_ATTACK)
+        val monsterThree = MonsterPrototype(ID_THREE, NAME_THREE, MAX_HEALTH, MAX_ATTACK)
+
+        val testStringOne = "test one"
+        val testStringTwo = "test two"
+
+        val initialList = ArrayList<CardPrototype>(listOf(monsterOne, monsterTwo, monsterThree))
+        val newList = ArrayList<CardPrototype>(listOf(monsterOne, monsterTwo, monsterThree))
+
+        given(fileWriter.readFile(cardsPath)).willReturn(testStringOne)
+        given(objectMapper.readValue<ArrayList<CardPrototype>>(testStringOne, type)).willReturn(initialList)
+        given(objectMapper.writeValueAsString(newList)).willReturn(testStringTwo)
+
+        // Testing
+
+        cardLoader.deleteCards(listOf(123, 12312, 1321))
+
+        verify(fileWriter, times(1)).readFile(cardsPath)
+        verify(objectMapper, times(1)).readValue<ArrayList<CardPrototype>>(testStringOne, type)
+        verify(objectMapper, times(1)).writeValueAsString(newList)
+        verify(fileWriter, times(1)).writeFile(cardsPath, testStringTwo)
+
+        verifyNoMoreInteractions(fileWriter)
+        verifyNoMoreInteractions(objectMapper)
+    }
+
+    @Test
     fun saveDeck() {
     }
 
