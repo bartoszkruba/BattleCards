@@ -42,12 +42,12 @@ class CardLoader(
 
     fun deleteCards(ids: Collection<Int>) = saveCardsFile(loadCardsFile().filter { !ids.contains(it.id) })
 
-    fun saveDeck(deckName: String, deck: DeckProtoype) {
+    fun saveDeck(deckName: String, deck: DeckPrototype) {
 
     }
 
-    fun loadDeck(): DeckProtoype {
-        return DeckProtoype()
+    fun loadDeck(): DeckPrototype {
+        return DeckPrototype("dd")
     }
 
     private fun loadCardsFile(): ArrayList<CardPrototype> {
