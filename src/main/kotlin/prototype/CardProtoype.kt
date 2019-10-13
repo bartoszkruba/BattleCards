@@ -1,9 +1,20 @@
 package prototype
 
-import java.util.prefs.Preferences.MAX_NAME_LENGTH
+import com.fasterxml.jackson.annotation.JsonSubTypes
+import com.fasterxml.jackson.annotation.JsonTypeInfo
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type
 
 
-// todo add type
+//// todo add type
+//@JsonTypeInfo(
+//    visible = true,
+//    use = JsonTypeInfo.Id.NAME,
+//    include = JsonTypeInfo.As.PROPERTY,
+//    property = "type"
+//)
+//@JsonSubTypes(
+//    Type(value = MonsterPrototype::class, name = "monster")
+//)
 abstract class CardPrototype(open val id: Int, open val name: String) {
 
     companion object {

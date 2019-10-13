@@ -8,6 +8,10 @@ class CardLoader(
     private val fileWriter: PrototypeFileWriter = PrototypeFileWriter()
 ) {
 
+    init {
+        objectMapper.enableDefaultTyping()
+    }
+
     private val cardsPath = Path.of("json", "cards.json").toAbsolutePath().toString()
     private val listType =
         ObjectMapper().typeFactory.constructCollectionType(ArrayList::class.java, CardPrototype::class.java)

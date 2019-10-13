@@ -65,6 +65,8 @@ internal class CardLoaderTest {
         fileWriter = Mockito.mock(PrototypeFileWriter::class.java)
 
         cardLoader = CardLoader(objectMapper, fileWriter)
+
+        Mockito.verify(objectMapper, times(1)).enableDefaultTyping()
     }
 
     @Test

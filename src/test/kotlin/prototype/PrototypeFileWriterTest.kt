@@ -11,6 +11,12 @@ internal class PrototypeFileWriterTest {
     companion object {
         private val testPath = Path.of("test", "test.json").toAbsolutePath().toString()
 
+        @BeforeAll
+        @JvmStatic
+        internal fun beforeAll() {
+            Path.of("test").toFile().mkdir()
+        }
+
         @AfterAll
         @JvmStatic
         internal fun afterAll() {

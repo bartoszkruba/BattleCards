@@ -1,13 +1,16 @@
 package prototype
 
 
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
 import kotlin.RuntimeException
 
-data class MonsterPrototype(
-    override val id: Int,
-    override val name: String,
-    val baseHealth: Int,
-    val baseAttack: Int
+
+data class MonsterPrototype @JsonCreator constructor(
+    @JsonProperty("id") override val id: Int,
+    @JsonProperty("name") override val name: String,
+    @JsonProperty("baseHealth") val baseHealth: Int,
+    @JsonProperty("baseAttack") val baseAttack: Int
 ) : CardPrototype(id, name) {
 
     companion object {
