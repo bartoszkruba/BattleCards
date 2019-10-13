@@ -2,13 +2,18 @@ package prototype
 
 import java.nio.file.Path
 
-class InitCards {
-    var counter = 1
+class InitCards(private val cardLoader: CardLoader = CardLoader()) {
+    private var counter = 1
 
     fun initCards() {
         Path.of("json").toAbsolutePath().toFile().mkdir()
 
-        val cardLoader = CardLoader()
+        println("Deleting old cards...")
+        val cardsToDelete = ArrayList<Int>()
+        cardLoader.loadCards().forEach { cardsToDelete.add(it.id) }
+        cardLoader.deleteCards(cardsToDelete)
+
+        println("Creating new cards...")
         val cards = ArrayList<CardPrototype>()
         cards.add(newMonster("Ogre", 3, 7))
         cards.add(newMonster("Spider", 4, 4))
@@ -26,18 +31,23 @@ class InitCards {
         cards.add(newMonster("Elf", 8, 6))
         cards.add(newMonster("Demon", 6, 10))
 
-        val cardsToDelete = ArrayList<Int>()
-        cardLoader.loadCards().forEach { cardsToDelete.add(it.id) }
-        cardLoader.deleteCards(cardsToDelete)
+        println("Saving new cards...")
         cardLoader.saveCards(cards)
+        println("Done!")
     }
 
-    private fun newMonster(name: String, baseHealth: Int, baseAttack: Int) = MonsterPrototype(
-        id = counter++,
-        name = name,
-        baseHealth = baseHealth,
-        baseAttack = baseAttack
-    )
+    private fun newMonster(name: String, baseHealth: Int, baseAttack: Int): MonsterPrototype {
+        val monster = MonsterPrototype(
+            id = counter++,
+            name = name,
+            baseHealth = baseHealth,
+            baseAttack = baseAttack
+        )
+
+        println("Created monster: $monster")
+
+        return monster
+    }
 
 }
 

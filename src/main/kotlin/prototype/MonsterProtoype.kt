@@ -28,18 +28,6 @@ data class MonsterPrototype @JsonCreator constructor(
         else if (baseAttack < MIN_ATTACK || baseAttack > MAX_ATTACK) throw RuntimeException("Invalid Base Attack")
     }
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as MonsterPrototype
-
-        if (id != other.id) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        return id
-    }
+    override fun equals(other: Any?) = super.equals(other)
+    override fun hashCode() = super.hashCode()
 }

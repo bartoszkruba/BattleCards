@@ -40,10 +40,12 @@ internal class MonsterPrototypeTest {
         assertEquals(monsterTwo, monsterOne)
     }
 
+
     @Test
     internal fun `Equals method returns false`() {
         val monsterOne = MonsterPrototype(1, NAME, MAX_HEALTH, MAX_ATTACK)
         val monsterTwo = MonsterPrototype(2, NAME, MAX_HEALTH, MAX_ATTACK)
+
 
         assertNotEquals(monsterOne, monsterTwo)
         assertNotEquals(monsterTwo, monsterOne)
