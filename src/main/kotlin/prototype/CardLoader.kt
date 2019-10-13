@@ -40,9 +40,7 @@ class CardLoader(
         } ?: kotlin.run { throw RuntimeException("Card do not exist!") }
     }
 
-    fun deleteCards(ids: Collection<Int>) {
-
-    }
+    fun deleteCards(ids: Collection<Int>) = saveCardsFile(loadCardsFile().filter { !ids.contains(it.id) })
 
     fun saveDeck(deckName: String, deck: DeckProtoype) {
 
@@ -64,7 +62,7 @@ class CardLoader(
         return objectMapper.readValue<ArrayList<CardPrototype>>(file, listType)
     }
 
-    private fun saveCardsFile(cards: ArrayList<CardPrototype>) = try {
+    private fun saveCardsFile(cards: Collection<CardPrototype>) = try {
         fileWriter.writeFile(cardsPath, objectMapper.writeValueAsString(cards))
     } catch (ex: Exception) {
         throw RuntimeException(ex.message)

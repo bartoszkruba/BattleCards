@@ -28,7 +28,6 @@ class InitCards {
 
         val cardsToDelete = ArrayList<Int>()
         cardLoader.loadCards().forEach { cardsToDelete.add(it.id) }
-        println(cardsToDelete)
         cardLoader.deleteCards(cardsToDelete)
         cardLoader.saveCards(cards)
     }
