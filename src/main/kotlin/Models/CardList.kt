@@ -1,6 +1,8 @@
 package Models
 
 import Card
+import Monster
+import utilities.Utils
 
 abstract class CardList(var empty: Boolean, cards: ArrayList<Card>) {
     var cards: ArrayList<Card> = ArrayList()
@@ -14,7 +16,11 @@ abstract class CardList(var empty: Boolean, cards: ArrayList<Card>) {
     }
 
     fun addCard(card: Card): Boolean {
-        return cards.add(card)
+        var copy: Card = Utils.clone(card) as Card
+
+        println(copy.cardId.equals(card.cardId)) // true
+
+        return cards.add(copy)
     }
 
     fun removeCard(card: Card): Card {
