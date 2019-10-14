@@ -32,6 +32,12 @@ internal class MonsterTest {
         assertEquals(6, monster2.attack)
         assertEquals(4, monster2.health)
 
+        try {
+            monster = Monster("",6,4);
+        }catch (e: NumberFormatException){
+            println("*************** Exception ************")
+        }
+
     }
 
     @Test
