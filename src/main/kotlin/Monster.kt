@@ -1,0 +1,22 @@
+import java.util.*
+
+class Monster (name: String = "something",
+               type: CardType = CardType.MONSTER,
+               cardId: UUID = UUID.randomUUID(),
+               var attack: Int = 7,
+               var health: Int = 5) : Card(name, type, cardId) {
+
+    fun takeDamge(card: Monster): Boolean {
+        if (this.health <= 0) {
+            return false
+        } else {
+            this.health = this.health - card.attack
+            return true
+        }
+    }
+
+    fun isDead(): Boolean {
+        if (this.health <= 0) { return true }
+        return false
+    }
+}
