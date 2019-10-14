@@ -14,7 +14,7 @@ abstract class CardList(var empty: Boolean, cards: ArrayList<Card>) {
     }
 
     fun addCard(card: Card): Boolean {
-        return false
+        return cards.add(card)
     }
 
     fun removeCard(card: Card): Card {
