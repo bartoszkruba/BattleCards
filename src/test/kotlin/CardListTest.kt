@@ -19,13 +19,12 @@ internal class CardListTest {
         var deck: Deck = Deck()
 
         assertTrue(deck.addCard(ogreCard))
-        assertEquals(deck.cards.size, 1)
-        assertEquals(deck.cards[0], ogreCard)
+        assertEquals(1, deck.cards.size, "The card wasn't added to the list")
+        assertEquals(deck.cards[0], ogreCard, "Added card doesn't match the card that was added")
 
         assertTrue(deck.addCard(wolfCard))
-        assertEquals(deck.cards.size, 2)
-        assertEquals(deck.cards[1], wolfCard)
-
+        assertEquals(2, deck.cards.size, "The card wasn't added to the list")
+        assertEquals(deck.cards[1], wolfCard, "Added card doesn't match the card that was added")
     }
 
     @Test
