@@ -20,9 +20,7 @@ internal class CardListTest {
 
         assertTrue(deck.addCard(ogreCard))
         assertEquals(1, deck.cards.size, "The card wasn't added to the list")
-        assertEquals(deck.cards[0].name, ogreCard.name, "Added card doesn't match the card that was added")
-        assertEquals(deck.cards[0].type, ogreCard.type, "Added card doesn't match the card that was added")
-        assertEquals(deck.cards[0].cardId, ogreCard.cardId, "Added card doesn't match the card that was added")
+        assertEquals(deck.cards[0], ogreCard, "Added card doesn't match the card that was added")
 
         ogreCard.attack = 20
         var deckOgre: Monster = deck.cards[0] as Monster
@@ -30,9 +28,7 @@ internal class CardListTest {
 
         assertTrue(deck.addCard(wolfCard))
         assertEquals(2, deck.cards.size, "The card wasn't added to the list")
-        assertEquals(deck.cards[1].name, wolfCard.name, "Added card doesn't match the card that was added")
-        assertEquals(deck.cards[1].type, wolfCard.type, "Added card doesn't match the card that was added")
-        assertEquals(deck.cards[1].cardId, wolfCard.cardId, "Added card doesn't match the card that was added")
+        assertEquals(deck.cards[1], wolfCard, "Added card doesn't match the card that was added")
 
         wolfCard.attack = 20
         var deckWolf: Monster = deck.cards[1] as Monster
