@@ -125,7 +125,7 @@ internal class CardListTest {
         assertFalse(allVariables["empty"] as Boolean)
         cardListCards = allVariables["cards"] as ArrayList<Card>
         assertEquals(2, cardListCards.size)
-        assertTrue(pigMonster !== listOfCards[0])
+        assertTrue(pigMonster !== cardListCards[0])
         assertTrue(cardListCards.containsAll(listOfCards))
         listOfCards.clear()
         assertTrue(cardListCards.isNotEmpty())
