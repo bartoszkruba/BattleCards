@@ -39,6 +39,26 @@ internal class CardListTest {
     }
 
     @Test
+    internal fun cardsInListTest() {
+        var pigMonster: Monster = Monster("Pig")
+        var rabbitMonster: Monster = Monster("Rabbit")
+        var deck: Deck = Deck(false, arrayListOf(pigMonster, rabbitMonster))
+
+        var deckClass = deck::class
+        var deckClassVariables = getAllVariables(deckClass, deck)
+        var originalDeckInClass = deckClassVariables["cards"] as ArrayList<Card>
+        assertTrue(deck.cardsInList() !== originalDeckInClass, "Returned list is not a copy of original list")
+        assertTrue(
+            deck.cardsInList()[0] !== originalDeckInClass[0],
+            "Returned objects in list is not a copy of the original object"
+        )
+        assertTrue(
+            deck.cardsInList().containsAll(originalDeckInClass),
+            "The returned copy doesnt contain the objects from the original list"
+        )
+    }
+
+    @Test
     internal fun removeCardTest() {
         var pigMonster: Monster = Monster("Pig")
         var rabbitMonster: Monster = Monster("Rabbit")
@@ -52,7 +72,11 @@ internal class CardListTest {
             assertTrue(false, "Something went wrong when trying to remove a card")
         }
 
-        assertEquals(pigMonster.cardId, removedCard.cardId, "The removed card doesn't match the card we wanted to remove")
+        assertEquals(
+            pigMonster.cardId,
+            removedCard.cardId,
+            "The removed card doesn't match the card we wanted to remove"
+        )
         assertEquals(0, deck.cards.size, "The card did not get removed, a card still exists in the deck")
         assertEquals(true, deck.empty, "The boolean empty should be set to true because no cards exists")
 
@@ -64,7 +88,11 @@ internal class CardListTest {
             assertTrue(false, "Something went wrong when trying to remove a card")
         }
 
-        assertEquals(rabbitMonster.cardId, removedCard.cardId, "The removed card doesn't match the card we wanted to remove")
+        assertEquals(
+            rabbitMonster.cardId,
+            removedCard.cardId,
+            "The removed card doesn't match the card we wanted to remove"
+        )
         assertEquals(1, deck.cards.size, "The card did not get removed, card array size is not correct")
         assertEquals(pigMonster, deck.cards[0], "The card that should exist is not the on existing")
 
@@ -78,22 +106,22 @@ internal class CardListTest {
     @Test
     internal fun handConstructorTest() {
         cardListConstructorTest(Hand::class)
-        var hand:Hand = Hand()
-        assertEquals(30,hand.maxSize)
+        var hand: Hand = Hand()
+        assertEquals(30, hand.maxSize)
     }
 
     @Test
     internal fun fieldConstructorTest() {
         cardListConstructorTest(Field::class)
-        var field:Field = Field()
-        assertEquals(30,field.maxSize)
+        var field: Field = Field()
+        assertEquals(30, field.maxSize)
     }
 
     @Test
     internal fun deckConstructorTest() {
         cardListConstructorTest(Deck::class)
-        var deck:Deck = Deck()
-        assertEquals(30,deck.maxSize)
+        var deck: Deck = Deck()
+        assertEquals(30, deck.maxSize)
     }
 
     private fun cardListConstructorTest(kClass: KClass<*>) {
