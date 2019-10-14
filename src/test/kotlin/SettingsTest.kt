@@ -9,10 +9,11 @@ internal class SettingsTest {
     internal fun settingsConstructorTest() {
         assertTrue(Settings::class.isAbstract, "Can't create instance from abstract class")
 
-        assertEquals(0, Settings::class.memberProperties.toList().size)
+        assertEquals(0, Settings::class.memberProperties.toList().size, "Only constants in companion object allowed")
 
+        // Tests all companion properties
         Settings::class.companionObject!!.memberProperties.forEach {
-           assertTrue(it.isConst, "Property $it must be a constant")
+            assertTrue(it.isConst, "Property $it must be a constant")
         }
     }
 }
