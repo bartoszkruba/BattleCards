@@ -114,7 +114,7 @@ internal class DeckPrototypeTest {
         assertTrue(deckPrototype.removeCard(prototypeOne))
         assertEquals(0, deckPrototype.size)
 
-        assertTrue(deckPrototype.cards[prototypeOne] == null)
+        assertTrue(deckPrototype.cardsCopy()[prototypeOne] == null)
     }
 
     @Test
@@ -144,23 +144,30 @@ internal class DeckPrototypeTest {
         val prototypeOne = MonsterPrototype(ID_ONE, MONSTER_NAME_ONE, MAX_HEALTH, MAX_ATTACK)
         deckPrototype.addCard(prototypeOne)
         assertEquals(1, deckPrototype.size)
-        assertTrue(deckPrototype.removeCard(ID_TWO))
+        assertFalse(deckPrototype.removeCard(ID_TWO))
         assertEquals(1, deckPrototype.size)
     }
 
     @Test
-    internal fun `cardList test`() {
+    internal fun `cardsCopy test`() {
         val deckPrototype = DeckPrototype(DECK_NAME_ONE)
         val prototypeOne = MonsterPrototype(ID_ONE, MONSTER_NAME_ONE, MAX_HEALTH, MAX_ATTACK)
         val prototypeTwo = MonsterPrototype(ID_TWO, MONSTER_NAME_ONE, MAX_HEALTH, MAX_ATTACK)
-        assertTrue(deckPrototype.addCard(prototypeOne))
-        assertTrue(deckPrototype.addCard(prototypeOne))
+
+
+        println("Adding two cards")
+        repeat(2) { assertTrue(deckPrototype.addCard(prototypeOne)) }
+        println("Asserting size")
         assertEquals(2, deckPrototype.size)
 
+        println("Adding one card")
         assertTrue(deckPrototype.addCard(prototypeTwo))
-        assertEquals(1, deckPrototype.size)
+        println("Asserting size")
+        assertEquals(3, deckPrototype.size)
 
-        val cards = deckPrototype.cards
+        val cards = deckPrototype.cardsCopy()
+
+
         assertEquals(2, cards.size)
         assertEquals(2, cards[prototypeOne])
         assertEquals(1, cards[prototypeTwo])
@@ -184,7 +191,7 @@ internal class DeckPrototypeTest {
         repeat(2) { deckPrototype.addCard(prototypeOne) }
         deckPrototype.addCard(prototypeTwo)
 
-        assertEquals(testString, deckPrototype.toString())
+        assertTrue(testString == deckPrototype.toString())
     }
 
     private fun shouldThrowRuntimeException(executable: Executable) {
