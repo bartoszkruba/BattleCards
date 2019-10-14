@@ -23,14 +23,14 @@ internal class CardListTest {
         assertEquals(deck.cards[0], ogreCard, "Added card doesn't match the card that was added")
 
         ogreCard.attack = 20
-        assertEquals(deck.cards[0], ogreCard, "Added card doesn't match the card that was added")
+        assertEquals(deck.cards[0], ogreCard, "Added card is not a copy of original object")
 
         assertTrue(deck.addCard(wolfCard))
         assertEquals(2, deck.cards.size, "The card wasn't added to the list")
         assertEquals(deck.cards[1], wolfCard, "Added card doesn't match the card that was added")
 
         wolfCard.attack = 29
-        assertEquals(deck.cards[1], wolfCard, "Added card doesn't match the card that was added")
+        assertEquals(deck.cards[1], wolfCard, "Added card is not a copy of original object")
     }
 
     @Test
