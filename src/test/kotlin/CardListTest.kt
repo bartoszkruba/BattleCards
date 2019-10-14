@@ -14,16 +14,22 @@ internal class CardListTest {
 
     @Test
     internal fun addCardTest() {
-        var ogreCard: Card = Monster("Ogre")
-        var wolfCard: Card = Monster("Wolf")
+        var ogreCard: Monster = Monster("Ogre")
+        var wolfCard: Monster = Monster("Wolf")
         var deck: Deck = Deck()
 
         assertTrue(deck.addCard(ogreCard))
         assertEquals(1, deck.cards.size, "The card wasn't added to the list")
         assertEquals(deck.cards[0], ogreCard, "Added card doesn't match the card that was added")
 
+        ogreCard.attack = 20
+        assertEquals(deck.cards[0], ogreCard, "Added card doesn't match the card that was added")
+
         assertTrue(deck.addCard(wolfCard))
         assertEquals(2, deck.cards.size, "The card wasn't added to the list")
+        assertEquals(deck.cards[1], wolfCard, "Added card doesn't match the card that was added")
+
+        wolfCard.attack = 29
         assertEquals(deck.cards[1], wolfCard, "Added card doesn't match the card that was added")
     }
 
