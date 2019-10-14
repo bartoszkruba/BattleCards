@@ -16,11 +16,14 @@ abstract class CardList(var empty: Boolean, cards: ArrayList<Card>) {
     }
 
     fun addCard(card: Card): Boolean {
-        var copy: Card = Utils.clone(card) as Card
+        for(c in cards) {
+            if(c.cardId.equals(card.cardId)) {
+                return false
+            }
+        }
 
-        println(copy.cardId.equals(card.cardId)) // true
-
-        return cards.add(copy)
+        val copied: Card = Utils.clone(card) as Card
+        return cards.add(copied)
     }
 
     fun removeCard(card: Card): Card {
