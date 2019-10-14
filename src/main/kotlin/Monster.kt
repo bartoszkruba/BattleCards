@@ -4,8 +4,8 @@ class Monster : Card {
     override var name: String
     override var cardId: UUID
     var cardType: CardType
-    var attack: Int = 7
-    var health: Int = 5
+    var attack: Int
+    var health: Int
 
     constructor() : super("Wolf", CardType.MONSTER, UUID.randomUUID()){
         this.name = "Wolf"
@@ -16,11 +16,14 @@ class Monster : Card {
     }
 
     constructor(name:String, attack:Int, health:Int) : super(name, CardType.MONSTER, UUID.randomUUID()){
-        this.name = name;
-        this.cardId = UUID.randomUUID()
-        this.cardType =  CardType.MONSTER
-        this.attack = attack;
-        this.health = health;
+        val regex = Regex("^[a-zA-Z]+(?:\\s[a-zA-Z]+)*$")
+        if(regex.matches(name) && attack > 0 && attack < 11  && health > 0 && health < 11) {
+            this.name = name;
+            this.cardId = UUID.randomUUID()
+            this.cardType = CardType.MONSTER
+            this.attack = attack;
+            this.health = health;
+        }else{throw RuntimeException("Not valid input")}
     }
 
     fun takeDamge(card: Monster): Boolean {

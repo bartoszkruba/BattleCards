@@ -23,27 +23,20 @@ internal class MonsterTest {
     }
 
     fun constructorWithArgument(){
-        var monster = Monster("",6,4);
-        var monster2 = Monster("",6,4);
+        var monster = Monster("Ogre tok",6,4);
+        var monster2 = Monster("Ogre",6,4);
         assertNotSame(monster2, monster)
         assertNotEquals(monster2.cardId, monster.cardId)
-        assertEquals("", monster2.name)
+        assertEquals("Ogre", monster2.name)
         assertEquals(CardType.MONSTER, monster2.type)
         assertEquals(6, monster2.attack)
         assertEquals(4, monster2.health)
-
-        try {
-            monster = Monster("",6,4);
-        }catch (e: NumberFormatException){
-            println("*************** Exception ************")
-        }
-
     }
 
     @Test
     fun takeDamge() {
-        var monster1 = Monster("", 6, 3);
-        var monster2 = Monster("", 7,4);
+        var monster1 = Monster("Ogre", 6, 3);
+        var monster2 = Monster("Ogre", 7,4);
 
         var a = monster2.takeDamge(monster1)
         assertTrue(a)
@@ -54,8 +47,8 @@ internal class MonsterTest {
 
     @Test
     fun isDead() {
-        var monster1 = Monster("",4, 3);
-        var monster2 = Monster("",7,10);
+        var monster1 = Monster("Ogre",4, 3);
+        var monster2 = Monster("Ogre",7,9);
 
         monster2.takeDamge(monster1)
         assertFalse(monster2.isDead())
