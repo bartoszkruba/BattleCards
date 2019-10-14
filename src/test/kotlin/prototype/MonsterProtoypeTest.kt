@@ -96,6 +96,19 @@ internal class MonsterPrototypeTest {
 
     // todo test equals with other CardPrototype classes
 
+    @Test
+    internal fun `Test clone`() {
+        val original = MonsterPrototype(ID, NAME, MAX_HEALTH, MAX_ATTACK)
+        val copy = original.copy()
+
+        assertTrue(original == copy)
+        assertFalse(original === copy)
+        assertEquals(ID, copy.id)
+        assertEquals(NAME, copy.name)
+        assertEquals(MAX_HEALTH, copy.baseHealth)
+        assertEquals(MAX_ATTACK, copy.baseAttack)
+    }
+
     private fun shouldThrowRuntimeException(executable: Executable) {
         assertThrows(RuntimeException::class.java, executable)
         return Unit

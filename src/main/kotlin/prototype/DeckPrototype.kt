@@ -21,10 +21,9 @@ class DeckPrototype(val name: String) {
         private set
 
     fun addCard(card: CardPrototype): Boolean {
-        var key: CardPrototype? = null
-        if (card is MonsterPrototype) key = card.copy()
+        if (size >= MAX_DECK_LENGTH) return false
 
-        if (size >= MAX_DECK_LENGTH || key == null) return false
+        val key = card.clone()
         this.cards[key]?.let {
             this.cards[card] = this.cards[card]!!.plus(1)
         } ?: run {

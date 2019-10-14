@@ -1,6 +1,6 @@
 package prototype
 
-abstract class CardPrototype(open val id: Int, open val name: String) {
+abstract class CardPrototype(open val id: Int, open val name: String) : Clonable {
 
     companion object {
         // todo get information from settings
@@ -23,6 +23,5 @@ abstract class CardPrototype(open val id: Int, open val name: String) {
     override fun hashCode(): Int {
         return id
     }
-
 
 }

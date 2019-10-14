@@ -30,4 +30,11 @@ data class MonsterPrototype @JsonCreator constructor(
 
     override fun equals(other: Any?) = super.equals(other)
     override fun hashCode() = super.hashCode()
+
+    override fun clone(): CardPrototype = MonsterPrototype(
+        id = id,
+        name = name,
+        baseHealth = baseHealth,
+        baseAttack = baseAttack
+    )
 }
