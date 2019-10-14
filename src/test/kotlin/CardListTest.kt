@@ -9,6 +9,7 @@ import java.lang.RuntimeException
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.*
+import kotlin.reflect.jvm.isAccessible
 
 internal class CardListTest {
 
@@ -19,23 +20,23 @@ internal class CardListTest {
         var deck: Deck = Deck()
 
         assertTrue(deck.addCard(ogreCard))
-        assertEquals(1, deck.cards.size, "The card wasn't added to the list")
-        assertEquals(deck.cards[0], ogreCard, "Added card doesn't match the card that was added")
+        assertEquals(1, deck.cardsInList().size, "The card wasn't added to the list")
+        assertEquals(deck.cardsInList()[0], ogreCard, "Added card doesn't match the card that was added")
 
         ogreCard.attack = 20
-        var deckOgre: Monster = deck.cards[0] as Monster
+        var deckOgre: Monster = deck.cardsInList()[0] as Monster
         assertNotEquals(deckOgre.attack, ogreCard.attack, "Added card is not a copy of original object")
 
         assertTrue(deck.addCard(wolfCard))
-        assertEquals(2, deck.cards.size, "The card wasn't added to the list")
-        assertEquals(deck.cards[1], wolfCard, "Added card doesn't match the card that was added")
+        assertEquals(2, deck.cardsInList().size, "The card wasn't added to the list")
+        assertEquals(deck.cardsInList()[1], wolfCard, "Added card doesn't match the card that was added")
 
         wolfCard.attack = 20
-        var deckWolf: Monster = deck.cards[1] as Monster
+        var deckWolf: Monster = deck.cardsInList()[1] as Monster
         assertNotEquals(deckWolf.attack, wolfCard.attack, "Added card is not a copy of original object")
 
         assertFalse(deck.addCard(ogreCard), "Card with unique ID already exists")
-        assertEquals(2, deck.cards.size, "Card with unique ID that already exists was added")
+        assertEquals(2, deck.cardsInList().size, "Card with unique ID that already exists was added")
     }
 
     @Test
@@ -77,7 +78,7 @@ internal class CardListTest {
             removedCard.cardId,
             "The removed card doesn't match the card we wanted to remove"
         )
-        assertEquals(0, deck.cards.size, "The card did not get removed, a card still exists in the deck")
+        assertEquals(0, deck.cardsInList().size, "The card did not get removed, a card still exists in the deck")
         assertEquals(true, deck.empty, "The boolean empty should be set to true because no cards exists")
 
         deck = Deck(false, arrayListOf(rabbitMonster, pigMonster))
@@ -93,8 +94,8 @@ internal class CardListTest {
             removedCard.cardId,
             "The removed card doesn't match the card we wanted to remove"
         )
-        assertEquals(1, deck.cards.size, "The card did not get removed, card array size is not correct")
-        assertEquals(pigMonster, deck.cards[0], "The card that should exist is not the on existing")
+        assertEquals(1, deck.cardsInList().size, "The card did not get removed, card array size is not correct")
+        assertEquals(pigMonster, deck.cardsInList()[0], "The card that should exist is not the on existing")
 
         try {
             deck.removeCard(rabbitMonster)
@@ -162,6 +163,7 @@ internal class CardListTest {
     private fun getAllVariables(kClass: KClass<*>, createdObject: Any): MutableMap<String, Any?> {
         var allVariables: MutableMap<String, Any?> = mutableMapOf()
         kClass.superclasses.first().memberProperties.forEach {
+            it.getter.isAccessible = true
             allVariables[it.name] = it.getter.call(createdObject)
         }
         return allVariables
