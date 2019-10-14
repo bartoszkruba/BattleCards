@@ -3,8 +3,7 @@ package utilities
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 
-open class Utils {
-
+class Utils {
     companion object {
         private val mapper: ObjectMapper = ObjectMapper()
 
