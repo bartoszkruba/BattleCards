@@ -35,8 +35,5 @@ class Monster : Card {
         }
     }
 
-    fun isDead(): Boolean {
-        if (this.health <= 0) { return true }
-        return false
-    }
+    fun isDead() = this.health <= 0
 }
