@@ -79,10 +79,10 @@ internal class JsonDeckTest {
         val jsonDeck = JsonDeck(deckPrototype)
         assertEquals(5, jsonDeck.size)
         val records = jsonDeck.records()
-        assertEquals(5, records.size)
+        assertEquals(3, records.size)
         assertEquals(2, records[MONSTER_ID_ONE])
         assertEquals(2, records[MONSTER_ID_TWO])
-        assertEquals(1, records[MONSTER_ID_TWO])
+        assertEquals(1, records[MONSTER_ID_THREE])
     }
 
     @Test
