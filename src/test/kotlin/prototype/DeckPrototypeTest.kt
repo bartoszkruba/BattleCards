@@ -192,8 +192,17 @@ internal class DeckPrototypeTest {
         assertTrue(testString == deckPrototype.toString())
     }
 
+    @Test
+    internal fun `toString test with empty deck`() {
+        val testString = ""
+        val deck = DeckPrototype(DECK_NAME_ONE)
+
+        assertEquals(testString, deck.toString())
+    }
+
     private fun shouldThrowRuntimeException(executable: Executable) {
         Assertions.assertThrows(RuntimeException::class.java, executable)
         return Unit
     }
+
 }
