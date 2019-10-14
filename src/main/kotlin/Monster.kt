@@ -17,13 +17,13 @@ class Monster : Card {
 
     constructor(name:String, attack:Int, health:Int) : super(name, CardType.MONSTER, UUID.randomUUID()){
         val regex = Regex("^[a-zA-Z]+(?:\\s[a-zA-Z]+)*$")
-        if(regex.matches(name) && attack > 0 && attack < 11  && health > 0 && health < 11) {
+        if(name.length in 1..10 && regex.matches(name) && attack in 1..10  && health in 1..10) {
             this.name = name;
             this.cardId = UUID.randomUUID()
             this.cardType = CardType.MONSTER
             this.attack = attack;
             this.health = health;
-        }else{throw RuntimeException("Not valid input")}
+        }else{throw RuntimeException("Invalid properties of object")}
     }
 
     fun takeDamge(card: Monster): Boolean {
