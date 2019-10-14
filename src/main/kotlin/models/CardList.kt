@@ -4,7 +4,7 @@ import Card
 import utilities.Utils
 
 abstract class CardList(var empty: Boolean, cards: ArrayList<Card>) {
-    var cards: ArrayList<Card> = ArrayList()
+    private var cards: ArrayList<Card> = ArrayList()
 
     init {
         this.cards = cards.map{Utils.clone(it) as Card} as ArrayList<Card>
