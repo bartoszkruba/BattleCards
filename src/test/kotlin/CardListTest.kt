@@ -1,6 +1,6 @@
-import Models.Deck
-import Models.Field
-import Models.Hand
+import models.Deck
+import models.Hand
+import models.Field
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*

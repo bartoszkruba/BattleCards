@@ -1,7 +1,6 @@
-package Models
+package models
 
 import Card
-import Monster
 import utilities.Utils
 
 abstract class CardList(var empty: Boolean, cards: ArrayList<Card>) {
