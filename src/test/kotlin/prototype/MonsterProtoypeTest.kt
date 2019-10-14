@@ -28,6 +28,7 @@ internal class MonsterPrototypeTest {
         assertEquals(ID, monsterPrototype.id)
         assertEquals(MIN_HEALTH, monsterPrototype.baseHealth)
         assertEquals(MIN_HEALTH, monsterPrototype.baseAttack)
+        assertEquals(CardType.MONSTER, monsterPrototype.type)
     }
 
     @Test
@@ -107,6 +108,7 @@ internal class MonsterPrototypeTest {
         assertEquals(NAME, copy.name)
         assertEquals(MAX_HEALTH, copy.baseHealth)
         assertEquals(MAX_ATTACK, copy.baseAttack)
+        assertEquals(CardType.MONSTER, copy.type)
     }
 
     private fun shouldThrowRuntimeException(executable: Executable) {

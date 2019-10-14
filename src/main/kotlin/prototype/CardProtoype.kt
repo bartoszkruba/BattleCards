@@ -1,6 +1,8 @@
 package prototype
 
-abstract class CardPrototype(open val id: Int, open val name: String) : Clonable {
+import CardType
+
+abstract class CardPrototype(open val id: Int, open val name: String, val type: CardType) : Clonable {
 
     companion object {
         val MAX_NAME_LENGTH = Settings.MAX_CARD_NAME_LENGTH

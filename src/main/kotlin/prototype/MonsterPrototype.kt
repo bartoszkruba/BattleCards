@@ -11,7 +11,7 @@ data class MonsterPrototype @JsonCreator constructor(
     @JsonProperty("name") override val name: String,
     @JsonProperty("baseHealth") val baseHealth: Int,
     @JsonProperty("baseAttack") val baseAttack: Int
-) : CardPrototype(id, name) {
+) : CardPrototype(id, name, CardType.MONSTER) {
 
     companion object {
         const val MAX_HEALTH = Settings.MAX_HEALTH
