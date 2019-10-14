@@ -40,8 +40,8 @@ internal class CardListTest {
 
     @Test
     internal fun removeCardTest() {
-        var pigMonster: Monster = Monster("Pig")
-        var rabbitMonster: Monster = Monster("Rabbit")
+        var pigMonster: Card = Monster("Pig")
+        var rabbitMonster: Card = Monster("Rabbit")
         var deck: Deck = Deck(false, arrayListOf(pigMonster))
 
         var removedCard: Card = Monster()
@@ -97,8 +97,8 @@ internal class CardListTest {
     }
 
     private fun cardListConstructorTest(kClass: KClass<*>) {
-        var pigMonster: Monster = Monster("Pig")
-        var rabbitMonster: Monster = Monster("Rabbit")
+        var pigMonster: Card = Monster("Pig")
+        var rabbitMonster: Card = Monster("Rabbit")
         var listOfCards: ArrayList<Card> = arrayListOf(pigMonster, rabbitMonster)
 
         var constructorParams: MutableMap<String, KParameter> = mutableMapOf()
@@ -108,10 +108,10 @@ internal class CardListTest {
 
         var allVariables: MutableMap<String, Any?> = getAllVariables(kClass, createdObject)
 
-        assertTrue(allVariables["empty"] as Boolean,"Should be true because no cards has been added")
+        assertTrue(allVariables["empty"] as Boolean)
 
         var cardListCards: ArrayList<Card> = allVariables["cards"] as ArrayList<Card>
-        assertTrue(cardListCards.isEmpty(), "Should be true because no cards has been added")
+        assertTrue(cardListCards.isEmpty())
 
         createdObject = kClass.primaryConstructor!!.callBy(
             mapOf(
@@ -122,13 +122,12 @@ internal class CardListTest {
 
         allVariables = getAllVariables(kClass, createdObject)
 
-        assertFalse(allVariables["empty"] as Boolean, "Should not be true as we added cards")
+        assertFalse(allVariables["empty"] as Boolean)
         cardListCards = allVariables["cards"] as ArrayList<Card>
         assertEquals(2, cardListCards.size)
-        assertTrue(cardListCards.containsAll(listOfCards), "Card list should contain all the cards we added")
-        assertTrue(pigMonster !== cardListCards[0], "Deep cloning has not been done")
+        assertTrue(cardListCards.containsAll(listOfCards))
         listOfCards.clear()
-        assertTrue(cardListCards.isNotEmpty(), "Card list should not be empty")
+        assertTrue(cardListCards.isNotEmpty())
     }
 
     private fun getAllVariables(kClass: KClass<*>, createdObject: Any): MutableMap<String, Any?> {
