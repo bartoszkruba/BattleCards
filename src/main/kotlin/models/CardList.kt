@@ -26,7 +26,8 @@ abstract class CardList(var empty: Boolean, cards: ArrayList<Card>) {
     }
 
     fun removeCard(card: Card): Card {
-        val indexToRemoveFrom = cards.indexOf(card)
+        val cardToRemove = cards.findLast{it.cardId == card.cardId}
+        val indexToRemoveFrom = cards.indexOf(cardToRemove)
         if (indexToRemoveFrom != -1) {
             val removedCard: Card = cards.removeAt(indexToRemoveFrom);
             if (cards.size == 0) empty = true
