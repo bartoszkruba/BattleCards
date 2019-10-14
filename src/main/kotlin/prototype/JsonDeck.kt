@@ -2,36 +2,38 @@ package prototype
 
 
 class JsonDeck {
-    sealed class JsonDeckRecord(val id: Int, val count: Int)
-
-    private val name: String
-    private val records: ArrayList<JsonDeckRecord>
+    val name: String
+    private val records: HashMap<Int, Int>
     var size = 0
         private set
 
     constructor(name: String) {
         this.name = name
-        this.records = ArrayList()
+        this.records = HashMap()
     }
 
-    constructor(name: String, deckPrototype: DeckPrototype) {
-        this.name = name
-        this.records = ArrayList()
+    constructor(deckPrototype: DeckPrototype) {
+        this.name = ""
+        this.records = HashMap()
+    }
+
+    fun records(): HashMap<Int, Int> {
+        return HashMap()
     }
 
     fun addCard(id: Int): Boolean {
         return false
     }
 
-    fun addCard(cardPrototype: CardPrototype) {
-
-    }
-
-    override fun toString(): String {
-        return ""
+    fun addCard(cardPrototype: CardPrototype): Boolean {
+        return false
     }
 
     fun removeCard(id: Int): Boolean {
+        return false
+    }
+
+    fun removeCard(card: CardPrototype): Boolean {
         return false
     }
 }
