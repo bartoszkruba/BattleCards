@@ -194,6 +194,31 @@ internal class JsonDeckTest {
         assertEquals(1, records[MONSTER_ID_ONE])
     }
 
+    @Test
+    internal fun `removeCard() with CardPrototype`() {
+        val jsonDeck = JsonDeck(DECK_NAME_ONE)
+        val monsterOne = MonsterPrototype(MONSTER_ID_ONE, MONSTER_NAME_ONE, MAX_HEALTH, MAX_DAMAGE)
+        assertTrue(jsonDeck.addCard(monsterOne))
+        assertEquals(1, jsonDeck.size)
+        assertTrue(jsonDeck.removeCard(monsterOne))
+        assertEquals(0, jsonDeck.size)
+        val records = jsonDeck.records()
+        assertEquals(0, records.size)
+    }
+
+    @Test
+    internal fun `removeCard() with CardPrototype, id not found`() {
+        val jsonDeck = JsonDeck(DECK_NAME_ONE)
+        val monsterOne = MonsterPrototype(MONSTER_ID_ONE, MONSTER_NAME_ONE, MAX_HEALTH, MAX_DAMAGE)
+        val monsterTwo = MonsterPrototype(MONSTER_ID_TWO, MONSTER_NAME_TWO, MAX_HEALTH, MAX_DAMAGE)
+        assertTrue(jsonDeck.addCard(monsterOne))
+        assertEquals(1, jsonDeck.size)
+        assertFalse(jsonDeck.removeCard(monsterTwo))
+        assertEquals(1, jsonDeck.size)
+        val records = jsonDeck.records()
+        assertEquals(1, records.size)
+    }
+
     private fun shouldThrowRuntimeException(executable: Executable) {
         assertThrows(RuntimeException::class.java, executable)
         return Unit
