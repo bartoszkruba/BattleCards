@@ -13,6 +13,22 @@ import kotlin.reflect.full.*
 internal class CardListTest {
 
     @Test
+    internal fun addCardTest() {
+        var ogreCard: Card = Monster("Ogre")
+        var wolfCard: Card = Monster("Wolf")
+        var deck: Deck = Deck()
+
+        assertTrue(deck.addCard(ogreCard))
+        assertEquals(deck.cards.size, 1)
+        assertEquals(deck.cards[0], ogreCard)
+
+        assertTrue(deck.addCard(wolfCard))
+        assertEquals(deck.cards.size, 2)
+        assertEquals(deck.cards[1], wolfCard)
+
+    }
+
+    @Test
     internal fun removeCardTest() {
         var pigMonster: Card = Monster("Pig")
         var rabbitMonster: Card = Monster("Rabbit")
