@@ -3,9 +3,9 @@ package prototype
 class DeckPrototype(val name: String) {
 
     companion object {
-        private const val MIN_NAME_LENGTH = 1
-        private const val MAX_NAME_LENGTH = 20
-        private const val MAX_DECK_LENGTH = 30
+        private const val MIN_NAME_LENGTH = Settings.MIN_DECK_NAME_LENGTH
+        private const val MAX_NAME_LENGTH = Settings.MAX_DECK_NAME_LENGTH
+        private const val MAX_DECK_LENGTH = Settings.DECK_SIZE
         val NAME_REGEX = Regex("[a-zA-z ]*")
     }
 

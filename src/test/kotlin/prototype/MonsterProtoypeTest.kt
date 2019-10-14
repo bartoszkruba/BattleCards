@@ -11,13 +11,13 @@ internal class MonsterPrototypeTest {
     companion object {
         private const val NAME = "name"
         private const val ID = 1
-        // todo load from settings
-        private const val MAX_HEALTH = 10
-        private const val MIN_HEALTH = 1
-        private const val MAX_ATTACK = 10
-        private const val MIN_ATTACK = 1
-        private const val MAX_NAME_LENGTH = 9
-        private const val MIN_NAME_LENGTH = 1
+
+        private const val MAX_HEALTH = Settings.MAX_HEALTH
+        private const val MIN_HEALTH = Settings.MIN_HEALTH
+        private const val MAX_ATTACK = Settings.MAX_DAMAGE
+        private const val MIN_ATTACK = Settings.MIN_DAMAGE
+        private const val MAX_NAME_LENGTH = Settings.MAX_CARD_NAME_LENGTH
+        private const val MIN_NAME_LENGTH = Settings.MIN_CARD_NAME_LENGTH
     }
 
     @Test

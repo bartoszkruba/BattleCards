@@ -17,11 +17,9 @@ internal class CardLoaderTest {
     companion object {
         val ob = ObjectMapper()
 
-        // todo load info from config
-
-        private const val MAX_HEALTH = 10
-        private const val MAX_ATTACK = 10
-        private const val MAX_NAME_LENGTH = 9
+        private const val MAX_HEALTH = Settings.MAX_HEALTH
+        private const val MAX_ATTACK = Settings.MAX_DAMAGE
+        private const val MAX_NAME_LENGTH = Settings.MAX_CARD_NAME_LENGTH
         private const val ID_ONE = 1
         private const val ID_TWO = 2
         private const val ID_THREE = 3
