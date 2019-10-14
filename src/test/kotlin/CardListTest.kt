@@ -37,6 +37,8 @@ internal class CardListTest {
         wolfCard.attack = 20
         var deckWolf: Monster = deck.cards[1] as Monster
         assertNotEquals(deckWolf.attack, wolfCard.attack, "Added card is not a copy of original object")
+
+        assertFalse(deck.addCard(ogreCard), "Card with unique ID already exists")
     }
 
     @Test
