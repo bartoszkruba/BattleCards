@@ -11,7 +11,7 @@ abstract class CardList(var empty: Boolean, cards: ArrayList<Card>) {
     }
 
     fun cardsInList(): ArrayList<Card> {
-        return cards
+        return cards.map{Utils.clone(it) as Card} as ArrayList<Card>
     }
 
     fun addCard(card: Card): Boolean {
