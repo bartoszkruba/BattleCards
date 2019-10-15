@@ -14,4 +14,8 @@ abstract class Card(val name: String,
 
         return true
     }
+
+    override fun toString(): String {
+        return super.toString()
+    }
 }
