@@ -15,7 +15,12 @@ class Output {
             }
         }
 
-        print("Choose deck(name): ")
+        val decks = listOf("one", "two", "three", "four")
+        for ((index, value) in decks.withIndex()){
+           println("${index+1}: ${value}")
+        }
+
+        print("Choose deck: ")
         var deckName = readLine()
         var validDeckName = userInput.deckNameInput(deckName)
         while(!validDeckName){
