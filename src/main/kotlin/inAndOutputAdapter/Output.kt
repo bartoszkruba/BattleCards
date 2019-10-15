@@ -20,13 +20,13 @@ class Output {
            println("${index+1}: ${value}")
         }
 
-        print("Choose deck: ")
+        print("Choose a deck: ")
         var deckName = readLine()
         var validDeckName = userInput.deckNameInput(deckName)
         while(!validDeckName){
             print("The deck does not exist! \nTry again: ")
             deckName = readLine()
-            if(userInput.userNameInput(deckName)){
+            if(userInput.checkDeckName(deckName)){
                 validDeckName = true
             }
         }

@@ -19,10 +19,21 @@ class Input() {
     }
 
     fun checkDeckName(name: String?):Boolean{
+        val regex = Regex("^\\d")
         val decks = listOf("one", "two", "three", "four")
-        for (iteam in decks){
-            if(iteam == name){
-                return true
+        if(name != null) {
+            if (regex.matches(name!!)) {
+                for ((index, value) in decks.withIndex()) {
+                    if (index == name!!.toInt() - 1) {
+                        return true
+                    }
+                }
+            } else {
+                for ((index, value) in decks.withIndex()) {
+                    if (value == name) {
+                        return true
+                    }
+                }
             }
         }
         return false
