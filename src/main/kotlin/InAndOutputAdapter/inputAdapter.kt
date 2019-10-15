@@ -8,4 +8,8 @@ class inputAdapter() {
     fun deckNameInput(deckName: String?): Unit? {
         return null
     }
+
+    fun userNameValidation(name: String?):Boolean{
+        return false
+    }
 }
