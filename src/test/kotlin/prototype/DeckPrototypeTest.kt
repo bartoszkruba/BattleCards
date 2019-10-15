@@ -175,30 +175,30 @@ internal class DeckPrototypeTest {
         assertFalse(key === prototypeOne)
     }
 
-    @Test
-    internal fun `toString test`() {
-        val testString = """
-            $MONSTER_NAME_ONE: x2
-            $MONSTER_NAME_TWO: x1
-        """.trimIndent()
-
-        val deckPrototype = DeckPrototype(DECK_NAME_ONE)
-        val prototypeOne = MonsterPrototype(ID_ONE, MONSTER_NAME_ONE, MAX_HEALTH, MAX_ATTACK)
-        val prototypeTwo = MonsterPrototype(ID_TWO, MONSTER_NAME_TWO, MAX_HEALTH, MAX_ATTACK)
-
-        repeat(2) { deckPrototype.addCard(prototypeOne) }
-        deckPrototype.addCard(prototypeTwo)
-
-        assertTrue(testString == deckPrototype.toString())
-    }
-
-    @Test
-    internal fun `toString test with empty deck`() {
-        val testString = ""
-        val deck = DeckPrototype(DECK_NAME_ONE)
-
-        assertEquals(testString, deck.toString())
-    }
+//    @Test
+//    internal fun `toString test`() {
+//        val testString = """
+//            $MONSTER_NAME_ONE: x2
+//            $MONSTER_NAME_TWO: x1
+//        """.trimIndent()
+//
+//        val deckPrototype = DeckPrototype(DECK_NAME_ONE)
+//        val prototypeOne = MonsterPrototype(ID_ONE, MONSTER_NAME_ONE, MAX_HEALTH, MAX_ATTACK)
+//        val prototypeTwo = MonsterPrototype(ID_TWO, MONSTER_NAME_TWO, MAX_HEALTH, MAX_ATTACK)
+//
+//        repeat(2) { deckPrototype.addCard(prototypeOne) }
+//        deckPrototype.addCard(prototypeTwo)
+//
+//        assertTrue(testString == deckPrototype.toString())
+//    }
+//
+//    @Test
+//    internal fun `toString test with empty deck`() {
+//        val testString = ""
+//        val deck = DeckPrototype(DECK_NAME_ONE)
+//
+//        assertEquals(testString, deck.toString())
+//    }
 
     private fun shouldThrowRuntimeException(executable: Executable) {
         Assertions.assertThrows(RuntimeException::class.java, executable)
