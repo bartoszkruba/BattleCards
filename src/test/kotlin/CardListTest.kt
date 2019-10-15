@@ -177,11 +177,11 @@ internal class CardListTest {
     @Test
     fun toStringTest() {
         val fieldPattern = """
-                ___        ___        ___        ___        ___    
-               |   |      |   |      |   |      |   |      |   |   
-               |   |      |   |      |   |      |   |      |   |   
-             4 |___| 7  1 |___| 3  3 |___| 4  2 |___| 2  1 |___| 4 
-               Ogre       Wolf      Ranger      Slime     Murloc
+                ___        ___        ___        ___        ___     
+               |   |      |   |      |   |      |   |      |   |    
+               |   |      |   |      |   |      |   |      |   |    
+             4 |___| 7  1 |___| 3  3 |___| 4  2 |___| 2  1 |___| 4  
+               Ogre       Wolf      Ranger      Slime     Murloc    
         """.trimIndent()
 
         val field = Field(false, arrayListOf(
@@ -197,11 +197,11 @@ internal class CardListTest {
         assertEquals(fieldPattern, field, "Field toString doesn't match pattern")
 
         val handPattern = """
-                ___        ___        ___        ___        ___    
-               |   |      |   |      |   |      |   |      |   |   
-               |   |      |   |      |   |      |   |      |   |   
-             2 |___| 4  1 |___| 3  7 |___| 4  5 |___| 9  1 |___| 4 
-               Gnarl      Wolf     Skeleton   WereWolf    Murloc
+                ___        ___        ___        ___        ___     
+               |   |      |   |      |   |      |   |      |   |    
+               |   |      |   |      |   |      |   |      |   |    
+             2 |___| 4  1 |___| 3  7 |___| 4  5 |___| 9  1 |___| 4  
+               Gnarl      Wolf     Skeleton   WereWolf    Murloc    
         """.trimIndent()
 
         val hand = Hand(false, arrayListOf(
