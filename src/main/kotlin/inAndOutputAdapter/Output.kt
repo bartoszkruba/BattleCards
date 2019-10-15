@@ -6,7 +6,14 @@ class Output {
         var userInput = Input()
         print("Add player name: ")
         var userName = readLine()
-        userInput.userNameInput(userName)
+        var validUserName = userInput.userNameInput(userName)
+        while(!validUserName){
+            print("Wrong input of name \nTry again: ")
+            var userName = readLine()
+            if(userInput.userNameInput(userName)){
+                validUserName = true
+            }
+        }
 
         print("Choose deck(name): ")
         var deckName = readLine()
