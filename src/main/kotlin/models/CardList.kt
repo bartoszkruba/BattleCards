@@ -1,18 +1,17 @@
-package Models
+package models
 
 import Card
-import Monster
 import utilities.Utils
 
 abstract class CardList(var empty: Boolean, cards: ArrayList<Card>) {
-    var cards: ArrayList<Card> = ArrayList()
+    private var cards: ArrayList<Card> = ArrayList()
 
     init {
-        this.cards = ArrayList(cards)
+        this.cards = cards.map{Utils.clone(it) as Card} as ArrayList<Card>
     }
 
     fun cardsInList(): ArrayList<Card> {
-        return cards
+        return cards.map{Utils.clone(it) as Card} as ArrayList<Card>
     }
 
     fun addCard(card: Card): Boolean {
@@ -27,7 +26,8 @@ abstract class CardList(var empty: Boolean, cards: ArrayList<Card>) {
     }
 
     fun removeCard(card: Card): Card {
-        val indexToRemoveFrom = cards.indexOf(card)
+        val cardToRemove = cards.findLast{it.cardId == card.cardId}
+        val indexToRemoveFrom = cards.indexOf(cardToRemove)
         if (indexToRemoveFrom != -1) {
             val removedCard: Card = cards.removeAt(indexToRemoveFrom);
             if (cards.size == 0) empty = true
