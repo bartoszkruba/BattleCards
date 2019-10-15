@@ -5,8 +5,8 @@ class Input() {
         return userNameValidation(name)
     }
 
-    fun deckNameInput(deckName: String?): Unit? {
-        return null
+    fun deckNameInput(deckName: String?): Boolean {
+        return checkDeckName(deckName)
     }
 
     fun userNameValidation(name: String?):Boolean{
@@ -16,5 +16,15 @@ class Input() {
         }else{
             false
         }
+    }
+
+    fun checkDeckName(name: String?):Boolean{
+        val decks = listOf("one", "two", "three", "four")
+        for (iteam in decks){
+            if(iteam == name){
+                return true
+            }
+        }
+        return false
     }
 }
