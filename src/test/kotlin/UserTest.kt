@@ -42,13 +42,18 @@ internal class UserTest {
         assertEquals(field,player.field,"Field does not match passed field")
 
         try {
-            player = Player("asdfghqwyew")
+            Player("asdfghqwyew")
             assertTrue(false,"Name is too long, should throw illegalArgumentException")
         }catch(err:IllegalArgumentException){}
 
         try {
-            player = Player("aas..1!#")
+            Player("aas..1!#")
             assertTrue(false,"Name is too long, should throw illegalArgumentException")
+        }catch(err:IllegalArgumentException){}
+
+        try {
+            Player("")
+            assertTrue(false,"Name is nothing, should throw illegalArgumentException")
         }catch(err:IllegalArgumentException){}
     }
 }
