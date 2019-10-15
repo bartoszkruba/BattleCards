@@ -15,8 +15,8 @@ internal class CardListTest {
 
     @Test
     internal fun addCardTest() {
-        var ogreCard: Monster = Monster("Ogre")
-        var wolfCard: Monster = Monster("Wolf")
+        var ogreCard: Monster = Monster("Ogre", 6, 4)
+        var wolfCard: Monster = Monster("Wolf",6,4)
         var deck: Deck = Deck()
 
         assertTrue(deck.addCard(ogreCard))
@@ -44,8 +44,8 @@ internal class CardListTest {
 
     @Test
     internal fun cardsInListTest() {
-        var pigMonster: Monster = Monster("Pig")
-        var rabbitMonster: Monster = Monster("Rabbit")
+        var pigMonster: Monster = Monster("Pig", 6,4)
+        var rabbitMonster: Monster = Monster("Rabbit", 6,4)
         var deck: Deck = Deck(false, arrayListOf(pigMonster, rabbitMonster))
 
         var deckClass = deck::class
@@ -64,8 +64,8 @@ internal class CardListTest {
 
     @Test
     internal fun removeCardTest() {
-        var pigMonster: Monster = Monster("Pig")
-        var rabbitMonster: Monster = Monster("Rabbit")
+        var pigMonster: Monster = Monster("Pig", 6,4)
+        var rabbitMonster: Monster = Monster("Rabbit", 6,4)
         var deck: Deck = Deck(false, arrayListOf(pigMonster))
 
         var removedCard: Card = Monster()
@@ -129,8 +129,8 @@ internal class CardListTest {
     }
 
     private fun cardListConstructorTest(kClass: KClass<*>) {
-        var pigMonster: Card = Monster("Pig")
-        var rabbitMonster: Card = Monster("Rabbit")
+        var pigMonster: Card = Monster("Pig", 6,4)
+        var rabbitMonster: Card = Monster("Rabbit", 6,4)
         var listOfCards: ArrayList<Card> = arrayListOf(pigMonster, rabbitMonster)
 
         var constructorParams: MutableMap<String, KParameter> = mutableMapOf()
