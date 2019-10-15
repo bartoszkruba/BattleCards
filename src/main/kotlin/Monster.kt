@@ -17,7 +17,7 @@ class Monster : Card {
 
     constructor(name:String, attack:Int, health:Int) : super(name, CardType.MONSTER, UUID.randomUUID()){
         val regex = Regex("^[a-zA-Z]+(?:\\s[a-zA-Z]+)*$")
-        if(name.length in 1..10 && regex.matches(name) && attack in 1..10  && health in 1..10) {
+        if(name.length in 1..9 && regex.matches(name) && attack in 1..10  && health in 1..10) {
             this.name = name;
             this.cardId = UUID.randomUUID()
             this.cardType = CardType.MONSTER
