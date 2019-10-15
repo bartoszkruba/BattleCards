@@ -192,8 +192,6 @@ internal class CardListTest {
             Monster("Murloc", CardType.MONSTER, UUID.randomUUID(), 1, 4)
         )).toString()
 
-        println(field)
-
         assertEquals(fieldPattern, field, "Field toString doesn't match pattern")
 
         val handPattern = """
@@ -211,8 +209,6 @@ internal class CardListTest {
             Monster("WereWolf", CardType.MONSTER, UUID.randomUUID(), 5, 9),
             Monster("Murloc", CardType.MONSTER, UUID.randomUUID(), 1, 4)
         )).toString()
-
-        println(hand)
 
         assertEquals(handPattern, hand, "Hand toString doesn't match pattern")
     }
