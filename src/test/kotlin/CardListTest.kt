@@ -20,23 +20,26 @@ internal class CardListTest {
         var deck: Deck = Deck()
 
         assertTrue(deck.addCard(ogreCard))
-        assertEquals(1, deck.cardsInList().size, "The card wasn't added to the list")
-        assertEquals(deck.cardsInList()[0], ogreCard, "Added card doesn't match the card that was added")
+        var cardsInList = getAllVariables(deck::class,deck)["cards"] as ArrayList<Card>
+        assertEquals(1, cardsInList.size, "The card wasn't added to the list")
+        assertEquals(cardsInList[0], ogreCard, "Added card doesn't match the card that was added")
 
         ogreCard.attack = 20
-        var deckOgre: Monster = deck.cardsInList()[0] as Monster
+        var deckOgre: Monster = cardsInList[0] as Monster
         assertNotEquals(deckOgre.attack, ogreCard.attack, "Added card is not a copy of original object")
 
         assertTrue(deck.addCard(wolfCard))
-        assertEquals(2, deck.cardsInList().size, "The card wasn't added to the list")
-        assertEquals(deck.cardsInList()[1], wolfCard, "Added card doesn't match the card that was added")
+        cardsInList = getAllVariables(deck::class,deck)["cards"] as ArrayList<Card>
+        assertEquals(2, cardsInList.size, "The card wasn't added to the list")
+        assertEquals(cardsInList[1], wolfCard, "Added card doesn't match the card that was added")
 
         wolfCard.attack = 20
-        var deckWolf: Monster = deck.cardsInList()[1] as Monster
+        var deckWolf: Monster = cardsInList[1] as Monster
         assertNotEquals(deckWolf.attack, wolfCard.attack, "Added card is not a copy of original object")
 
         assertFalse(deck.addCard(ogreCard), "Card with unique ID already exists")
-        assertEquals(2, deck.cardsInList().size, "Card with unique ID that already exists was added")
+        cardsInList = getAllVariables(deck::class,deck)["cards"] as ArrayList<Card>
+        assertEquals(2, cardsInList.size, "Card with unique ID that already exists was added")
     }
 
     @Test
