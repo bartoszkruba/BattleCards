@@ -28,16 +28,15 @@ class Monster (name: String = "something",
         repeat((4 - floor(name.length * 0.5)).toInt()) { sb.append(" ") }
         var cardName = "$sb$name"
         sb.clear()
-        repeat(10 - cardName.length) { sb.append(" ") }
-        if(name.length % 2 != 0) { sb.append(" ") }
+        repeat(11 - cardName.length) { sb.append(" ") }
         cardName += sb
 
         return """
-            ___    
-           |   |   
-           |   |   
-         $atk|___|$hp 
-         $cardName
+             ___     
+            |   |    
+            |   |    
+          $atk|___|$hp  
+          $cardName
         """.trimIndent()
     }
 }
