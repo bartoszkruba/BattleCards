@@ -7,7 +7,7 @@ class Deck(
     empty: Boolean = true,
     cards: ArrayList<Card> = ArrayList()
 ) : CardList(empty, cards) {
-    val maxSize: Int = 30
+    val maxSize: Int = Settings.DECK_SIZE
 
     fun shuffleDeck() {}
 

@@ -110,22 +110,22 @@ internal class CardListTest {
     @Test
     internal fun handConstructorTest() {
         cardListConstructorTest(Hand::class)
-        var hand: Hand = Hand()
-        assertEquals(30, hand.maxSize)
+        var hand:Hand = Hand()
+        assertEquals(Settings.HAND_SIZE, hand.maxSize)
     }
 
     @Test
     internal fun fieldConstructorTest() {
         cardListConstructorTest(Field::class)
-        var field: Field = Field()
-        assertEquals(30, field.maxSize)
+        var field:Field = Field()
+        assertEquals(Settings.FIELD_SIZE, field.maxSize)
     }
 
     @Test
     internal fun deckConstructorTest() {
         cardListConstructorTest(Deck::class)
-        var deck: Deck = Deck()
-        assertEquals(30, deck.maxSize)
+        var deck:Deck = Deck()
+        assertEquals(Settings.DECK_SIZE, deck.maxSize)
     }
 
     private fun cardListConstructorTest(kClass: KClass<*>) {
