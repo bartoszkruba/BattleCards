@@ -12,6 +12,13 @@ internal class InputTest {
 
     @Test
     fun deckNameInput() {
+        var userInput = Input()
+        val decks = listOf("one", "two", "three", "four")
+
+        assertTrue(userInput.deckNameInput(decks.get(0)))
+        assertTrue(userInput.deckNameInput(decks.get(3)))
+        assertFalse(userInput.deckNameInput("deck name"))
+        assertFalse(userInput.deckNameInput(null))
     }
 
     @Test
