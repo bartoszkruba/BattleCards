@@ -21,6 +21,7 @@ internal class CardLoaderTest {
         private const val MAX_HEALTH = Settings.MAX_HEALTH
         private const val MAX_ATTACK = Settings.MAX_DAMAGE
         private const val MAX_NAME_LENGTH = Settings.MAX_CARD_NAME_LENGTH
+        private const val MAX_DECK_NAME_LENGTH = Settings.MAX_DECK_NAME_LENGTH
         private const val ID_ONE = 1
         private const val ID_TWO = 2
         private const val ID_THREE = 3
@@ -54,7 +55,7 @@ internal class CardLoaderTest {
             stringBuilderC.append("c")
         }
 
-        repeat(MAX_DECK_SIZE) {
+        repeat(MAX_DECK_NAME_LENGTH) {
             stringBuilderD.append("d")
         }
 

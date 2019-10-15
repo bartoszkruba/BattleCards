@@ -223,4 +223,6 @@ internal class JsonDeckTest {
         assertThrows(RuntimeException::class.java, executable)
         return Unit
     }
+
+    // todo test equals
 }
