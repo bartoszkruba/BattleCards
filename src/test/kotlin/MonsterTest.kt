@@ -59,9 +59,7 @@ internal class MonsterTest {
 
     @Test
     fun toStringTest() {
-        val wolfCard = Monster("Wolf", CardType.MONSTER, UUID.randomUUID(), 3, 6)
-        println(wolfCard)
-
+        val wolfCard = Monster("Wolf", CardType.MONSTER, UUID.randomUUID(), 3, 6).toString()
         val wolfCardTest = """
             ___    
            |   |   
@@ -72,25 +70,24 @@ internal class MonsterTest {
 
         assertEquals(wolfCardTest, wolfCard, "The toString doesn't match")
 
-        val ogreCard = Monster("Ogre", CardType.MONSTER, UUID.randomUUID(), 8, 5)
-        val ogreCardTest = """
+        val gnarlCard = Monster("Gnarl", CardType.MONSTER, UUID.randomUUID(), 8, 5).toString()
+        val gnarlCardTest = """
             ___    
            |   |   
            |   |   
          8 |___| 5 
-           Ogre    
+           Gnarl    
         """.trimIndent()
 
-        assertEquals(ogreCardTest, ogreCard, "The toString doesn't match")
+        assertEquals(gnarlCardTest, gnarlCard, "The toString doesn't match")
 
-        val skeletonCard = Monster("Skeleton", CardType.MONSTER, UUID.randomUUID(), 10, 10)
-
+        val skeletonCard = Monster("Skeleton", CardType.MONSTER, UUID.randomUUID(), 10, 10).toString()
         val skeletonCardTest = """
             ___    
            |   |   
            |   |   
          10|___|10 
-         Skeleton    
+         Skeleton  
         """.trimIndent()
 
         assertEquals(skeletonCardTest, skeletonCard, "The toString doesn't match")
