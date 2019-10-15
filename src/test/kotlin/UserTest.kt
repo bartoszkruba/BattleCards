@@ -5,6 +5,7 @@ import models.Player
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
+import java.lang.IllegalArgumentException
 import java.util.*
 import kotlin.reflect.full.*
 
@@ -40,5 +41,14 @@ internal class UserTest {
         assertEquals(hand,player.hand,"Hand does not match passed hand")
         assertEquals(field,player.field,"Field does not match passed field")
 
+        try {
+            player = Player("asdfghqwyew")
+            assertTrue(false,"Name is too long, should throw illegalArgumentException")
+        }catch(err:IllegalArgumentException){}
+
+        try {
+            player = Player("aas..1!#")
+            assertTrue(false,"Name is too long, should throw illegalArgumentException")
+        }catch(err:IllegalArgumentException){}
     }
 }
