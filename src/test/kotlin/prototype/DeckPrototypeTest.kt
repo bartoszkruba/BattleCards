@@ -191,7 +191,7 @@ internal class DeckPrototypeTest {
         repeat(2) { deckPrototype.addCard(prototypeOne) }
         deckPrototype.addCard(prototypeTwo)
 
-        assertTrue(testString == deckPrototype.toString())
+        assertEquals(testString, deckPrototype.toString())
     }
 
     private fun shouldThrowRuntimeException(executable: Executable) {
