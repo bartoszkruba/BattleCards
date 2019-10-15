@@ -1,7 +1,7 @@
-import InAndOutputAdapter.OutputAdapter
+import inAndOutputAdapter.Output
 
 fun main(args: Array<String>) {
-    var printMAnScreen = OutputAdapter()
+    var printMAnScreen = Output()
     printMAnScreen.printMainScreen()
 }
 

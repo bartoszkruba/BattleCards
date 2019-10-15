@@ -1,9 +1,9 @@
-package InAndOutputAdapter
+package inAndOutputAdapter
 
-class OutputAdapter {
+class Output {
 
     fun printMainScreen(){
-        var userInput = inputAdapter()
+        var userInput = Input()
         print("Add player name: ")
         var userName = readLine()
         userInput.userNameInput(userName)
