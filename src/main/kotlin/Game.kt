@@ -13,8 +13,9 @@ class Game {
         printCurrentGame()
     }
 
-    fun attackMonster(attacker:Card,toBeAttacked:Card){
-
+    fun attackMonster(attacker: Monster, toBeAttacked: Monster): Boolean {
+        toBeAttacked.takeDamge(attacker)
+        return toBeAttacked.isDead()
     }
 
     fun printCurrentGame(){
