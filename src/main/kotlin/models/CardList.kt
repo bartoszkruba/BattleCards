@@ -7,6 +7,7 @@ abstract class CardList(var empty: Boolean, cards: ArrayList<Card>,var maxSize:I
     private var cards: ArrayList<Card> = ArrayList()
 
     init {
+        require(cards.size <= maxSize){"Card list is too big, ohh nooo!"}
         this.cards = cards.map{Utils.clone(it) as Card} as ArrayList<Card>
     }
 
