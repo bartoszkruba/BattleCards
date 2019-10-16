@@ -1,3 +1,4 @@
+import models.CardList
 import models.Deck
 import models.Hand
 import models.Field
@@ -5,7 +6,10 @@ import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
 import java.lang.Exception
+import java.lang.IllegalArgumentException
 import java.lang.RuntimeException
+import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.*
@@ -20,7 +24,7 @@ internal class CardListTest {
         var deck: Deck = Deck()
 
         assertTrue(deck.addCard(ogreCard))
-        var cardsInList = getAllVariables(deck::class,deck)["cards"] as ArrayList<Card>
+        var cardsInList = getAllVariables(deck::class, deck)["cards"] as ArrayList<Card>
         assertEquals(1, cardsInList.size, "The card wasn't added to the list")
         assertEquals(cardsInList[0], ogreCard, "Added card doesn't match the card that was added")
 
@@ -29,7 +33,7 @@ internal class CardListTest {
         assertNotEquals(deckOgre.attack, ogreCard.attack, "Added card is not a copy of original object")
 
         assertTrue(deck.addCard(wolfCard))
-        cardsInList = getAllVariables(deck::class,deck)["cards"] as ArrayList<Card>
+        cardsInList = getAllVariables(deck::class, deck)["cards"] as ArrayList<Card>
         assertEquals(2, cardsInList.size, "The card wasn't added to the list")
         assertEquals(cardsInList[1], wolfCard, "Added card doesn't match the card that was added")
 
@@ -38,8 +42,23 @@ internal class CardListTest {
         assertNotEquals(deckWolf.attack, wolfCard.attack, "Added card is not a copy of original object")
 
         assertFalse(deck.addCard(ogreCard), "Card with unique ID already exists")
-        cardsInList = getAllVariables(deck::class,deck)["cards"] as ArrayList<Card>
+        cardsInList = getAllVariables(deck::class, deck)["cards"] as ArrayList<Card>
         assertEquals(2, cardsInList.size, "Card with unique ID that already exists was added")
+
+        testMaxAddCard(Deck(), Settings.DECK_SIZE)
+        testMaxAddCard(Hand(), Settings.HAND_SIZE)
+        testMaxAddCard(Field(), Settings.FIELD_SIZE)
+    }
+
+    private fun testMaxAddCard(clazz: CardList, maxSize: Int) {
+        for (i in 1..maxSize + 1) {
+            var wolfCard: Monster = Monster("Wolf")
+            if (i <= maxSize) assertTrue(clazz.addCard(wolfCard), "Should return true ass we are allowed to add cards")
+            else assertFalse(
+                clazz.addCard(wolfCard),
+                "Should return false because we have added more cards than we are allowed to"
+            )
+        }
     }
 
     @Test
@@ -110,22 +129,26 @@ internal class CardListTest {
     @Test
     internal fun handConstructorTest() {
         cardListConstructorTest(Hand::class)
-        var hand:Hand = Hand()
+        var hand: Hand = Hand()
         assertEquals(Settings.HAND_SIZE, hand.maxSize)
     }
 
     @Test
     internal fun fieldConstructorTest() {
         cardListConstructorTest(Field::class)
-        var field:Field = Field()
+        var field: Field = Field()
         assertEquals(Settings.FIELD_SIZE, field.maxSize)
     }
 
     @Test
     internal fun deckConstructorTest() {
         cardListConstructorTest(Deck::class)
-        var deck:Deck = Deck()
+        var deck: Deck = Deck()
         assertEquals(Settings.DECK_SIZE, deck.maxSize)
+    }
+
+    private fun maxCardsInListConstructorTest(clazz:CardList,maxSize: Int){
+
     }
 
     private fun cardListConstructorTest(kClass: KClass<*>) {
@@ -161,6 +184,35 @@ internal class CardListTest {
         assertTrue(cardListCards.containsAll(listOfCards))
         listOfCards.clear()
         assertTrue(cardListCards.isNotEmpty())
+
+        when(kClass.simpleName){
+            "Deck" -> {
+                try{
+                    Deck(false,getToLargeCardList(Settings.DECK_SIZE))
+                    assertTrue(false,"Should throw IllegalArgumentException")
+                }catch (err:IllegalArgumentException){}
+            }
+            "Hand" -> {
+                try{
+                    Hand(false,getToLargeCardList(Settings.HAND_SIZE))
+                    assertTrue(false,"Should throw IllegalArgumentException")
+                }catch (err:IllegalArgumentException){}
+            }
+            "Field" -> {
+                try{
+                    Field(false,getToLargeCardList(Settings.FIELD_SIZE))
+                    assertTrue(false,"Should throw IllegalArgumentException")
+                }catch (err:IllegalArgumentException){}
+            }
+        }
+    }
+
+    private fun getToLargeCardList(maxSize: Int):ArrayList<Card>{
+        var toLargeCardList:ArrayList<Card> = arrayListOf()
+        for (i in 1..maxSize + 1) {
+            toLargeCardList.add(Monster("Im a monster,grrrr"))
+        }
+        return toLargeCardList
     }
 
     private fun getAllVariables(kClass: KClass<*>, createdObject: Any): MutableMap<String, Any?> {
@@ -170,5 +222,44 @@ internal class CardListTest {
             allVariables[it.name] = it.getter.call(createdObject)
         }
         return allVariables
+    }
+
+    @Test
+    fun toStringTest() {
+        val fieldPattern = """
+                ___        ___        ___        ___        ___     
+               |   |      |   |      |   |      |   |      |   |    
+               |   |      |   |      |   |      |   |      |   |    
+             4 |___| 7  1 |___| 3  3 |___| 4  2 |___| 2  1 |___| 4  
+               Ogre       Wolf      Ranger      Slime     Murloc    
+        """.trimIndent()
+
+        val field = Field(false, arrayListOf(
+            Monster("Ogre", CardType.MONSTER, UUID.randomUUID(), 4, 7),
+            Monster("Wolf", CardType.MONSTER, UUID.randomUUID(), 1, 3),
+            Monster("Ranger", CardType.MONSTER, UUID.randomUUID(), 3, 4),
+            Monster("Slime", CardType.MONSTER, UUID.randomUUID(), 2, 2),
+            Monster("Murloc", CardType.MONSTER, UUID.randomUUID(), 1, 4)
+        )).toString()
+
+        assertEquals(fieldPattern, field, "Field toString doesn't match pattern")
+
+        val handPattern = """
+                ___        ___        ___        ___        ___     
+               |   |      |   |      |   |      |   |      |   |    
+               |   |      |   |      |   |      |   |      |   |    
+             2 |___| 4  1 |___| 3  7 |___| 4  5 |___| 9  1 |___| 4  
+               Gnarl      Wolf     Skeleton   WereWolf    Murloc    
+        """.trimIndent()
+
+        val hand = Hand(false, arrayListOf(
+            Monster("Gnarl", CardType.MONSTER, UUID.randomUUID(), 2, 4),
+            Monster("Wolf", CardType.MONSTER, UUID.randomUUID(), 1, 3),
+            Monster("Skeleton", CardType.MONSTER, UUID.randomUUID(), 7, 4),
+            Monster("WereWolf", CardType.MONSTER, UUID.randomUUID(), 5, 9),
+            Monster("Murloc", CardType.MONSTER, UUID.randomUUID(), 1, 4)
+        )).toString()
+
+        assertEquals(handPattern, hand, "Hand toString doesn't match pattern")
     }
 }
