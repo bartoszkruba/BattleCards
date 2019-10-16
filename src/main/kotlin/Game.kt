@@ -3,8 +3,8 @@ import models.Player
 class Game {
     var status:String = ""
     var turn:Int = 0
-    var whitePlayer:Player = Player("WhitePlayer")
-    var blackPlayer:Player = Player("BlackPlayer")
+    var whitePlayer:Player = Player("White")
+    var blackPlayer:Player = Player("Black")
     //var messageLogger:MessageLogger = MessageLogger()
     //var guiAdapter:GuiAdapter = GuiAdapter()
 
