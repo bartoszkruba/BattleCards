@@ -8,14 +8,12 @@ import org.junit.jupiter.api.function.Executable
 internal class DeckPrototypeTest {
 
     companion object {
-        // todo load info from config
-
-        private const val MAX_DECK_SIZE = 30
-        private const val MAX_HEALTH = 10
-        private const val MAX_ATTACK = 10
-        private const val MAX_NAME_LENGTH = 9
-        private const val MAX_DECK_NAME_LENGTH = 20
-        private const val MIN_DECK_NAME_LENGTH = 1
+        private const val MAX_DECK_SIZE = Settings.DECK_SIZE
+        private const val MAX_HEALTH = Settings.MAX_HEALTH
+        private const val MAX_ATTACK = Settings.MAX_DAMAGE
+        private const val MAX_NAME_LENGTH = Settings.MAX_CARD_NAME_LENGTH
+        private const val MAX_DECK_NAME_LENGTH = Settings.MAX_DECK_NAME_LENGTH
+        private const val MIN_DECK_NAME_LENGTH = Settings.MIN_DECK_NAME_LENGTH
         private const val ID_ONE = 1
         private const val ID_TWO = 2
         private const val ID_THREE = 3
@@ -177,25 +175,34 @@ internal class DeckPrototypeTest {
         assertFalse(key === prototypeOne)
     }
 
-    @Test
-    internal fun `toString test`() {
-        val testString = """
-            $MONSTER_NAME_ONE: x2
-            $MONSTER_NAME_TWO: x1
-        """.trimIndent()
-
-        val deckPrototype = DeckPrototype(DECK_NAME_ONE)
-        val prototypeOne = MonsterPrototype(ID_ONE, MONSTER_NAME_ONE, MAX_HEALTH, MAX_ATTACK)
-        val prototypeTwo = MonsterPrototype(ID_TWO, MONSTER_NAME_TWO, MAX_HEALTH, MAX_ATTACK)
-
-        repeat(2) { deckPrototype.addCard(prototypeOne) }
-        deckPrototype.addCard(prototypeTwo)
-
-        assertEquals(testString, deckPrototype.toString())
-    }
+//    @Test
+//    internal fun `toString test`() {
+//        val testString = """
+//            $MONSTER_NAME_ONE: x2
+//            $MONSTER_NAME_TWO: x1
+//        """.trimIndent()
+//
+//        val deckPrototype = DeckPrototype(DECK_NAME_ONE)
+//        val prototypeOne = MonsterPrototype(ID_ONE, MONSTER_NAME_ONE, MAX_HEALTH, MAX_ATTACK)
+//        val prototypeTwo = MonsterPrototype(ID_TWO, MONSTER_NAME_TWO, MAX_HEALTH, MAX_ATTACK)
+//
+//        repeat(2) { deckPrototype.addCard(prototypeOne) }
+//        deckPrototype.addCard(prototypeTwo)
+//
+//        assertTrue(testString == deckPrototype.toString())
+//    }
+//
+//    @Test
+//    internal fun `toString test with empty deck`() {
+//        val testString = ""
+//        val deck = DeckPrototype(DECK_NAME_ONE)
+//
+//        assertEquals(testString, deck.toString())
+//    }
 
     private fun shouldThrowRuntimeException(executable: Executable) {
         Assertions.assertThrows(RuntimeException::class.java, executable)
         return Unit
     }
+
 }

@@ -13,7 +13,7 @@ internal class MonsterTest {
         constructorWithArgument();
     }
 
-    fun constructorWithNoArgument(){
+    fun constructorWithNoArgument() {
         var monster = Monster()
         var monster2 = Monster()
         assertNotEquals(monster.cardId, monster2.cardId)
@@ -58,5 +58,41 @@ internal class MonsterTest {
 
         monster2.takeDamge(monster1)
         assertTrue(monster2.isDead())
+    }
+
+    @Test
+    fun toStringTest() {
+        val wolfCard = Monster("Wolf", 3, 6).toString()
+        val wolfCardTest = """
+             ___     
+            |   |    
+            |   |    
+          3 |___| 6  
+            Wolf     
+        """.trimIndent()
+
+        assertEquals(wolfCardTest, wolfCard, "The toString doesn't match")
+
+        val gnarlCard = Monster("Gnarl", 8, 5).toString()
+        val gnarlCardTest = """
+             ___     
+            |   |    
+            |   |    
+          8 |___| 5  
+            Gnarl    
+        """.trimIndent()
+
+        assertEquals(gnarlCardTest, gnarlCard, "The toString doesn't match")
+
+        val skeletonCard = Monster("Skeleton",10, 10).toString()
+        val skeletonCardTest = """
+             ___     
+            |   |    
+            |   |    
+          10|___|10  
+          Skeleton   
+        """.trimIndent()
+
+        assertEquals(skeletonCardTest, skeletonCard, "The toString doesn't match")
     }
 }
