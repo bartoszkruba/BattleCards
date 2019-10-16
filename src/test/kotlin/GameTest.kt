@@ -5,14 +5,14 @@ import models.Player
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
+import utilities.Utils
+import java.util.*
 
 internal class GameTest {
 
     var deck:Deck = Deck()
     var hand:Hand = Hand()
     var field:Field = Field()
-    var testCard1:Monster = Monster("Monster")
-    var testCard2:Monster = Monster("NoMonster")
     lateinit var player1:Player
     lateinit var player2: Player
 
@@ -40,25 +40,32 @@ internal class GameTest {
     @Test
     internal fun attackMonsterTest(){
         createMockData()
-        var game:Game = Game()
-        var attackedCard:Monster = game.attackMonster(testCard1,testCard2)
-        assertEquals(testCard2.health - testCard1.attack,testCard2.health)
-        assertTrue(attackedCard !== testCard2)
-        assertTrue(attackedCard.cardId == testCard2.cardId)
+        var game = Game()
+        var attacker: Monster = player1.field.cardsInList()[0] as Monster
+        var getsAttacked: Monster = player2.field.cardsInList()[0] as Monster
+        var getsAttackedCopy: Monster = Utils.clone(getsAttacked) as Monster
 
+        game.attackMonster(attacker, getsAttacked)
+        assertEquals(getsAttackedCopy.health - attacker.attack, getsAttacked.health, "Attacked card should have new health values")
+        assertNotEquals(getsAttacked, getsAttackedCopy, "Attacked card should have new health values")
+        assertTrue(getsAttacked.cardId == getsAttackedCopy.cardId, "Attacked card isn't the same after attack")
     }
 
     private fun createMockData(){
-        for (i in 1..Settings.HAND_SIZE){
-            val monster:Monster = Monster("Monster")
+        // reset players for mock data
+        player1 = Player("1")
+        player2 = Player("2")
+
+        repeat(Settings.HAND_SIZE) {
+            val monster = Monster("Murloc", CardType.MONSTER, UUID.randomUUID(), 1, 4)
             hand.addCard(monster)
         }
-        for (i in 1..Settings.DECK_SIZE){
-            val monster:Monster = Monster("Monster")
+        repeat (Settings.DECK_SIZE) {
+            val monster = Monster("Wolf", CardType.MONSTER, UUID.randomUUID(), 1, 3)
             deck.addCard(monster)
         }
-        for (i in 1..Settings.FIELD_SIZE){
-            val monster:Monster = Monster("Monster")
+        repeat (Settings.FIELD_SIZE) {
+            val monster = Monster("WereWolf", CardType.MONSTER, UUID.randomUUID(), 5, 9)
             field.addCard(monster)
         }
 
