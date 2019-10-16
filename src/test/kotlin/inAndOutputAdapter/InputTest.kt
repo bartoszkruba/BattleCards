@@ -30,4 +30,17 @@ internal class InputTest {
         assertTrue(userInput.deckChoice("1", 1))
         assertFalse(userInput.deckChoice("7", 2))
     }
+
+    @Test
+    fun menu() {
+        var userInput = Input()
+
+        assertNotNull(userInput.menu("2"))
+        assertNotNull(userInput.menu("Main Menu"))
+        assertNotNull(userInput.menu("1"))
+        assertNotNull(userInput.menu("Sub Menu"))
+        assertEquals("Sub Menu", userInput.menu("Sub Menu"))
+        assertNull(userInput.menu("something"))
+        assertNull(userInput.menu("3"))
+    }
 }
