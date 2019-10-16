@@ -10,10 +10,6 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 internal class GameTest {
-
-    var deck:Deck = Deck()
-    var hand:Hand = Hand()
-    var field:Field = Field()
     lateinit var player1:Player
     lateinit var player2: Player
 
@@ -43,17 +39,23 @@ internal class GameTest {
         createMockData()
         var game = Game()
 
+        var index = 0
         repeat(player1.field.cards.size) {
-            var attacker: Monster = player1.field.cards[it] as Monster
-            var getsAttacked: Monster = player2.field.cards[it] as Monster
+            var attacker: Monster = player1.field.cards[index] as Monster
+            var getsAttacked: Monster = player2.field.cards[index] as Monster
             var getsAttackedCopy: Monster = Utils.clone(getsAttacked) as Monster
 
-            game.attackMonster(attacker, getsAttacked)
+            val killsCard = game.attackMonster(attacker, getsAttacked)
+            if(killsCard) {
+                player2.field.removeCard(getsAttacked)
+                index--
+            }
             assertEquals(getsAttackedCopy.health - attacker.attack, getsAttacked.health, "Attacked card didn't loose right health")
             assertNotEquals(getsAttacked.toString(), getsAttackedCopy.toString(), "Attacked card should have new health values")
             assertTrue(getsAttacked.cardId == getsAttackedCopy.cardId, "Attacked card isn't the same after attack")
-            assertEquals(3, player2.field.cards.size, "Dead cards wasn't removed from field")
+            index++
         }
+        assertEquals(3, player2.field.cards.size, "Dead cards wasn't removed from field")
 
         println("""
             
@@ -63,17 +65,23 @@ internal class GameTest {
             """.trimIndent())
         println(player2.field)
 
+        index = 0
         repeat(player2.field.cards.size) {
-            var attacker: Monster = player2.field.cards[it] as Monster
-            var getsAttacked: Monster = player1.field.cards[it] as Monster
+            var attacker: Monster = player2.field.cards[index] as Monster
+            var getsAttacked: Monster = player1.field.cards[index] as Monster
             var getsAttackedCopy: Monster = Utils.clone(getsAttacked) as Monster
 
-            game.attackMonster(attacker, getsAttacked)
+            val killsCard = game.attackMonster(attacker, getsAttacked)
+            if(killsCard) {
+                player1.field.removeCard(getsAttacked)
+                index--
+            }
             assertEquals(getsAttackedCopy.health - attacker.attack, getsAttacked.health, "Attacked card didn't loose right health")
             assertNotEquals(getsAttacked.toString(), getsAttackedCopy.toString(), "Attacked card should have new health values")
             assertTrue(getsAttacked.cardId == getsAttackedCopy.cardId, "Attacked card isn't the same after attack")
-            assertEquals(3, player2.field.cards.size, "Dead cards wasn't removed from field")
+            index++
         }
+        assertEquals(4, player1.field.cards.size, "Dead cards wasn't removed from field")
 
         println("""
             
@@ -97,22 +105,33 @@ internal class GameTest {
             Monster("Slime", CardType.MONSTER, UUID.randomUUID(), 2, 2),
             Monster("Murloc", CardType.MONSTER, UUID.randomUUID(), 1, 4)
         )
-        var index = 0
 
-        repeat(Settings.HAND_SIZE) {
-            hand.addCard(testCards[index++])
-        }
-        index = 0
-        repeat (Settings.DECK_SIZE) {
-            deck.addCard(testCards[index++])
-            if(index > 4) index = 0
-        }
-        index = 0
-        repeat (Settings.FIELD_SIZE) {
-            field.addCard(testCards[index++])
-        }
+        val players: Array<Player> = arrayOf(player1, player2)
 
-        player1 = Player("Player1",deck,hand,field)
-        player2 = Player("Player2",deck,hand,field)
+        repeat(2) {
+            val deck = Deck()
+            val hand = Hand()
+            val field = Field()
+
+            var index = 0
+            repeat(Settings.HAND_SIZE) {
+                val card: Monster = Utils.clone(testCards[index++]) as Monster
+                hand.addCard(card)
+            }
+            index = 0
+            repeat (Settings.DECK_SIZE) {
+                val card: Monster = Utils.clone(testCards[index++]) as Monster
+                deck.addCard(card)
+                if(index > 4) index = 0
+            }
+            index = 0
+            repeat (Settings.FIELD_SIZE) {
+                val card: Monster = Utils.clone(testCards[index++]) as Monster
+                field.addCard(card)
+            }
+            players[it] = Player("Player$it", deck, hand, field)
+        }
+        player1 = players[0]
+        player2 = players[1]
     }
 }
