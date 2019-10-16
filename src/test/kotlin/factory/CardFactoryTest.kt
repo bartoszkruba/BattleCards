@@ -74,7 +74,7 @@ internal class CardFactoryTest {
 
         assertEquals(MONSTER_NAME_FOUR, cardFour.name)
         assertEquals(MIN_HEALTH, cardFour.health)
-        assertEquals(MIN_ATTACK, cardFour.attack)
+        assertEquals(MAX_ATTACK, cardFour.attack)
         assertEquals(CardType.MONSTER, cardFour.type)
     }
 }
