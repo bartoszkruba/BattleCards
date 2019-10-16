@@ -23,7 +23,8 @@ class Monster (name: String = "something",
 
     override fun toString(): String {
         val atk = if(attack > 9) "$attack" else "$attack "
-        val hp = if(health > 9) "$health" else " $health"
+        var hp = if(health > 9) "$health" else " $health"
+        hp = if(health <= 0) " 0" else hp
         var spaces = ""
         for (i in 1..(4 - floor(name.length * 0.5)).toInt()){
             spaces += " "
