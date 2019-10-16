@@ -1,15 +1,20 @@
 package inAndOutputAdapter
 
+import models.Player
+
 class Input() {
-    fun userNameInput(name: String?): Boolean {
+    private var playerOne:Player = Player("rami")
+    private var playerTwo:Player = Player("aalkan")
+
+    fun userNameInput(name: String?, playerNumber: Int): Boolean {
         return userNameValidation(name)
     }
 
-    fun deckNameInput(deckName: String?): Boolean {
+    fun deckNameInput(deckName: String?, playerNumber: Int): Boolean {
         return checkDeckName(deckName)
     }
 
-    fun userNameValidation(name: String?):Boolean{
+    private fun userNameValidation(name: String?):Boolean{
         val regex = Regex("^[a-zA-Z]{1,9}")
         return if (name != null) {
             name.length in 1..9 && regex.matches(name)
@@ -18,7 +23,7 @@ class Input() {
         }
     }
 
-    fun checkDeckName(name: String?):Boolean{
+    private fun checkDeckName(name: String?):Boolean{
         val regex = Regex("^\\d")
         val decks = listOf("one", "two", "three", "four")
         if(name != null) {
