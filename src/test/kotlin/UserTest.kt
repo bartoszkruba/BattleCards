@@ -14,8 +14,8 @@ internal class UserTest {
     @Test
     internal fun playerConstructorTest() {
         var player: Player = Player("TestNisse")
-        var pigMonster: Card = Monster("Pig")
-        var rabbitMonster: Card = Monster("Rabbit")
+        var pigMonster: Card = Monster("Pig", 6, 4)
+        var rabbitMonster: Card = Monster("Rabbit", 6, 4)
         var listOfCards: ArrayList<Card> = arrayListOf(pigMonster, rabbitMonster)
         var deck:Deck = Deck(false,listOfCards)
         var hand:Hand = Hand(false,listOfCards)

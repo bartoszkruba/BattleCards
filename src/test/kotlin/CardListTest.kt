@@ -52,7 +52,7 @@ internal class CardListTest {
 
     private fun testMaxAddCard(clazz: CardList, maxSize: Int) {
         for (i in 1..maxSize + 1) {
-            var wolfCard: Monster = Monster("Wolf")
+            var wolfCard: Monster = Monster("Wolf", 6, 4)
             if (i <= maxSize) assertTrue(clazz.addCard(wolfCard), "Should return true ass we are allowed to add cards")
             else assertFalse(
                 clazz.addCard(wolfCard),
@@ -210,7 +210,7 @@ internal class CardListTest {
     private fun getToLargeCardList(maxSize: Int):ArrayList<Card>{
         var toLargeCardList:ArrayList<Card> = arrayListOf()
         for (i in 1..maxSize + 1) {
-            toLargeCardList.add(Monster("Im a monster,grrrr"))
+            toLargeCardList.add(Monster("monster", 6, 4))
         }
         return toLargeCardList
     }
@@ -235,11 +235,11 @@ internal class CardListTest {
         """.trimIndent()
 
         val field = Field(false, arrayListOf(
-            Monster("Ogre", CardType.MONSTER, UUID.randomUUID(), 4, 7),
-            Monster("Wolf", CardType.MONSTER, UUID.randomUUID(), 1, 3),
-            Monster("Ranger", CardType.MONSTER, UUID.randomUUID(), 3, 4),
-            Monster("Slime", CardType.MONSTER, UUID.randomUUID(), 2, 2),
-            Monster("Murloc", CardType.MONSTER, UUID.randomUUID(), 1, 4)
+            Monster("Ogre", 4, 7),
+            Monster("Wolf", 1, 3),
+            Monster("Ranger",3, 4),
+            Monster("Slime", 2, 2),
+            Monster("Murloc", 1, 4)
         )).toString()
 
         assertEquals(fieldPattern, field, "Field toString doesn't match pattern")
@@ -253,11 +253,11 @@ internal class CardListTest {
         """.trimIndent()
 
         val hand = Hand(false, arrayListOf(
-            Monster("Gnarl", CardType.MONSTER, UUID.randomUUID(), 2, 4),
-            Monster("Wolf", CardType.MONSTER, UUID.randomUUID(), 1, 3),
-            Monster("Skeleton", CardType.MONSTER, UUID.randomUUID(), 7, 4),
-            Monster("WereWolf", CardType.MONSTER, UUID.randomUUID(), 5, 9),
-            Monster("Murloc", CardType.MONSTER, UUID.randomUUID(), 1, 4)
+            Monster("Gnarl", 2, 4),
+            Monster("Wolf",1, 3),
+            Monster("Skeleton",7, 4),
+            Monster("WereWolf",5, 9),
+            Monster("Murloc",1, 4)
         )).toString()
 
         assertEquals(handPattern, hand, "Hand toString doesn't match pattern")
