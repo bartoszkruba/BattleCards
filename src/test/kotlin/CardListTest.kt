@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Assertions.*
 import java.lang.Exception
 import java.lang.IllegalArgumentException
 import java.lang.RuntimeException
+import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.*
@@ -220,5 +222,44 @@ internal class CardListTest {
             allVariables[it.name] = it.getter.call(createdObject)
         }
         return allVariables
+    }
+
+    @Test
+    fun toStringTest() {
+        val fieldPattern = """
+                ___        ___        ___        ___        ___     
+               |   |      |   |      |   |      |   |      |   |    
+               |   |      |   |      |   |      |   |      |   |    
+             4 |___| 7  1 |___| 3  3 |___| 4  2 |___| 2  1 |___| 4  
+               Ogre       Wolf      Ranger      Slime     Murloc    
+        """.trimIndent()
+
+        val field = Field(false, arrayListOf(
+            Monster("Ogre", CardType.MONSTER, UUID.randomUUID(), 4, 7),
+            Monster("Wolf", CardType.MONSTER, UUID.randomUUID(), 1, 3),
+            Monster("Ranger", CardType.MONSTER, UUID.randomUUID(), 3, 4),
+            Monster("Slime", CardType.MONSTER, UUID.randomUUID(), 2, 2),
+            Monster("Murloc", CardType.MONSTER, UUID.randomUUID(), 1, 4)
+        )).toString()
+
+        assertEquals(fieldPattern, field, "Field toString doesn't match pattern")
+
+        val handPattern = """
+                ___        ___        ___        ___        ___     
+               |   |      |   |      |   |      |   |      |   |    
+               |   |      |   |      |   |      |   |      |   |    
+             2 |___| 4  1 |___| 3  7 |___| 4  5 |___| 9  1 |___| 4  
+               Gnarl      Wolf     Skeleton   WereWolf    Murloc    
+        """.trimIndent()
+
+        val hand = Hand(false, arrayListOf(
+            Monster("Gnarl", CardType.MONSTER, UUID.randomUUID(), 2, 4),
+            Monster("Wolf", CardType.MONSTER, UUID.randomUUID(), 1, 3),
+            Monster("Skeleton", CardType.MONSTER, UUID.randomUUID(), 7, 4),
+            Monster("WereWolf", CardType.MONSTER, UUID.randomUUID(), 5, 9),
+            Monster("Murloc", CardType.MONSTER, UUID.randomUUID(), 1, 4)
+        )).toString()
+
+        assertEquals(handPattern, hand, "Hand toString doesn't match pattern")
     }
 }

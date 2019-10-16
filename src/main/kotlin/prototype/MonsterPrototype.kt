@@ -11,14 +11,13 @@ data class MonsterPrototype @JsonCreator constructor(
     @JsonProperty("name") override val name: String,
     @JsonProperty("baseHealth") val baseHealth: Int,
     @JsonProperty("baseAttack") val baseAttack: Int
-) : CardPrototype(id, name) {
+) : CardPrototype(id, name, CardType.MONSTER) {
 
     companion object {
-        // todo load from settings
-        val MAX_HEALTH = 10
-        val MIN_HEALTH = 1
-        val MAX_ATTACK = 10
-        val MIN_ATTACK = 1
+        const val MAX_HEALTH = Settings.MAX_HEALTH
+        const val MIN_HEALTH = Settings.MIN_HEALTH
+        const val MAX_ATTACK = Settings.MAX_DAMAGE
+        const val MIN_ATTACK = Settings.MIN_DAMAGE
     }
 
     init {
@@ -30,4 +29,11 @@ data class MonsterPrototype @JsonCreator constructor(
 
     override fun equals(other: Any?) = super.equals(other)
     override fun hashCode() = super.hashCode()
+
+    override fun clone(): CardPrototype = MonsterPrototype(
+        id = id,
+        name = name,
+        baseHealth = baseHealth,
+        baseAttack = baseAttack
+    )
 }
