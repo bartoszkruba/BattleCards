@@ -1,11 +1,12 @@
 package prototype
 
-abstract class CardPrototype(open val id: Int, open val name: String) {
+import CardType
+
+abstract class CardPrototype(open val id: Int, open val name: String, val type: CardType) : Clonable {
 
     companion object {
-        // todo get information from settings
-        val MAX_NAME_LENGTH = 9
-        val MIN_NAME_LENGTH = 1
+        val MAX_NAME_LENGTH = Settings.MAX_CARD_NAME_LENGTH
+        val MIN_NAME_LENGTH = Settings.MIN_CARD_NAME_LENGTH
         val NAME_REGEX = Regex("[a-zA-z ]*")
     }
 
@@ -23,6 +24,5 @@ abstract class CardPrototype(open val id: Int, open val name: String) {
     override fun hashCode(): Int {
         return id
     }
-
 
 }

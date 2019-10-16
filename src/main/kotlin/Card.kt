@@ -1,8 +1,8 @@
 import java.util.*
 
-abstract class Card(val name: String,
+abstract class Card(open val name: String,
                     val type: CardType,
-                    val cardId: UUID
+                    open val cardId: UUID
 ) {
     override fun equals(other: Any?): Boolean{
         if (this === other) return true
