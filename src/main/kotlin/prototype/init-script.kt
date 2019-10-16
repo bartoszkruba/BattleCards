@@ -7,6 +7,7 @@ class InitCards(private val cardLoader: CardLoader = CardLoader()) {
 
     fun initCards() {
         Path.of("json").toAbsolutePath().toFile().mkdir()
+        Path.of("json", "decks").toAbsolutePath().toFile().mkdir()
 
         println("Deleting old cards...")
         val cardsToDelete = ArrayList<Int>()
@@ -33,7 +34,19 @@ class InitCards(private val cardLoader: CardLoader = CardLoader()) {
 
         println("Saving new cards...")
         cardLoader.saveCards(cards)
-        println("Done!")
+
+        println("\nAdding new deck...")
+
+        val deckPrototype = DeckPrototype("test")
+        repeat(2) {
+            cards.forEach { deckPrototype.addCard(it) }
+        }
+
+        cardLoader.saveDeck(deckPrototype)
+
+        println("Added new deck: \n")
+        println(cardLoader.loadDeck("test"))
+        println("\nDone!")
     }
 
     private fun newMonster(name: String, baseHealth: Int, baseAttack: Int): MonsterPrototype {

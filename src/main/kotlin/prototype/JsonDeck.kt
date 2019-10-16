@@ -1,5 +1,8 @@
 package prototype
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
+
 
 class JsonDeck {
 
@@ -11,13 +14,23 @@ class JsonDeck {
     }
 
     val name: String
-    private val records: HashMap<Int, Int>
+    val records: HashMap<Int, Int>
+
+    @JsonIgnore
     var size = 0
         private set
 
     constructor(name: String) {
         this.name = checkName(name)
         this.records = HashMap()
+    }
+
+    constructor(@JsonProperty("name") name: String, @JsonProperty("records") records: HashMap<Int, Int>) {
+        this.name = name
+        this.records = HashMap()
+        for (entry in records) {
+            repeat(entry.value) { this.addCard(entry.key) }
+        }
     }
 
     constructor(deckPrototype: DeckPrototype) {

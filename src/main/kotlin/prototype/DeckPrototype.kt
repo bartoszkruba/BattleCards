@@ -57,6 +57,7 @@ class DeckPrototype(val name: String) {
 
     override fun toString(): String {
         val sb = StringBuilder()
+        sb.appendln(name)
         for (entry in cards.entries) {
             sb.appendln("${entry.key.name}: x${entry.value}")
         }

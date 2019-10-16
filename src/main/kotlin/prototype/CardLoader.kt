@@ -8,6 +8,10 @@ class CardLoader(
     private val fileWriter: PrototypeFileWriter = PrototypeFileWriter()
 ) {
 
+    companion object {
+        const val MAX_DECK_SIZE = Settings.DECK_SIZE
+    }
+
     init {
         objectMapper.enableDefaultTyping()
     }
@@ -43,6 +47,7 @@ class CardLoader(
     fun deleteCards(ids: Collection<Int>) = saveCardsFile(loadCardsFile().filter { !ids.contains(it.id) })
 
     fun saveDeck(deck: DeckPrototype) {
+        if (deck.size != MAX_DECK_SIZE) throw RuntimeException("Invalid deck size")
         val loadedCards = loadCardsFile()
         deck.cardsCopy().keys.forEach { if (!loadedCards.contains(it)) throw RuntimeException("Invalid id") }
         saveDeckFile(deck)
@@ -57,7 +62,7 @@ class CardLoader(
         for (entry in jsonDeck.records().entries) {
             cards.findLast { it.id == entry.key }?.let {
                 val card = it
-                repeat(entry.key) {
+                repeat(entry.value) {
                     deckPrototype.addCard(card)
                 }
             } ?: run { throw RuntimeException("Invalid Id") }
