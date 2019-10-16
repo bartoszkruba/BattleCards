@@ -145,6 +145,10 @@ internal class CardListTest {
         assertEquals(Settings.DECK_SIZE, deck.maxSize)
     }
 
+    private fun maxCardsInListConstructorTest(clazz:CardList,maxSize: Int){
+
+    }
+
     private fun cardListConstructorTest(kClass: KClass<*>) {
         var pigMonster: Card = Monster("Pig")
         var rabbitMonster: Card = Monster("Rabbit")
@@ -178,6 +182,35 @@ internal class CardListTest {
         assertTrue(cardListCards.containsAll(listOfCards))
         listOfCards.clear()
         assertTrue(cardListCards.isNotEmpty())
+
+        when(kClass.simpleName){
+            "Deck" -> {
+                try{
+                    Deck(false,getToLargeCardList(Settings.DECK_SIZE))
+                    assertTrue(false,"Should throw IllegalArgumentException")
+                }catch (err:IllegalArgumentException){}
+            }
+            "Hand" -> {
+                try{
+                    Hand(false,getToLargeCardList(Settings.HAND_SIZE))
+                    assertTrue(false,"Should throw IllegalArgumentException")
+                }catch (err:IllegalArgumentException){}
+            }
+            "Field" -> {
+                try{
+                    Field(false,getToLargeCardList(Settings.FIELD_SIZE))
+                    assertTrue(false,"Should throw IllegalArgumentException")
+                }catch (err:IllegalArgumentException){}
+            }
+        }
+    }
+
+    private fun getToLargeCardList(maxSize: Int):ArrayList<Card>{
+        var toLargeCardList:ArrayList<Card> = arrayListOf()
+        for (i in 1..maxSize + 1) {
+            toLargeCardList.add(Monster("Im a monster,grrrr"))
+        }
+        return toLargeCardList
     }
 
     private fun getAllVariables(kClass: KClass<*>, createdObject: Any): MutableMap<String, Any?> {
