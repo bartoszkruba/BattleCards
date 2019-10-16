@@ -18,14 +18,14 @@ internal class GameTest {
 
 
     @Test
-    fun nextTurn() {
+    internal fun nextTurn() {
         var game:Game = Game()
         game.nextTurn()
         assertEquals(1,game.turn,"Turn should have increased by one")
     }
 
     @Test
-    fun newGameTest(){
+    internal fun newGameTest(){
         createMockData()
         var game:Game = Game()
         game.turn = 2
@@ -35,6 +35,17 @@ internal class GameTest {
         assertEquals("",game.status)
         assertEquals(player1,game.whitePlayer)
         assertEquals(player2,game.blackPlayer)
+    }
+
+    @Test
+    internal fun attackMonsterTest(){
+        createMockData()
+        var game:Game = Game()
+        var attackedCard:Monster = game.attackMonster(testCard1,testCard2)
+        assertEquals(testCard2.health - testCard1.attack,testCard2.health)
+        assertTrue(attackedCard !== testCard2)
+        assertTrue(attackedCard.cardId == testCard2.cardId)
+
     }
 
     private fun createMockData(){
