@@ -9,7 +9,8 @@ class Game {
     //var guiAdapter:GuiAdapter = GuiAdapter()
 
     fun nextTurn(){
-
+        turn++
+        printCurrentGame()
     }
 
     fun attackMonster(attacker:Card,toBeAttacked:Card){
