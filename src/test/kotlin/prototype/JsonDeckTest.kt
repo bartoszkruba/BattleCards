@@ -224,5 +224,21 @@ internal class JsonDeckTest {
         return Unit
     }
 
-    // todo test equals
+    @Test
+    internal fun `equals test`() {
+        val jsonDeckOne = JsonDeck(DECK_NAME_ONE)
+        val jsonDeckTwo = JsonDeck(DECK_NAME_ONE)
+
+        assertTrue(jsonDeckOne == jsonDeckTwo)
+        assertTrue(jsonDeckTwo == jsonDeckOne)
+        assertFalse(jsonDeckOne === jsonDeckTwo)
+        assertFalse(jsonDeckTwo === jsonDeckOne)
+
+        jsonDeckOne.addCard(1)
+
+        assertFalse(jsonDeckOne == jsonDeckTwo)
+        assertFalse(jsonDeckTwo == jsonDeckOne)
+        assertFalse(jsonDeckOne === jsonDeckTwo)
+        assertFalse(jsonDeckTwo === jsonDeckOne)
+    }
 }
