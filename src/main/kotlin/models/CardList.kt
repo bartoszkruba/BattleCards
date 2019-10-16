@@ -3,7 +3,7 @@ package models
 import Card
 import utilities.Utils
 
-abstract class CardList(var empty: Boolean, cards: ArrayList<Card>) {
+abstract class CardList(var empty: Boolean, cards: ArrayList<Card>,var maxSize:Int) {
     private var cards: ArrayList<Card> = ArrayList()
 
     init {
@@ -15,14 +15,17 @@ abstract class CardList(var empty: Boolean, cards: ArrayList<Card>) {
     }
 
     fun addCard(card: Card): Boolean {
-        for(c in cards) {
-            if(c.cardId.equals(card.cardId)) {
-                return false
+        if(cards.size < maxSize){
+            for(c in cards) {
+                if(c.cardId.equals(card.cardId)) {
+                    return false
+                }
             }
-        }
 
-        val copied: Card = Utils.clone(card) as Card
-        return cards.add(copied)
+            val copied: Card = Utils.clone(card) as Card
+            return cards.add(copied)
+        }
+        return false
     }
 
     fun removeCard(card: Card): Card {
