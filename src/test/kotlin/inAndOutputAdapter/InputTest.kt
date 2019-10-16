@@ -11,6 +11,7 @@ internal class InputTest {
         var userInput = Input()
 
         assertTrue(userInput.userNameInput("name", 1))
+        assertFalse(userInput.userNameInput("name", 0))
         assertFalse(userInput.userNameInput("", 0))
         assertFalse(userInput.userNameInput("1234", 3))
         assertFalse(userInput.userNameInput("name77", -1))
@@ -18,15 +19,15 @@ internal class InputTest {
     }
 
     @Test
-    fun deckNameInput() {
+    fun deckChoice() {
         var userInput = Input()
         val decks = listOf("one", "two", "three", "four")
 
-        assertTrue(userInput.deckNameInput(decks.get(0), 1))
-        assertTrue(userInput.deckNameInput(decks.get(3), 2))
-        assertFalse(userInput.deckNameInput("random deck name", 2))
-        assertFalse(userInput.deckNameInput("name", 0))
-        assertTrue(userInput.deckNameInput("1", 1))
-        assertTrue(userInput.deckNameInput("7", 2))
+        assertTrue(userInput.deckChoice(decks.get(0), 1))
+        assertTrue(userInput.deckChoice(decks.get(3), 2))
+        assertFalse(userInput.deckChoice("random deck name", 2))
+        assertFalse(userInput.deckChoice("two", 0))
+        assertTrue(userInput.deckChoice("1", 1))
+        assertFalse(userInput.deckChoice("7", 2))
     }
 }

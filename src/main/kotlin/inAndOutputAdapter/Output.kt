@@ -21,12 +21,12 @@ class Output {
 
     private fun chooseDeck(playerNumber: Int) {
         print("Choose a deck(player $playerNumber): ")
-        var deckName = readLine()
-        var validDeckName = userInput.deckNameInput(deckName, playerNumber)
+        var deckInput = readLine()
+        var validDeckName = userInput.deckChoice(deckInput!!, playerNumber)
         while(!validDeckName){
             print("The deck does not exist! \nTry again: ")
-            deckName = readLine()
-            if(userInput.deckNameInput(deckName, playerNumber)){
+            deckInput = readLine()
+            if(userInput.deckChoice(deckInput!!, playerNumber)){
                 validDeckName = true
             }
         }
@@ -35,11 +35,11 @@ class Output {
     private fun userNameInput(playerNumber: Int) {
         print("Add player $playerNumber name: ")
         var userName = readLine()
-        var validUserName = userInput.userNameInput(userName, playerNumber)
+        var validUserName = userInput.userNameInput(userName!!, playerNumber)
         while(!validUserName){
             print("Wrong input of name \nTry again: ")
             userName = readLine()
-            if(userInput.userNameInput(userName, playerNumber)){
+            if(userInput.userNameInput(userName!!, playerNumber)){
                 validUserName = true
             }
         }
