@@ -4,7 +4,7 @@ import Card
 import utilities.Utils
 
 abstract class CardList(var empty: Boolean, cards: ArrayList<Card>,var maxSize:Int) {
-    private var cards: ArrayList<Card> = ArrayList()
+    var cards: ArrayList<Card> = ArrayList()
 
     init {
         require(cards.size <= maxSize){"Card list is too big, ohh nooo!"}
