@@ -22,7 +22,10 @@ class Game {
     }
 
     fun newGame(whitePlayer:Player,blackPlayer: Player){
-
+        status = ""
+        turn = 0
+        this.whitePlayer = whitePlayer
+        this.blackPlayer = blackPlayer
     }
 
     fun gameOver(){
