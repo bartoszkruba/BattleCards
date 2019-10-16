@@ -1,3 +1,4 @@
+import models.CardList
 import models.Deck
 import models.Hand
 import models.Field
@@ -5,6 +6,7 @@ import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
 import java.lang.Exception
+import java.lang.IllegalArgumentException
 import java.lang.RuntimeException
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
@@ -20,7 +22,7 @@ internal class CardListTest {
         var deck: Deck = Deck()
 
         assertTrue(deck.addCard(ogreCard))
-        var cardsInList = getAllVariables(deck::class,deck)["cards"] as ArrayList<Card>
+        var cardsInList = getAllVariables(deck::class, deck)["cards"] as ArrayList<Card>
         assertEquals(1, cardsInList.size, "The card wasn't added to the list")
         assertEquals(cardsInList[0], ogreCard, "Added card doesn't match the card that was added")
 
@@ -29,7 +31,7 @@ internal class CardListTest {
         assertNotEquals(deckOgre.attack, ogreCard.attack, "Added card is not a copy of original object")
 
         assertTrue(deck.addCard(wolfCard))
-        cardsInList = getAllVariables(deck::class,deck)["cards"] as ArrayList<Card>
+        cardsInList = getAllVariables(deck::class, deck)["cards"] as ArrayList<Card>
         assertEquals(2, cardsInList.size, "The card wasn't added to the list")
         assertEquals(cardsInList[1], wolfCard, "Added card doesn't match the card that was added")
 
@@ -38,8 +40,23 @@ internal class CardListTest {
         assertNotEquals(deckWolf.attack, wolfCard.attack, "Added card is not a copy of original object")
 
         assertFalse(deck.addCard(ogreCard), "Card with unique ID already exists")
-        cardsInList = getAllVariables(deck::class,deck)["cards"] as ArrayList<Card>
+        cardsInList = getAllVariables(deck::class, deck)["cards"] as ArrayList<Card>
         assertEquals(2, cardsInList.size, "Card with unique ID that already exists was added")
+
+        testMaxAddCard(Deck(), Settings.DECK_SIZE)
+        testMaxAddCard(Hand(), Settings.HAND_SIZE)
+        testMaxAddCard(Field(), Settings.FIELD_SIZE)
+    }
+
+    private fun testMaxAddCard(clazz: CardList, maxSize: Int) {
+        for (i in 1..maxSize + 1) {
+            var wolfCard: Monster = Monster("Wolf")
+            if (i <= maxSize) assertTrue(clazz.addCard(wolfCard), "Should return true ass we are allowed to add cards")
+            else assertFalse(
+                clazz.addCard(wolfCard),
+                "Should return false because we have added more cards than we are allowed to"
+            )
+        }
     }
 
     @Test
@@ -110,21 +127,21 @@ internal class CardListTest {
     @Test
     internal fun handConstructorTest() {
         cardListConstructorTest(Hand::class)
-        var hand:Hand = Hand()
+        var hand: Hand = Hand()
         assertEquals(Settings.HAND_SIZE, hand.maxSize)
     }
 
     @Test
     internal fun fieldConstructorTest() {
         cardListConstructorTest(Field::class)
-        var field:Field = Field()
+        var field: Field = Field()
         assertEquals(Settings.FIELD_SIZE, field.maxSize)
     }
 
     @Test
     internal fun deckConstructorTest() {
         cardListConstructorTest(Deck::class)
-        var deck:Deck = Deck()
+        var deck: Deck = Deck()
         assertEquals(Settings.DECK_SIZE, deck.maxSize)
     }
 
