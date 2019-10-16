@@ -10,12 +10,11 @@ internal class InputTest {
     fun userNameInput() {
         var userInput = Input()
 
-        assertFalse(userInput.userNameValidation(null))
-        assertTrue(userInput.userNameValidation("name"))
-        assertFalse(userInput.userNameValidation(""))
-        assertFalse(userInput.userNameValidation("1234"))
-        assertFalse(userInput.userNameValidation("name77"))
-        assertFalse(userInput.userNameValidation("name more than nine characters"))
+        assertTrue(userInput.userNameInput("name", 1))
+        assertFalse(userInput.userNameInput("", 0))
+        assertFalse(userInput.userNameInput("1234", 3))
+        assertFalse(userInput.userNameInput("name77", -1))
+        assertFalse(userInput.userNameInput("name more than nine characters", 5))
     }
 
     @Test
@@ -23,11 +22,11 @@ internal class InputTest {
         var userInput = Input()
         val decks = listOf("one", "two", "three", "four")
 
-        assertTrue(userInput.deckNameInput(decks.get(0)))
-        assertTrue(userInput.deckNameInput(decks.get(3)))
-        assertFalse(userInput.deckNameInput("deck name"))
-        assertTrue(userInput.deckNameInput("1"))
-        assertFalse(userInput.userNameInput("7"))
-        assertFalse(userInput.deckNameInput(null))
+        assertTrue(userInput.deckNameInput(decks.get(0), 1))
+        assertTrue(userInput.deckNameInput(decks.get(3), 2))
+        assertFalse(userInput.deckNameInput("random deck name", 2))
+        assertFalse(userInput.deckNameInput("name", 0))
+        assertTrue(userInput.deckNameInput("1", 1))
+        assertTrue(userInput.deckNameInput("7", 2))
     }
 }
