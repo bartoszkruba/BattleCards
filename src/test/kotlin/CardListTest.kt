@@ -17,11 +17,16 @@ import kotlin.reflect.jvm.isAccessible
 
 internal class CardListTest {
 
+    companion object {
+        const val MAX_HEALTH = Settings.MAX_HEALTH
+        const val MAX_ATTACK = Settings.MAX_DAMAGE
+    }
+
     @Test
     internal fun addCardTest() {
-        var ogreCard: Monster = Monster("Ogre")
-        var wolfCard: Monster = Monster("Wolf")
-        var deck: Deck = Deck()
+        var ogreCard = Monster("Ogre", MAX_ATTACK, MAX_HEALTH)
+        var wolfCard = Monster("Wolf", MAX_ATTACK, MAX_HEALTH)
+        var deck = Deck()
 
         assertTrue(deck.addCard(ogreCard))
         var cardsInList = getAllVariables(deck::class, deck)["cards"] as ArrayList<Card>
@@ -52,7 +57,7 @@ internal class CardListTest {
 
     private fun testMaxAddCard(clazz: CardList, maxSize: Int) {
         for (i in 1..maxSize + 1) {
-            var wolfCard: Monster = Monster("Wolf")
+            var wolfCard: Monster = Monster("Wolf", MAX_ATTACK, MAX_HEALTH)
             if (i <= maxSize) assertTrue(clazz.addCard(wolfCard), "Should return true ass we are allowed to add cards")
             else assertFalse(
                 clazz.addCard(wolfCard),
@@ -63,8 +68,8 @@ internal class CardListTest {
 
     @Test
     internal fun cardsInListTest() {
-        var pigMonster: Monster = Monster("Pig")
-        var rabbitMonster: Monster = Monster("Rabbit")
+        var pigMonster: Monster = Monster("Pig", MAX_ATTACK, MAX_HEALTH)
+        var rabbitMonster: Monster = Monster("Rabbit", MAX_ATTACK, MAX_HEALTH)
         var deck: Deck = Deck(arrayListOf(pigMonster, rabbitMonster))
 
         var deckClass = deck::class
@@ -83,8 +88,8 @@ internal class CardListTest {
 
     @Test
     internal fun removeCardTest() {
-        var pigMonster: Monster = Monster("Pig")
-        var rabbitMonster: Monster = Monster("Rabbit")
+        var pigMonster: Monster = Monster("Pig", MAX_ATTACK, MAX_HEALTH)
+        var rabbitMonster: Monster = Monster("Rabbit", MAX_ATTACK, MAX_HEALTH)
         var deck: Deck = Deck(arrayListOf(pigMonster))
 
         var removedCard: Card = Monster()
@@ -152,8 +157,8 @@ internal class CardListTest {
     }
 
     private fun cardListConstructorTest(kClass: KClass<*>) {
-        var pigMonster: Card = Monster("Pig")
-        var rabbitMonster: Card = Monster("Rabbit")
+        var pigMonster: Card = Monster("Pig", MAX_ATTACK, MAX_HEALTH)
+        var rabbitMonster: Card = Monster("Rabbit", MAX_ATTACK, MAX_HEALTH)
         var listOfCards: ArrayList<Card> = arrayListOf(pigMonster, rabbitMonster)
 
         var constructorParams: MutableMap<String, KParameter> = mutableMapOf()
@@ -213,7 +218,7 @@ internal class CardListTest {
     private fun getToLargeCardList(maxSize: Int): ArrayList<Card> {
         var toLargeCardList: ArrayList<Card> = arrayListOf()
         for (i in 1..maxSize + 1) {
-            toLargeCardList.add(Monster("Im a monster,grrrr"))
+            toLargeCardList.add(Monster("monster", MAX_ATTACK, MAX_HEALTH))
         }
         return toLargeCardList
     }
@@ -239,11 +244,11 @@ internal class CardListTest {
 
         val field = Field(
             arrayListOf(
-                Monster("Ogre", CardType.MONSTER, UUID.randomUUID(), 4, 7),
-                Monster("Wolf", CardType.MONSTER, UUID.randomUUID(), 1, 3),
-                Monster("Ranger", CardType.MONSTER, UUID.randomUUID(), 3, 4),
-                Monster("Slime", CardType.MONSTER, UUID.randomUUID(), 2, 2),
-                Monster("Murloc", CardType.MONSTER, UUID.randomUUID(), 1, 4)
+                Monster("Ogre", 4, 7),
+                Monster("Wolf", 1, 3),
+                Monster("Ranger", 3, 4),
+                Monster("Slime", 2, 2),
+                Monster("Murloc", 1, 4)
             )
         ).toString()
 
@@ -259,11 +264,11 @@ internal class CardListTest {
 
         val hand = Hand(
             arrayListOf(
-                Monster("Gnarl", CardType.MONSTER, UUID.randomUUID(), 2, 4),
-                Monster("Wolf", CardType.MONSTER, UUID.randomUUID(), 1, 3),
-                Monster("Skeleton", CardType.MONSTER, UUID.randomUUID(), 7, 4),
-                Monster("WereWolf", CardType.MONSTER, UUID.randomUUID(), 5, 9),
-                Monster("Murloc", CardType.MONSTER, UUID.randomUUID(), 1, 4)
+                Monster("Gnarl", 2, 4),
+                Monster("Wolf", 1, 3),
+                Monster("Skeleton", 7, 4),
+                Monster("WereWolf", 5, 9),
+                Monster("Murloc", 1, 4)
             )
         ).toString()
 
