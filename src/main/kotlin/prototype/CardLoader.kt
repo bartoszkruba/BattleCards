@@ -8,6 +8,10 @@ class CardLoader(
     private val fileWriter: PrototypeFileWriter = PrototypeFileWriter()
 ) {
 
+    companion object {
+        const val MAX_DECK_SIZE = Settings.DECK_SIZE
+    }
+
     init {
         objectMapper.enableDefaultTyping()
     }
@@ -42,15 +46,51 @@ class CardLoader(
 
     fun deleteCards(ids: Collection<Int>) = saveCardsFile(loadCardsFile().filter { !ids.contains(it.id) })
 
-    fun saveDeck(deckName: String, deck: DeckPrototype) {
-
+    fun saveDeck(deck: DeckPrototype) {
+        if (deck.size != MAX_DECK_SIZE) throw RuntimeException("Invalid deck size")
+        val loadedCards = loadCardsFile()
+        deck.cardsCopy().keys.forEach { if (!loadedCards.contains(it)) throw RuntimeException("Invalid id") }
+        saveDeckFile(deck)
     }
 
-    fun loadDeck(): DeckPrototype {
-        return DeckPrototype("dd")
+    fun loadDeck(name: String): DeckPrototype {
+        val cards = loadCardsFile()
+        val jsonDeck = loadDeckFile(name)
+
+        val deckPrototype = DeckPrototype(jsonDeck.name)
+
+        for (entry in jsonDeck.records().entries) {
+            cards.findLast { it.id == entry.key }?.let {
+                val card = it
+                repeat(entry.value) {
+                    deckPrototype.addCard(card)
+                }
+            } ?: run { throw RuntimeException("Invalid Id") }
+        }
+
+        return deckPrototype
+    }
+
+    private fun loadDeckFile(name: String): JsonDeck {
+
+        val path = Path.of("json", "decks", "$name.json").toAbsolutePath().toString()
+
+        return fileWriter.readFile(path)?.let {
+            objectMapper.readValue(it, JsonDeck::class.java)
+        } ?: kotlin.run {
+            throw RuntimeException("Deck do not exist")
+        }
+    }
+
+    private fun saveDeckFile(deck: DeckPrototype) {
+        val jsonDeck = JsonDeck(deck)
+        val file = objectMapper.writeValueAsString(jsonDeck)
+        val path = Path.of("json", "decks", "${deck.name}.json").toAbsolutePath().toString()
+        fileWriter.writeFile(path, file)
     }
 
     private fun loadCardsFile(): ArrayList<CardPrototype> {
+
         val file = when (val file = try {
             fileWriter.readFile(cardsPath)
         } catch (ex: Exception) {
@@ -59,6 +99,7 @@ class CardLoader(
             null -> "[]"
             else -> file
         }
+
         return objectMapper.readValue<ArrayList<CardPrototype>>(file, listType)
     }
 
