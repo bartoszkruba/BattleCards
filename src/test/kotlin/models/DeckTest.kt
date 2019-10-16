@@ -42,7 +42,7 @@ internal class DeckTest {
 
         val deck = Deck()
 
-        repeat(3) {
+        repeat(10) {
             deck.addCard(monsterOne)
             deck.addCard(monsterTwo)
             deck.addCard(monsterThree)
