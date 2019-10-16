@@ -1,6 +1,7 @@
 package prototype
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import java.lang.StringBuilder
 import java.nio.file.Path
 
 class CardLoader(
@@ -53,7 +54,32 @@ class CardLoader(
     }
 
     fun loadDeck(name: String): DeckPrototype {
-        return DeckPrototype("dd")
+        val cards = loadCardsFile()
+        val jsonDeck = loadDeckFile(name)
+
+        val deckPrototype = DeckPrototype(jsonDeck.name)
+
+        for (entry in jsonDeck.records().entries) {
+            cards.findLast { it.id == entry.key }?.let {
+                val card = it
+                repeat(entry.key) {
+                    deckPrototype.addCard(card)
+                }
+            } ?: run { throw RuntimeException("Invalid Id") }
+        }
+
+        return deckPrototype
+    }
+
+    private fun loadDeckFile(name: String): JsonDeck {
+
+        val path = Path.of("json", "decks", "$name.json").toAbsolutePath().toString()
+
+        return fileWriter.readFile(path)?.let {
+            objectMapper.readValue(it, JsonDeck::class.java)
+        } ?: kotlin.run {
+            throw RuntimeException("Deck do not exist")
+        }
     }
 
     private fun saveDeckFile(deck: DeckPrototype) {
@@ -64,6 +90,7 @@ class CardLoader(
     }
 
     private fun loadCardsFile(): ArrayList<CardPrototype> {
+
         val file = when (val file = try {
             fileWriter.readFile(cardsPath)
         } catch (ex: Exception) {
@@ -72,6 +99,7 @@ class CardLoader(
             null -> "[]"
             else -> file
         }
+
         return objectMapper.readValue<ArrayList<CardPrototype>>(file, listType)
     }
 

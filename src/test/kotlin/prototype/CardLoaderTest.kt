@@ -522,11 +522,9 @@ internal class CardLoaderTest {
         val monsterTwo = MonsterPrototype(ID_TWO, NAME_TWO, MAX_HEALTH, MAX_ATTACK)
         val monsterThree = MonsterPrototype(ID_THREE, NAME_THREE, MAX_HEALTH, MAX_ATTACK)
 
-        val deckName = "name"
+        val path = Path.of("json", "decks", "$DECK_NAME_ONE.json").toAbsolutePath().toString()
 
-        val path = Path.of("json", "decks", "$deckName.json").toAbsolutePath().toString()
-
-        val deckPrototype = DeckPrototype(NAME_ONE)
+        val deckPrototype = DeckPrototype(DECK_NAME_ONE)
         deckPrototype.addCard(monsterOne)
         deckPrototype.addCard(monsterTwo)
         deckPrototype.addCard(monsterThree)
@@ -541,9 +539,9 @@ internal class CardLoaderTest {
         given(objectMapper.readValue<ArrayList<CardPrototype>>(testStringTwo, type)).willReturn(cards)
         given(objectMapper.readValue<JsonDeck>(testStringOne, JsonDeck::class.java)).willReturn(jsonDeck)
 
-        val loadedDeckPrototype = cardLoader.loadDeck(deckName)
+        val loadedDeckPrototype = cardLoader.loadDeck(DECK_NAME_ONE)
         assertEquals(3, deckPrototype.size)
-        assertEquals(deckName, loadedDeckPrototype.name)
+        assertEquals(DECK_NAME_ONE, loadedDeckPrototype.name)
         val cardsCopy = deckPrototype.cardsCopy()
         assertEquals(3, cardsCopy.size)
         assertEquals(1, cardsCopy[monsterOne])
@@ -560,12 +558,23 @@ internal class CardLoaderTest {
     }
 
     @Test
-    internal fun `loadDeck(), wilewriter loadFile returns null`() {
-        given(fileWriter.readFile(cardsPath)).willReturn(null)
+    internal fun `loadDeck(), filewriter loadFile returns null`() {
+        val cards = ArrayList<CardPrototype>()
+        val deckPrototype = DeckPrototype(DECK_NAME_ONE)
+        val monsterOne = MonsterPrototype(ID_ONE, NAME_ONE, MAX_HEALTH, MAX_ATTACK)
+        repeat(MAX_DECK_SIZE) { deckPrototype.addCard(monsterOne) }
+        val deckPath = Path.of("json", "decks", "$DECK_NAME_ONE.json").toAbsolutePath().toString()
 
-        shouldThrowRuntimeException(Executable { cardLoader.loadDeck("dd") })
+        given(fileWriter.readFile(cardsPath)).willReturn(null)
+        given(fileWriter.readFile(deckPath)).willReturn(null)
+        given(objectMapper.readValue<ArrayList<CardPrototype>>("[]", type)).willReturn(cards)
+
+        shouldThrowRuntimeException(Executable { cardLoader.loadDeck(DECK_NAME_ONE) })
 
         verify(fileWriter, times(1)).readFile(cardsPath)
+        verify(objectMapper, times(1)).readValue<ArrayList<CardPrototype>>("[]", type)
+        verify(fileWriter, times(1)).readFile(deckPath)
+
         verifyNoMoreInteractions(fileWriter)
         verifyNoMoreInteractions(objectMapper)
     }
@@ -576,11 +585,10 @@ internal class CardLoaderTest {
         val monsterTwo = MonsterPrototype(ID_TWO, NAME_TWO, MAX_HEALTH, MAX_ATTACK)
         val monsterThree = MonsterPrototype(ID_THREE, NAME_THREE, MAX_HEALTH, MAX_ATTACK)
 
-        val deckName = "name"
 
-        val path = Path.of("json", "decks", "$deckName.json").toAbsolutePath().toString()
+        val path = Path.of("json", "decks", "$DECK_NAME_ONE.json").toAbsolutePath().toString()
 
-        val deckPrototype = DeckPrototype(NAME_ONE)
+        val deckPrototype = DeckPrototype(DECK_NAME_ONE)
         deckPrototype.addCard(monsterOne)
         deckPrototype.addCard(monsterTwo)
         deckPrototype.addCard(monsterThree)
@@ -595,7 +603,7 @@ internal class CardLoaderTest {
         given(objectMapper.readValue<ArrayList<CardPrototype>>(testStringTwo, type)).willReturn(cards)
         given(objectMapper.readValue<JsonDeck>(testStringOne, JsonDeck::class.java)).willReturn(jsonDeck)
 
-        shouldThrowRuntimeException(Executable { cardLoader.loadDeck(deckName) })
+        shouldThrowRuntimeException(Executable { cardLoader.loadDeck(DECK_NAME_ONE) })
 
         verify(fileWriter, times(1)).readFile(cardsPath)
         verify(fileWriter, times(1)).readFile(path)
@@ -609,16 +617,19 @@ internal class CardLoaderTest {
     @Test
     internal fun `loadDeck(), deck do not exist`() {
         val testStringOne = "test one"
-        val deckName = "name"
 
-        val deckPath = Path.of("json", "decks", "$deckName.json").toString()
+        val deckPath = Path.of("json", "decks", "$DECK_NAME_ONE.json").toAbsolutePath().toString()
+
+        val cards = ArrayList<CardPrototype>()
 
         given(fileWriter.readFile(cardsPath)).willReturn(testStringOne)
+        given(objectMapper.readValue<ArrayList<CardPrototype>>(testStringOne, type)).willReturn(cards)
         given(fileWriter.readFile(deckPath)).willReturn(null)
 
-        shouldThrowRuntimeException(Executable { cardLoader.loadDeck(deckName) })
+        shouldThrowRuntimeException(Executable { cardLoader.loadDeck(DECK_NAME_ONE) })
 
         verify(fileWriter, times(1)).readFile(cardsPath)
+        verify(objectMapper, times(1)).readValue<ArrayList<CardPrototype>>(testStringOne, type)
         verify(fileWriter, times(1)).readFile(deckPath)
         verifyNoMoreInteractions(fileWriter)
         verifyNoMoreInteractions(objectMapper)
@@ -639,18 +650,33 @@ internal class CardLoaderTest {
     internal fun `loadDeck(), filewriter throws exception during loading deck`() {
         val testStringOne = "test one"
 
+        val cards = ArrayList<CardPrototype>()
         val deckPath = Path.of("json", "decks", "$DECK_NAME_ONE.json").toAbsolutePath().toString()
 
         given(fileWriter.readFile(cardsPath)).willReturn(testStringOne)
+        given(objectMapper.readValue<ArrayList<CardPrototype>>(testStringOne, type)).willReturn(cards)
         given(fileWriter.readFile(deckPath)).willThrow(RuntimeException::class.java)
 
         shouldThrowRuntimeException(Executable { cardLoader.loadDeck(DECK_NAME_ONE) })
 
         verify(fileWriter, times(1)).readFile(cardsPath)
+        verify(objectMapper, times(1)).readValue<ArrayList<CardPrototype>>(testStringOne, type)
         verify(fileWriter, times(1)).readFile(deckPath)
 
         verifyNoMoreInteractions(fileWriter)
         verifyNoMoreInteractions(objectMapper)
+    }
+
+    @Test
+    internal fun `loadDeck(), filewrtier throws exception during loading cards`() {
+        given(fileWriter.readFile(cardsPath)).willThrow(RuntimeException::class.java)
+
+        shouldThrowRuntimeException(Executable { cardLoader.loadDeck("dd") })
+
+        verify(fileWriter, times(1)).readFile(cardsPath)
+
+        verifyNoMoreInteractions(fileWriter)
+        Mockito.verifyNoMoreInteractions(objectMapper)
     }
 
     @Test
@@ -718,58 +744,10 @@ internal class CardLoaderTest {
         verifyNoMoreInteractions(objectMapper)
     }
 
-    @Test
-    internal fun `loadDeck, filewrtier throws exception during loading cards`() {
-        given(fileWriter.readFile(cardsPath)).willThrow(RuntimeException::class.java)
-
-        verify(fileWriter, times(1)).readFile(cardsPath)
-
-        val monsterOne = MonsterPrototype(ID_ONE, NAME_ONE, MAX_HEALTH, MAX_ATTACK)
-
-        val deckPrototype = DeckPrototype(DECK_NAME_ONE)
-        repeat(MAX_DECK_SIZE) { deckPrototype.addCard(monsterOne) }
-
-        shouldThrowRuntimeException(Executable { cardLoader.saveDeck(deckPrototype) })
-
-        verifyNoMoreInteractions(fileWriter)
-        verifyNoMoreInteractions(objectMapper)
-    }
-
-    @Test
-    internal fun `loadDeck(), filewriter throws exception during saving deck`() {
-        val testStringOne = "test one"
-        val testStringTwo = "test two"
-
-        val deckPath = Path.of("json", "decks", "$DECK_NAME_ONE.json").toAbsolutePath().toString()
-
-        val monsterOne = MonsterPrototype(ID_ONE, NAME_ONE, MAX_HEALTH, MAX_ATTACK)
-        val monsterTwo = MonsterPrototype(ID_TWO, NAME_TWO, MAX_HEALTH, MAX_ATTACK)
-        val monsterThree = MonsterPrototype(ID_THREE, NAME_THREE, MAX_HEALTH, MAX_ATTACK)
-
-        val cards = arrayListOf<CardPrototype>(monsterOne, monsterTwo, monsterThree)
-        val deckPrototype = DeckPrototype(DECK_NAME_ONE)
-        repeat(MAX_DECK_SIZE) { deckPrototype.addCard(monsterOne) }
-        val jsonDeck = JsonDeck(deckPrototype)
-
-        given(fileWriter.readFile(cardsPath)).willReturn(testStringOne)
-        given(objectMapper.readValue<ArrayList<CardPrototype>>(testStringOne, type)).willReturn(cards)
-        given(objectMapper.writeValueAsString(jsonDeck)).willReturn(testStringTwo)
-        given(fileWriter.writeFile(deckPath, testStringTwo)).willThrow(RuntimeException::class.java)
-
-        shouldThrowRuntimeException(Executable { cardLoader.saveDeck(deckPrototype) })
-
-        verify(fileWriter, times(1)).readFile(cardsPath)
-        verify(objectMapper, times(1)).readValue<ArrayList<CardPrototype>>(testStringOne, type)
-        verify(objectMapper, times(1)).writeValueAsString(jsonDeck)
-        verify(fileWriter, times(1)).writeFile(deckPath, testStringTwo)
-
-        verifyNoMoreInteractions(fileWriter)
-        verifyNoMoreInteractions(objectMapper)
-    }
-
     private fun shouldThrowRuntimeException(executable: Executable) {
         assertThrows(RuntimeException::class.java, executable)
         return Unit
     }
 
+    fun <T> any(): T = Mockito.any<T>()
 }
