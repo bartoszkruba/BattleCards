@@ -29,7 +29,13 @@ class Input() {
     }
 
     fun menu(choice: String): String? {
-        return null
+        return if(choice == "Main Menu" || choice == "1"){
+            choice
+        }else if (choice == "Sub Menu" || choice == "2"){
+            choice
+        }else {
+            null
+        }
     }
 
     private fun userNameValidation(name: String):Boolean{
