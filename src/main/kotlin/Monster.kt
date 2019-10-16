@@ -33,7 +33,6 @@ class Monster : Card {
         } else {
             this.health = this.health - card.attack
             return true
-
         }
     }
 
