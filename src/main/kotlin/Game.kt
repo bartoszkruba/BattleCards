@@ -19,7 +19,20 @@ class Game {
     }
 
     fun printCurrentGame(){
+        println("""
 
+                     ${whitePlayer.name}
+
+${whitePlayer.field}
+
+_____________________________________________________
+
+${blackPlayer.field}
+
+                     ${blackPlayer.name}
+
+        """.trimIndent())
+//    TODO: Add ${messageLogger.lastLog()} to print
     }
 
     fun newGame(whitePlayer:Player,blackPlayer: Player){
