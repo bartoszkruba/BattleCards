@@ -17,9 +17,9 @@ internal class UserTest {
         var pigMonster: Card = Monster("Pig")
         var rabbitMonster: Card = Monster("Rabbit")
         var listOfCards: ArrayList<Card> = arrayListOf(pigMonster, rabbitMonster)
-        var deck:Deck = Deck(false,listOfCards)
-        var hand:Hand = Hand(false,listOfCards)
-        var field:Field = Field(false,listOfCards)
+        var deck:Deck = Deck(listOfCards)
+        var hand:Hand = Hand(listOfCards)
+        var field:Field = Field(listOfCards)
 
         assertFalse(player::class.superclasses[0].primaryConstructor!!.parameters.find {it.name == "name"}!!.isOptional)
         assertTrue(

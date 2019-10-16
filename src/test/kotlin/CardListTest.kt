@@ -65,7 +65,7 @@ internal class CardListTest {
     internal fun cardsInListTest() {
         var pigMonster: Monster = Monster("Pig")
         var rabbitMonster: Monster = Monster("Rabbit")
-        var deck: Deck = Deck(false, arrayListOf(pigMonster, rabbitMonster))
+        var deck: Deck = Deck(arrayListOf(pigMonster, rabbitMonster))
 
         var deckClass = deck::class
         var deckClassVariables = getAllVariables(deckClass, deck)
@@ -85,7 +85,7 @@ internal class CardListTest {
     internal fun removeCardTest() {
         var pigMonster: Monster = Monster("Pig")
         var rabbitMonster: Monster = Monster("Rabbit")
-        var deck: Deck = Deck(false, arrayListOf(pigMonster))
+        var deck: Deck = Deck(arrayListOf(pigMonster))
 
         var removedCard: Card = Monster()
 
@@ -103,7 +103,7 @@ internal class CardListTest {
         assertEquals(0, deck.cardsInList().size, "The card did not get removed, a card still exists in the deck")
         assertEquals(true, deck.empty, "The boolean empty should be set to true because no cards exists")
 
-        deck = Deck(false, arrayListOf(rabbitMonster, pigMonster))
+        deck = Deck(arrayListOf(rabbitMonster, pigMonster))
 
         try {
             removedCard = deck.removeCard(rabbitMonster)
@@ -147,7 +147,7 @@ internal class CardListTest {
         assertEquals(Settings.DECK_SIZE, deck.maxSize)
     }
 
-    private fun maxCardsInListConstructorTest(clazz:CardList,maxSize: Int){
+    private fun maxCardsInListConstructorTest(clazz: CardList, maxSize: Int) {
 
     }
 
@@ -170,7 +170,7 @@ internal class CardListTest {
 
         createdObject = kClass.primaryConstructor!!.callBy(
             mapOf(
-                constructorParams["empty"]!! to false,
+//                constructorParams["empty"]!! to false,
                 constructorParams["cards"]!! to listOfCards
             ) as Map<KParameter, Any>
         )
@@ -185,30 +185,33 @@ internal class CardListTest {
         listOfCards.clear()
         assertTrue(cardListCards.isNotEmpty())
 
-        when(kClass.simpleName){
+        when (kClass.simpleName) {
             "Deck" -> {
-                try{
-                    Deck(false,getToLargeCardList(Settings.DECK_SIZE))
-                    assertTrue(false,"Should throw IllegalArgumentException")
-                }catch (err:IllegalArgumentException){}
+                try {
+                    Deck(getToLargeCardList(Settings.DECK_SIZE))
+                    assertTrue(false, "Should throw IllegalArgumentException")
+                } catch (err: IllegalArgumentException) {
+                }
             }
             "Hand" -> {
-                try{
-                    Hand(false,getToLargeCardList(Settings.HAND_SIZE))
-                    assertTrue(false,"Should throw IllegalArgumentException")
-                }catch (err:IllegalArgumentException){}
+                try {
+                    Hand(getToLargeCardList(Settings.HAND_SIZE))
+                    assertTrue(false, "Should throw IllegalArgumentException")
+                } catch (err: IllegalArgumentException) {
+                }
             }
             "Field" -> {
-                try{
-                    Field(false,getToLargeCardList(Settings.FIELD_SIZE))
-                    assertTrue(false,"Should throw IllegalArgumentException")
-                }catch (err:IllegalArgumentException){}
+                try {
+                    Field(getToLargeCardList(Settings.FIELD_SIZE))
+                    assertTrue(false, "Should throw IllegalArgumentException")
+                } catch (err: IllegalArgumentException) {
+                }
             }
         }
     }
 
-    private fun getToLargeCardList(maxSize: Int):ArrayList<Card>{
-        var toLargeCardList:ArrayList<Card> = arrayListOf()
+    private fun getToLargeCardList(maxSize: Int): ArrayList<Card> {
+        var toLargeCardList: ArrayList<Card> = arrayListOf()
         for (i in 1..maxSize + 1) {
             toLargeCardList.add(Monster("Im a monster,grrrr"))
         }
@@ -234,13 +237,15 @@ internal class CardListTest {
                Ogre       Wolf      Ranger      Slime     Murloc    
         """.trimIndent()
 
-        val field = Field(false, arrayListOf(
-            Monster("Ogre", CardType.MONSTER, UUID.randomUUID(), 4, 7),
-            Monster("Wolf", CardType.MONSTER, UUID.randomUUID(), 1, 3),
-            Monster("Ranger", CardType.MONSTER, UUID.randomUUID(), 3, 4),
-            Monster("Slime", CardType.MONSTER, UUID.randomUUID(), 2, 2),
-            Monster("Murloc", CardType.MONSTER, UUID.randomUUID(), 1, 4)
-        )).toString()
+        val field = Field(
+            arrayListOf(
+                Monster("Ogre", CardType.MONSTER, UUID.randomUUID(), 4, 7),
+                Monster("Wolf", CardType.MONSTER, UUID.randomUUID(), 1, 3),
+                Monster("Ranger", CardType.MONSTER, UUID.randomUUID(), 3, 4),
+                Monster("Slime", CardType.MONSTER, UUID.randomUUID(), 2, 2),
+                Monster("Murloc", CardType.MONSTER, UUID.randomUUID(), 1, 4)
+            )
+        ).toString()
 
         assertEquals(fieldPattern, field, "Field toString doesn't match pattern")
 
@@ -252,13 +257,15 @@ internal class CardListTest {
                Gnarl      Wolf     Skeleton   WereWolf    Murloc    
         """.trimIndent()
 
-        val hand = Hand(false, arrayListOf(
-            Monster("Gnarl", CardType.MONSTER, UUID.randomUUID(), 2, 4),
-            Monster("Wolf", CardType.MONSTER, UUID.randomUUID(), 1, 3),
-            Monster("Skeleton", CardType.MONSTER, UUID.randomUUID(), 7, 4),
-            Monster("WereWolf", CardType.MONSTER, UUID.randomUUID(), 5, 9),
-            Monster("Murloc", CardType.MONSTER, UUID.randomUUID(), 1, 4)
-        )).toString()
+        val hand = Hand(
+            arrayListOf(
+                Monster("Gnarl", CardType.MONSTER, UUID.randomUUID(), 2, 4),
+                Monster("Wolf", CardType.MONSTER, UUID.randomUUID(), 1, 3),
+                Monster("Skeleton", CardType.MONSTER, UUID.randomUUID(), 7, 4),
+                Monster("WereWolf", CardType.MONSTER, UUID.randomUUID(), 5, 9),
+                Monster("Murloc", CardType.MONSTER, UUID.randomUUID(), 1, 4)
+            )
+        ).toString()
 
         assertEquals(handPattern, hand, "Hand toString doesn't match pattern")
     }
