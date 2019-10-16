@@ -28,6 +28,10 @@ class Input() {
         return false
     }
 
+    fun menu(choice: String): String? {
+        return null
+    }
+
     private fun userNameValidation(name: String):Boolean{
         val regex = Regex("^[a-zA-Z]{1,9}")
         return name.length in 1..9 && regex.matches(name)

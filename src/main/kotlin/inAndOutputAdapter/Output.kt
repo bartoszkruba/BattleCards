@@ -3,13 +3,15 @@ package inAndOutputAdapter
 class Output {
     var userInput = Input()
     fun printMainScreen(){
-        userNameInput(1);
+        /*userNameInput(1);
         printAllDecks()
         chooseDeck(1);
 
         userNameInput(2);
         printAllDecks()
-        chooseDeck(2);
+        chooseDeck(2);*/
+
+        printMenus()
     }
 
     private fun printAllDecks() {
@@ -41,6 +43,23 @@ class Output {
             userName = readLine()
             if(userInput.userNameInput(userName!!, playerNumber)){
                 validUserName = true
+            }
+        }
+    }
+
+    private fun printMenus(){
+        println("**** The game has just started ****")
+        println("\n1. Main Menu")
+        println("2. Sub Menu")
+        print("\nAction: ")
+
+        var choice = readLine()
+        var validChoice = userInput.menu(choice!!)
+        while(validChoice == null){
+            print("Wrong choice \nTry again: ")
+            choice = readLine()
+            if(userInput.menu(choice!!) != null){
+                validChoice = choice
             }
         }
     }
