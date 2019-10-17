@@ -24,6 +24,50 @@ internal class GameTest {
         assertEquals(Settings.PLAYER_MANA,game.blackPlayer.mana)
     }
 
+    @Test
+    internal fun checkGameOverTest(){
+        createMockData()
+        var game:Game = Game(player1.deck,player2.deck,player1.name,player2.name)
+        assertFalse(game.checkGameOver())
+        game.whitePlayer.deck = Deck()
+        assertFalse(game.checkGameOver())
+        game.blackPlayer.deck = Deck()
+        assertTrue(game.checkGameOver())
+
+        game = Game(player1.deck,player2.deck,player1.name,player2.name)
+        game.whitePlayer.field.addCard(Utils.clone(player1.deck.cards[0]) as Card)
+        game.whitePlayer.deck = Deck()
+        game.blackPlayer.deck = Deck()
+        assertFalse(game.checkGameOver())
+        game.whitePlayer.field = Field()
+        assertTrue(game.checkGameOver())
+
+        game = Game(player1.deck,player2.deck,player1.name,player2.name)
+        game.whitePlayer.hand.addCard(Utils.clone(player1.deck.cards[0]) as Card)
+        game.whitePlayer.deck = Deck()
+        game.blackPlayer.deck = Deck()
+        assertFalse(game.checkGameOver())
+        game.whitePlayer.hand = Hand()
+        assertTrue(game.checkGameOver())
+
+        game = Game(player1.deck,player2.deck,player1.name,player2.name)
+        game.blackPlayer.field.addCard(Utils.clone(player1.deck.cards[0]) as Card)
+        game.whitePlayer.deck = Deck()
+        game.blackPlayer.deck = Deck()
+        assertFalse(game.checkGameOver())
+        game.blackPlayer.field = Field()
+        assertTrue(game.checkGameOver())
+
+        game = Game(player1.deck,player2.deck,player1.name,player2.name)
+        game.blackPlayer.hand.addCard(Utils.clone(player1.deck.cards[0]) as Card)
+        game.whitePlayer.deck = Deck()
+        game.blackPlayer.deck = Deck()
+        assertFalse(game.checkGameOver())
+        game.blackPlayer.hand = Hand()
+        assertTrue(game.checkGameOver())
+
+    }
+
 
    @Test
    internal fun gameConstructorTest(){
