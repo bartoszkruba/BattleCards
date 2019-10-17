@@ -6,7 +6,6 @@ import models.Player
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import utilities.Utils
-import java.util.*
 import kotlin.collections.ArrayList
 
 internal class GameTest {
@@ -15,28 +14,15 @@ internal class GameTest {
 
     @Test
     internal fun nextTurn() {
-        var game: Game = Game()
+        val game = Game(Deck(), Deck(), "player1", "player2")
         game.nextTurn()
         assertEquals(1, game.turn, "Turn should have increased by one")
     }
 
     @Test
-    internal fun newGameTest() {
-        createMockData()
-        var game: Game = Game()
-        game.turn = 2
-        game.status = "asdas"
-        game.newGame(player1, player2)
-        assertEquals(0, game.turn)
-        assertEquals("", game.status)
-        assertEquals(player1, game.whitePlayer)
-        assertEquals(player2, game.blackPlayer)
-    }
-
-    @Test
     internal fun attackMonsterTest() {
         createMockData()
-        val game = Game()
+        val game = Game(Deck(), Deck(), "player1", "player2")
 
         var index = 0
         repeat(player1.field.cards.size) {
@@ -115,7 +101,7 @@ internal class GameTest {
     @Test
     fun `printCurrentGame() test`() {
         createMockData()
-        val game = Game()
+        val game = Game(Deck(), Deck(), "player1", "player2")
         game.whitePlayer = player1
         game.blackPlayer = player2
 
