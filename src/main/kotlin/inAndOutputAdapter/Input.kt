@@ -25,8 +25,8 @@ class Input() {
             return name.length in 1..9 && regex.matches(name)
         }
 
-        fun readGameOptions(gameOptions: Map<Int, String>) {
-
+        fun readGameOptions(options: String): Int? {
+            return null
         }
     }
 }
