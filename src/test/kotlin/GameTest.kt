@@ -25,6 +25,7 @@ internal class GameTest {
         assertEquals(Settings.PLAYER_MANA, game.blackPlayer.mana)
     }
 
+    /*
     @Test
     internal fun placeCardOnFieldTest(){
         createMockData()
@@ -61,6 +62,7 @@ internal class GameTest {
         game.whitePlayer.hand = Hand()
         assertFalse(game.placeCardOnField(player1.hand.cards[0]),"Should return false because no cards in hand")
     }
+     */
 
     @Test
     internal fun checkGameOverTest() {
