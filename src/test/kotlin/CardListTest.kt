@@ -234,12 +234,30 @@ internal class CardListTest {
 
     @Test
     fun toStringTest() {
+        var atk1 = "${Settings.ANSI_BLUE}4 ${Settings.ANSI_RESET}"
+        var atk2 = "${Settings.ANSI_BLUE}1 ${Settings.ANSI_RESET}"
+        var atk3 = "${Settings.ANSI_BLUE}3 ${Settings.ANSI_RESET}"
+        var atk4 = "${Settings.ANSI_BLUE}2 ${Settings.ANSI_RESET}"
+        var atk5 = "${Settings.ANSI_BLUE}1 ${Settings.ANSI_RESET}"
+
+        var hp1 = "${Settings.ANSI_RED} 7${Settings.ANSI_RESET}"
+        var hp2 = "${Settings.ANSI_RED} 3${Settings.ANSI_RESET}"
+        var hp3 = "${Settings.ANSI_RED} 4${Settings.ANSI_RESET}"
+        var hp4 = "${Settings.ANSI_RED} 2${Settings.ANSI_RESET}"
+        var hp5 = "${Settings.ANSI_RED} 4${Settings.ANSI_RESET}"
+
+        var name1 = "${Settings.ANSI_GREEN}  Ogre     ${Settings.ANSI_RESET}"
+        var name2 = "${Settings.ANSI_GREEN}  Wolf     ${Settings.ANSI_RESET}"
+        var name3 = "${Settings.ANSI_GREEN} Ranger    ${Settings.ANSI_RESET}"
+        var name4 = "${Settings.ANSI_GREEN}  Slime    ${Settings.ANSI_RESET}"
+        var name5 = "${Settings.ANSI_GREEN} Murloc    ${Settings.ANSI_RESET}"
+
         val fieldPattern = """
-                ___        ___        ___        ___        ___     
-               |   |      |   |      |   |      |   |      |   |    
-               | 1 |      | 2 |      | 3 |      | 4 |      | 5 |    
-             4 |___| 7  1 |___| 3  3 |___| 4  2 |___| 2  1 |___| 4  
-               Ogre       Wolf      Ranger      Slime     Murloc    
+               ___        ___        ___        ___        ___     
+              |   |      |   |      |   |      |   |      |   |    
+              | 1 |      | 2 |      | 3 |      | 4 |      | 5 |    
+            $atk1|___|$hp1  $atk2|___|$hp2  $atk3|___|$hp3  $atk4|___|$hp4  $atk5|___|$hp5  
+            $name1$name2$name3$name4$name5
         """.trimIndent()
 
         val field = Field(
@@ -254,12 +272,30 @@ internal class CardListTest {
 
         assertEquals(fieldPattern, field, "Field toString doesn't match pattern")
 
+        atk1 = "${Settings.ANSI_BLUE}2 ${Settings.ANSI_RESET}"
+        atk2 = "${Settings.ANSI_BLUE}1 ${Settings.ANSI_RESET}"
+        atk3 = "${Settings.ANSI_BLUE}7 ${Settings.ANSI_RESET}"
+        atk4 = "${Settings.ANSI_BLUE}5 ${Settings.ANSI_RESET}"
+        atk5 = "${Settings.ANSI_BLUE}1 ${Settings.ANSI_RESET}"
+
+        hp1 = "${Settings.ANSI_RED} 4${Settings.ANSI_RESET}"
+        hp2 = "${Settings.ANSI_RED} 3${Settings.ANSI_RESET}"
+        hp3 = "${Settings.ANSI_RED} 4${Settings.ANSI_RESET}"
+        hp4 = "${Settings.ANSI_RED} 9${Settings.ANSI_RESET}"
+        hp5 = "${Settings.ANSI_RED} 4${Settings.ANSI_RESET}"
+
+        name1 = "${Settings.ANSI_GREEN}  Gnarl    ${Settings.ANSI_RESET}"
+        name2 = "${Settings.ANSI_GREEN}  Wolf     ${Settings.ANSI_RESET}"
+        name3 = "${Settings.ANSI_GREEN}Skeleton   ${Settings.ANSI_RESET}"
+        name4 = "${Settings.ANSI_GREEN}WereWolf   ${Settings.ANSI_RESET}"
+        name5 = "${Settings.ANSI_GREEN} Murloc    ${Settings.ANSI_RESET}"
+
         val handPattern = """
-                ___        ___        ___        ___        ___     
-               |   |      |   |      |   |      |   |      |   |    
-               | 1 |      | 2 |      | 3 |      | 4 |      | 5 |    
-             2 |___| 4  1 |___| 3  7 |___| 4  5 |___| 9  1 |___| 4  
-               Gnarl      Wolf     Skeleton   WereWolf    Murloc    
+               ___        ___        ___        ___        ___     
+              |   |      |   |      |   |      |   |      |   |    
+              | 1 |      | 2 |      | 3 |      | 4 |      | 5 |    
+            $atk1|___|$hp1  $atk2|___|$hp2  $atk3|___|$hp3  $atk4|___|$hp4  $atk5|___|$hp5  
+            $name1$name2$name3$name4$name5
         """.trimIndent()
 
         val hand = Hand(
@@ -280,34 +316,49 @@ internal class CardListTest {
         val field = Field()
 
         val wolfCard = Monster("Wolf", 3, 6)
+
+        var atk = "${Settings.ANSI_BLUE}3 ${Settings.ANSI_RESET}"
+        var hp = "${Settings.ANSI_RED} 6${Settings.ANSI_RESET}"
+        var name = "${Settings.ANSI_GREEN}  Wolf     ${Settings.ANSI_RESET}"
+
         val wolfCardTest = """
-             ___     
-            |   |    
-            | 1 |    
-          3 |___| 6  
-            Wolf     
+            ___     
+           |   |    
+           | 1 |    
+         $atk|___|$hp  
+         $name
         """.trimIndent()
 
         assertEquals(wolfCardTest, field.cardToString(wolfCard, 0), "The toString doesn't match")
 
         val gnarlCard = Monster("Gnarl", 8, 5)
+
+        atk = "${Settings.ANSI_BLUE}8 ${Settings.ANSI_RESET}"
+        hp = "${Settings.ANSI_RED} 5${Settings.ANSI_RESET}"
+        name = "${Settings.ANSI_GREEN}  Gnarl    ${Settings.ANSI_RESET}"
+
         val gnarlCardTest = """
-             ___     
-            |   |    
-            | 3 |    
-          8 |___| 5  
-            Gnarl    
+            ___     
+           |   |    
+           | 3 |    
+         $atk|___|$hp  
+         $name
         """.trimIndent()
 
         assertEquals(gnarlCardTest, field.cardToString(gnarlCard, 2), "The toString doesn't match")
 
         val skeletonCard = Monster("Skeleton",10, 10)
+
+        atk = "${Settings.ANSI_BLUE}10${Settings.ANSI_RESET}"
+        hp = "${Settings.ANSI_RED}10${Settings.ANSI_RESET}"
+        name = "${Settings.ANSI_GREEN}Skeleton   ${Settings.ANSI_RESET}"
+
         val skeletonCardTest = """
-             ___     
-            |   |    
-            | 5 |    
-          10|___|10  
-          Skeleton   
+            ___     
+           |   |    
+           | 5 |    
+         $atk|___|$hp  
+         $name
         """.trimIndent()
 
         assertEquals(skeletonCardTest, field.cardToString(skeletonCard, 4), "The toString doesn't match")
