@@ -1,16 +1,22 @@
+import models.Deck
 import models.Player
 
-class Game {
+class Game(
+        val player1Deck: Deck,
+        val player2Deck: Deck,
+        val player1Name: String,
+        val player2Name: String) {
+    lateinit var whitePlayer: Player;
+    lateinit var blackPlayer: Player;
     var status:String = ""
     var turn:Int = 0
-    var whitePlayer:Player = Player("White")
-    var blackPlayer:Player = Player("Black")
-    //var messageLogger:MessageLogger = MessageLogger()
-    //var guiAdapter:GuiAdapter = GuiAdapter()
+
+    init {
+
+    }
 
     fun nextTurn(){
         turn++
-        printCurrentGame()
     }
 
     fun attackMonster(attacker: Monster, toBeAttacked: Monster): Boolean {
@@ -35,15 +41,20 @@ ${blackPlayer.field}
 //    TODO: Add ${messageLogger.lastLog()} to print
     }
 
-    fun newGame(whitePlayer:Player,blackPlayer: Player){
-        status = ""
-        turn = 0
-        this.whitePlayer = whitePlayer
-        this.blackPlayer = blackPlayer
+    fun checkGameOver(){
+
     }
 
-    fun gameOver(){
+    fun placeCardOnField(card: Card): Boolean {
+        return false
+    }
 
+    fun drawCardFromDeck(): Boolean {
+        return false
+    }
+
+    fun validMoves(): Map<Int, String> {
+        return mapOf()
     }
 }
 
