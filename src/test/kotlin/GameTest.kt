@@ -26,6 +26,43 @@ internal class GameTest {
     }
 
     @Test
+    internal fun placeCardOnFieldTest(){
+        createMockData()
+        var game: Game = Game(player1.deck, player2.deck, player1.name, player2.name)
+
+        for(i in 1..Settings.FIELD_SIZE +1){
+            game.whitePlayer.hand.cards = arrayListOf(player1.deck.cards[i])
+            game.blackPlayer.hand.cards = arrayListOf(player2.deck.cards[i])
+
+            var result = game.placeCardOnField(player1.hand.cards[0])
+            var placedCard = player1.hand.cards[0]
+            if(i > Settings.FIELD_SIZE){
+                assertFalse(result,"Should be false because field is full")
+            } else{
+                assertTrue(result,"Should be true because field is not full")
+                assertEquals(i,game.whitePlayer.field.cardsInList().size,"Should be $i because card is added")
+                assertEquals(placedCard, game.whitePlayer.field.cardsInList()[i],"Card should be the same")
+            }
+
+            game.nextTurn()
+
+            result = game.placeCardOnField(player2.hand.cards[0])
+            placedCard = player2.hand.cards[0]
+            if(i > Settings.FIELD_SIZE){
+                assertFalse(result,"Should be false because field is full")
+            } else{
+                assertTrue(result,"Should be true because field is not full")
+                assertEquals(i,game.blackPlayer.field.cardsInList().size,"Should be $i because card is added")
+                assertEquals(placedCard, game.blackPlayer.field.cardsInList()[i],"Card should be the same")
+            }
+        }
+
+        game = Game(player1.deck, player2.deck, player1.name, player2.name)
+        game.whitePlayer.hand = Hand()
+        assertFalse(game.placeCardOnField(player1.hand.cards[0]),"Should return false because no cards in hand")
+    }
+
+    @Test
     internal fun checkGameOverTest() {
         for(i in 0..10000) {
             var game = Game(
@@ -221,10 +258,12 @@ ${player2.field}
         player1 = Player("player1")
         player2 = Player("player2")
 
+
         val players: Array<Player> = arrayOf(player1, player2)
 
         repeat(2) {
             val testCards: ArrayList<Monster> = arrayListOf(
+
                 Monster("Ogre", 4, 7),
                 Monster("Wolf", 3, 2),
                 Monster("Ranger", 3, 4),
