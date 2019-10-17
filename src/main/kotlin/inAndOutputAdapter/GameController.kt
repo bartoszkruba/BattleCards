@@ -39,12 +39,17 @@ class GameController {
         var game = Game(playerOneDeck, playerTwoDeck, playerOneName!!, playerTwoName!!)
         OutputAdapter.printBoard(game)
 
-        val gameOptions= mapOf( 1 to "Draw", 2 to "Put",3 to "Attack", 4 to "Pass")
+        val gameOptions = game.validMoves()
         OutputAdapter.printGameOptions(gameOptions)
+        var chosenOption = readLine()
 
-        Input.readGameOptions(gameOptions)
-
-
+        var validChoice = Input.readGameOptions(chosenOption!!, gameOptions)
+        while(validChoice == null){
+            OutputAdapter.illegalInputInfo()
+            chosenOption = readLine()
+            if(Input.readName(chosenOption!!) != null){
+                validChoice = chosenOption
+            }
+        }
     }
-
 }
