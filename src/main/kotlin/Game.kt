@@ -22,6 +22,9 @@ class Game(
 
     fun nextTurn(){
         turn++
+        whitePlayer.mana = Settings.PLAYER_MANA
+        blackPlayer.mana = Settings.PLAYER_MANA
+        checkGameOver()
     }
 
     fun attackMonster(attacker: Monster, toBeAttacked: Monster) {
