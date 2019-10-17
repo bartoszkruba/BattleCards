@@ -19,13 +19,11 @@ class GameController {
         OutputAdapter.printEnterName(playerNumber)
 
         var playerName = readLine()
-        var validPlayerName = Input.readName(playerName!!)
+        val validPlayerName = Input.readName(playerName!!)
         while(validPlayerName == null){
             OutputAdapter.illegalInputInfo()
             playerName = readLine()
-            if(Input.readName(playerName!!) != null){
-                return playerName
-            }
+            if(Input.readName(playerName!!) != null) return playerName
         }
         return playerName
     }
@@ -37,7 +35,7 @@ class GameController {
         val playerOneDeck = DeckFactory.createDeck(deckPrototype)
         val playerTwoDeck = DeckFactory.createDeck(deckPrototype)
 
-        var game = Game(playerOneDeck, playerTwoDeck, this.playerOneName!!, this.playerTwoName!!)
+        val game = Game(playerOneDeck, playerTwoDeck, this.playerOneName!!, this.playerTwoName!!)
         OutputAdapter.printBoard(game)
 
         val gameOptions = game.validMoves()
@@ -48,9 +46,7 @@ class GameController {
         while(validChoice == null){
             OutputAdapter.illegalInputInfo()
             chosenOption = readLine()
-            if(Input.readName(chosenOption!!) != null){
-                validChoice = chosenOption
-            }
+            if(Input.readName(chosenOption!!) != null) validChoice = chosenOption
         }
     }
 }
