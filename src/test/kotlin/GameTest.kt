@@ -20,6 +20,21 @@ internal class GameTest {
     }
 
     @Test
+    fun currentPlayerTest() {
+        val game = Game(Deck(), Deck(), "player1", "player2")
+        val whitePlayer: Player = game.whitePlayer
+        val blackPlayer: Player = game.blackPlayer
+
+        assertTrue(game.turn % 2 != 0 && game.currentPlayer() == whitePlayer)
+        game.nextTurn()
+        assertTrue(game.turn % 2 == 0 && game.currentPlayer() == blackPlayer)
+        game.nextTurn()
+        assertTrue(game.turn % 2 != 0 && game.currentPlayer() == whitePlayer)
+        game.nextTurn()
+        assertTrue(game.turn % 2 == 0 && game.currentPlayer() == blackPlayer)
+    }
+
+    @Test
     internal fun attackMonsterTest() {
         createMockData()
         val game = Game(Deck(), Deck(), "player1", "player2")
