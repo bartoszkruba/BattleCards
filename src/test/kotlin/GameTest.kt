@@ -9,8 +9,8 @@ import utilities.Utils
 import kotlin.collections.ArrayList
 
 internal class GameTest {
-    lateinit var player1: Player
-    lateinit var player2: Player
+    private lateinit var player1: Player
+    private lateinit var player2: Player
 
     @Test
     internal fun nextTurn() {
@@ -25,12 +25,12 @@ internal class GameTest {
    internal fun gameConstructorTest(){
        createMockData()
        var game: Game = Game(player1.deck,player2.deck,player1.name,player2.name)
-       assertEquals(0,game.turn)
+       assertEquals(1,game.turn)
        assertEquals("",game.status)
        assertEquals(player1.name,game.whitePlayer.name)
        assertEquals(player1.deck,game.whitePlayer.deck)
-       assertEquals(player2.name,game.whitePlayer.name)
-       assertEquals(player2.deck,game.whitePlayer.deck)
+       assertEquals(player2.name,game.blackPlayer.name)
+       assertEquals(player2.deck,game.blackPlayer.deck)
    }
 
     @Test
