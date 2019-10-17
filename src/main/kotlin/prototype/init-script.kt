@@ -45,7 +45,7 @@ class InitCards(private val cardLoader: CardLoader = CardLoader()) {
         cardLoader.saveDeck(deckPrototype)
 
         println("Added new deck: \n")
-        println(cardLoader.loadDeck("test"))
+        val deck = cardLoader.loadDeck("test")
         println("\nDone!")
     }
 
