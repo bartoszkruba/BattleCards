@@ -10,12 +10,11 @@ internal class InputTest {
     fun userNameInput() {
         var userInput = Input()
 
-        assertTrue(userInput.userNameInput("name", 1))
-        assertFalse(userInput.userNameInput("name", 0))
-        assertFalse(userInput.userNameInput("", 0))
-        assertFalse(userInput.userNameInput("1234", 3))
-        assertFalse(userInput.userNameInput("name77", -1))
-        assertFalse(userInput.userNameInput("name more than nine characters", 5))
+        assertNotNull(Input.readName("name"))
+        assertNull(Input.readName(""))
+        assertNull(Input.readName("1"))
+        assertNull(Input.readName("1234"))
+        assertNull(Input.readName("name more than nine characters"))
     }
 
     @Test
