@@ -40,8 +40,8 @@ class Monster : Card {
 
     override fun toString(): String {
         val atk = if(attack > 9) "$attack" else "$attack "
+        var hp = if(health > 9) "$health" else " $health"
         hp = if(health <= 0) " 0" else hp
-        val hp = if(health > 9) "$health" else " $health"
         var sb = StringBuilder()
         repeat((4 - floor(name.length * 0.5)).toInt()) { sb.append(" ") }
         var cardName = "$sb$name"

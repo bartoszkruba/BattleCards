@@ -68,7 +68,7 @@ internal class GameTest {
             """
             
             --------------------------------
-            Player 2 field
+            Player 2 field after attack
             
             """.trimIndent()
         )
@@ -104,7 +104,7 @@ internal class GameTest {
             """
             
             --------------------------------
-            Player 1 field
+            Player 1 field after attack
 
             """.trimIndent()
         )
@@ -142,11 +142,11 @@ ${player2.field}
         player2 = Player("2")
 
         val testCards: ArrayList<Monster> = arrayListOf(
-            Monster("Ogre", CardType.MONSTER, UUID.randomUUID(), 4, 7),
-            Monster("Wolf", CardType.MONSTER, UUID.randomUUID(), 3, 2),
-            Monster("Ranger", CardType.MONSTER, UUID.randomUUID(), 3, 4),
-            Monster("Slime", CardType.MONSTER, UUID.randomUUID(), 2, 2),
-            Monster("Murloc", CardType.MONSTER, UUID.randomUUID(), 1, 4)
+            Monster("Ogre", 4, 7),
+            Monster("Wolf", 3, 2),
+            Monster("Ranger", 3, 4),
+            Monster("Slime", 2, 2),
+            Monster("Murloc", 1, 4)
         )
 
         val players: Array<Player> = arrayOf(player1, player2)
