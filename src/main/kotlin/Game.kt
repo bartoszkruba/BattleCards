@@ -48,7 +48,7 @@ ${blackPlayer.field}
 //    TODO: Add ${messageLogger.lastLog()} to print
     }
 
-    fun checkGameOver(){
+    fun checkGameOver():Boolean{
 
     }
 
