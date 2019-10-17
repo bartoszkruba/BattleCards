@@ -1,7 +1,7 @@
-import inAndOutputAdapter.Output
+import inAndOutputAdapter.GameController
 
 fun main(args: Array<String>) {
-    var printMAnScreen = Output()
-    printMAnScreen.printMainScreen()
+    var gameController = GameController()
+    gameController.printMainScreen()
 }
 
