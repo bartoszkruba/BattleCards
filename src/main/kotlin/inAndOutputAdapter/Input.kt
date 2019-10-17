@@ -1,7 +1,5 @@
 package inAndOutputAdapter
 
-import models.Player
-
 class Input() {
     companion object {
 
@@ -25,7 +23,7 @@ class Input() {
             return name.length in 1..9 && regex.matches(name)
         }
 
-        fun readGameOptions(options: String): Int? {
+        fun readGameOptions(option: String, optionsList:  Map<Int, String>): String? {
             return null
         }
     }
