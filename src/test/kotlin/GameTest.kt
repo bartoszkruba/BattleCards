@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import utilities.Utils
 import kotlin.collections.ArrayList
+import kotlin.random.Random
 
 internal class GameTest {
     private lateinit var player1: Player
@@ -15,27 +16,57 @@ internal class GameTest {
     @Test
     internal fun nextTurn() {
         createMockData()
-        var game: Game = Game(player1.deck,player2.deck,player1.name,player2.name)
+        var game: Game = Game(player1.deck, player2.deck, player1.name, player2.name)
         game.whitePlayer.mana = 0
         game.blackPlayer.mana = 0
         game.nextTurn()
         assertEquals(2, game.turn, "Turn should have increased by one")
-        assertEquals(Settings.PLAYER_MANA,game.whitePlayer.mana)
-        assertEquals(Settings.PLAYER_MANA,game.blackPlayer.mana)
+        assertEquals(Settings.PLAYER_MANA, game.whitePlayer.mana)
+        assertEquals(Settings.PLAYER_MANA, game.blackPlayer.mana)
+    }
+
+    @Test
+    internal fun checkGameOverTest() {
+        for(i in 0..10000) {
+            var game = Game(
+                Deck(getListWithRandomAmountOfCards(Settings.DECK_SIZE)),
+                Deck(getListWithRandomAmountOfCards(Settings.DECK_SIZE)),
+                "player1",
+                "player2"
+            )
+            game.whitePlayer.hand = Hand(getListWithRandomAmountOfCards(Settings.HAND_SIZE))
+            game.whitePlayer.field = Field(getListWithRandomAmountOfCards(Settings.FIELD_SIZE))
+            game.blackPlayer.hand = Hand(getListWithRandomAmountOfCards(Settings.HAND_SIZE))
+            game.blackPlayer.field = Field(getListWithRandomAmountOfCards(Settings.FIELD_SIZE))
+            var expectedResult: Boolean
+            expectedResult = (game.whitePlayer.deck.cardsInList().size == 0 && game.whitePlayer.field.cardsInList().size == 0 && game.whitePlayer.hand.cardsInList().size == 0)
+                    || (game.blackPlayer.deck.cardsInList().size == 0 && game.blackPlayer.field.cardsInList().size == 0 && game.blackPlayer.hand.cardsInList().size == 0)
+
+            assertEquals(expectedResult,game.checkGameOver())
+        }
+
+    }
+
+    private fun getListWithRandomAmountOfCards(maxSize: Int): ArrayList<Card> {
+        var listOfCards: ArrayList<Card> = arrayListOf()
+        for (i in 1..Random.nextInt(0, maxSize)) {
+            listOfCards.add(Monster("Monster", 2, 5))
+        }
+        return listOfCards
     }
 
 
-   @Test
-   internal fun gameConstructorTest(){
-       createMockData()
-       var game: Game = Game(player1.deck,player2.deck,player1.name,player2.name)
-       assertEquals(1,game.turn)
-       assertEquals("",game.status)
-       assertEquals(player1.name,game.whitePlayer.name)
-       assertEquals(player1.deck,game.whitePlayer.deck)
-       assertEquals(player2.name,game.blackPlayer.name)
-       assertEquals(player2.deck,game.blackPlayer.deck)
-   }
+    @Test
+    internal fun gameConstructorTest() {
+        createMockData()
+        var game: Game = Game(player1.deck, player2.deck, player1.name, player2.name)
+        assertEquals(1, game.turn)
+        assertEquals("", game.status)
+        assertEquals(player1.name, game.whitePlayer.name)
+        assertEquals(player1.deck, game.whitePlayer.deck)
+        assertEquals(player2.name, game.blackPlayer.name)
+        assertEquals(player2.deck, game.blackPlayer.deck)
+    }
 
     @Test
     fun validMovesTest() {
