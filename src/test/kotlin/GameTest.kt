@@ -38,6 +38,14 @@ internal class GameTest {
    }
 
     @Test
+    fun validMovesTest() {
+        val game = Game(Deck(), Deck(), "player1", "player2")
+        
+
+
+    }
+
+    @Test
     fun currentPlayerTest() {
         val game = Game(Deck(), Deck(), "player1", "player2")
         val whitePlayer: Player = game.whitePlayer
