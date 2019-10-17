@@ -71,9 +71,37 @@ internal class GameTest {
     @Test
     fun validMovesTest() {
         val game = Game(Deck(), Deck(), "player1", "player2")
-        
+        game.whitePlayer.deck = Deck(arrayListOf(Monster("Wolf", 3, 2)))
+        game.whitePlayer.hand = Hand(arrayListOf(Monster("Murloc", 1, 3)))
 
+        var testMapPattern = mapOf(
+            1 to "Place Card",
+            2 to "Draw Card",
+            3 to "End Round")
 
+        assertArrayEquals(testMapPattern.values.toTypedArray(), game.validMoves().values.toTypedArray())
+
+        testMapPattern = mapOf(
+            1 to "Attack Monster",
+            2 to "Place Card",
+            3 to "Draw Card",
+            4 to "End Round")
+        game.whitePlayer.field = Field(arrayListOf(Monster("Murloc", 1, 3)))
+        assertArrayEquals(testMapPattern.values.toTypedArray(), game.validMoves().values.toTypedArray())
+
+        testMapPattern = mapOf(
+            1 to "Attack Monster",
+            2 to "End Round")
+        game.whitePlayer.deck = Deck()
+        game.whitePlayer.hand = Hand()
+        assertArrayEquals(testMapPattern.values.toTypedArray(), game.validMoves().values.toTypedArray())
+
+        testMapPattern = mapOf(
+            1 to "Attack Monster",
+            2 to "Draw Card",
+            3 to "End Round")
+        game.whitePlayer.deck = Deck(arrayListOf(Monster("Murloc", 1, 3)))
+        assertArrayEquals(testMapPattern.values.toTypedArray(), game.validMoves().values.toTypedArray())
     }
 
     @Test
