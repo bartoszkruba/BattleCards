@@ -16,9 +16,7 @@ class Game(
         blackPlayer = Player(player2Name,player2Deck)
     }
 
-    fun currentPlayer(): Player {
-        return if(turn % 2 != 0) whitePlayer else blackPlayer
-    }
+    fun currentPlayer() = if(turn % 2 != 0) whitePlayer else blackPlayer
 
     fun nextTurn(){
         turn++
