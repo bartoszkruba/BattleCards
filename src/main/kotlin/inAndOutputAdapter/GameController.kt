@@ -42,7 +42,7 @@ class GameController {
         val gameOptions= mapOf( 1 to "Draw", 2 to "Put",3 to "Attack", 4 to "Pass")
         OutputAdapter.printGameOptions(gameOptions)
 
-
+        Input.readGameOptions(gameOptions)
 
 
     }

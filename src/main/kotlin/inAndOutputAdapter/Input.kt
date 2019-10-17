@@ -4,8 +4,6 @@ import models.Player
 
 class Input() {
     companion object {
-        var playerOne: Player = Player("rami")
-        var playerTwo: Player = Player("aalkan")
 
         fun readName(name: String): String? {
             var validUserName = userNameValidation(name)
@@ -25,6 +23,10 @@ class Input() {
         fun userNameValidation(name: String): Boolean {
             val regex = Regex("^[a-zA-Z]{1,9}")
             return name.length in 1..9 && regex.matches(name)
+        }
+
+        fun readGameOptions(gameOptions: Map<Int, String>) {
+
         }
     }
 }
