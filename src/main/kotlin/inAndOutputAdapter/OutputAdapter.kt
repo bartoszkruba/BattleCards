@@ -50,16 +50,15 @@ class OutputAdapter {
         }
 
         fun printDeckPrototype(deck: DeckPrototype) {
-            print("$ANSI_PURPLE<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<$ANSI_RESET")
-            print("$ANSI_PURPLE>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>$ANSI_RESET\n\n")
-            println("                                                       YOUR Deck: ${deck.name}\n")
+            println(delimiter(ANSI_PURPLE))
+            println(centreLine("YOUR Deck: ${deck.name}") + "\n")
 
-            for(line in deck.toString().lines()){
-                println("                                                          $line")
+            for (line in deck.toString().lines()) {
+                println(centreLine(line))
             }
 
-            print("\n$ANSI_PURPLE<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<$ANSI_RESET")
-            print("$ANSI_PURPLE>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>$ANSI_RESET\n\n")
+            println()
+            println(delimiter(ANSI_PURPLE))
         }
 
         fun printBoard(game: Game) {
@@ -67,29 +66,25 @@ class OutputAdapter {
         }
 
         fun illegalInputInfo() {
-            print("$ANSI_RED<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<$ANSI_RESET")
-            print("$ANSI_RED>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>$ANSI_RESET\n\n")
+            println(delimiter(ANSI_RED))
 
-            println("                                             Invalid Input! Please Try Again.\n")
+            println(centreLine("Invalid Input! Please Try Again.\n"))
 
-            print("$ANSI_RED<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<$ANSI_RESET")
-            print("$ANSI_RED>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>$ANSI_RESET\n\n")
+            println(delimiter(ANSI_PURPLE))
         }
 
         fun printDrawCardFromDeck(card: Card) {
-            print("$ANSI_BLUE<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<$ANSI_RESET")
-            print("$ANSI_BLUE>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>$ANSI_RESET\n\n")
+            println(delimiter(ANSI_BLUE))
 
-            println("                                                       You Draw Card:\n")
+            println(centreLine("You Draw Card:\n"))
 
             for (line in card.toString().lines()) {
-                println("                                                         $line")
+                println(centreLine(line))
             }
 
             println()
 
-            print("$ANSI_BLUE<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<$ANSI_RESET")
-            print("$ANSI_BLUE>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>$ANSI_RESET\n\n")
+            println(delimiter(ANSI_BLUE))
         }
 
         fun printAttackMenu() {
@@ -97,33 +92,49 @@ class OutputAdapter {
         }
 
         fun printGameOptions(options: Map<Int, String>) {
-            print("$ANSI_BLUE<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<$ANSI_RESET")
-            print("$ANSI_BLUE>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>$ANSI_RESET\n\n")
+            println(delimiter(ANSI_BLUE))
 
-            println("                                                     What Do You Want To Do?\n")
+            println(centreLine("What Do You Want To Do?\n"))
 
             for (entry in options.entries) {
-                println("                                                     - ${entry.key}: ${entry.value}")
+                println(centreLine("- ${entry.key}: ${entry.value}"))
             }
 
             println()
-            print("$ANSI_BLUE<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<$ANSI_RESET")
-            print("$ANSI_BLUE>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>$ANSI_RESET\n\n")
+            println(delimiter(ANSI_BLUE))
         }
 
         fun printGameOver(winner: Player) {
+            println(delimiter(ANSI_RED))
 
+            println(centreLine("Game Over, ${winner.mana} Wins."))
+
+            println(delimiter(ANSI_RED))
+
+        }
+
+        fun delimiter(color: String): String {
+            val line = "$color<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" +
+                    ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>$ANSI_RESET\n"
+            return centreLine(line)
+        }
+
+        private fun centreLine(line: String): String {
+            val indent: Int = (ASCII.BATTLE_CARDS.lines()[1].length - line.length) / 2
+            val sb = StringBuilder()
+            repeat(indent) { sb.append(" ") }
+            return sb.toString() + line + sb.toString()
         }
     }
 
 }
+
 
 fun clear() {
     println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 }
 
 fun main() {
-    println("Welcome Screen")
     OutputAdapter.printWelcome()
     OutputAdapter.printEnterName(1)
     println()
