@@ -27,6 +27,10 @@ class Game(
 
     fun attackMonster(attacker: Monster, toBeAttacked: Monster) {
         toBeAttacked.takeDamge(attacker)
+        if(toBeAttacked.isDead()) {
+            val player = if(currentPlayer() == whitePlayer) blackPlayer else whitePlayer
+            player.field.removeCard(toBeAttacked)
+        }
     }
 
     fun printCurrentGame(){

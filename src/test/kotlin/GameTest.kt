@@ -106,6 +106,14 @@ internal class GameTest {
     }
 
     @Test
+    fun validMovesTest() {
+        val game = Game(Deck(), Deck(), "player1", "player2")
+        
+
+
+    }
+
+    @Test
     fun currentPlayerTest() {
         val game = Game(Deck(), Deck(), "player1", "player2")
         val whitePlayer: Player = game.whitePlayer
@@ -124,11 +132,14 @@ internal class GameTest {
     @Test
     internal fun attackMonsterTest() {
         createMockData()
-        val game = Game(Deck(), Deck(), "player1", "player2")
+        val game = Game(player1.deck, player2.deck, player1.name, player2.name)
+        game.whitePlayer.field = player1.field
+        game.blackPlayer.field = player2.field
 
-        repeat(player1.field.cards.size) {
-            val attacker: Monster = player1.field.cards[it] as Monster
-            val getsAttacked: Monster = player2.field.cards[it] as Monster
+        var index = 0
+        do {
+            val attacker: Monster = game.whitePlayer.field.cards[index] as Monster
+            val getsAttacked: Monster = game.blackPlayer.field.cards[index] as Monster
             val getsAttackedCopy: Monster = Utils.clone(getsAttacked) as Monster
 
             game.attackMonster(attacker, getsAttacked)
@@ -143,9 +154,8 @@ internal class GameTest {
                 "Attacked card should have new health values"
             )
             assertTrue(getsAttacked.cardId == getsAttackedCopy.cardId, "Attacked card isn't the same after attack")
-        }
-        assertEquals(3, player2.field.cards.size, "Dead cards wasn't removed from field")
-
+            index++
+        } while(index < game.blackPlayer.field.cards.size)
         println(
             """
             
@@ -154,11 +164,14 @@ internal class GameTest {
             
             """.trimIndent()
         )
-        println(player2.field)
+        println(game.blackPlayer.field)
+        assertEquals(3, game.blackPlayer.field.cards.size, "Dead cards wasn't removed from field")
 
-        repeat(player2.field.cards.size) {
-            val attacker: Monster = player2.field.cards[it] as Monster
-            val getsAttacked: Monster = player1.field.cards[it] as Monster
+        game.nextTurn()
+        index = 0
+        do {
+            val attacker: Monster = game.blackPlayer.field.cards[index] as Monster
+            val getsAttacked: Monster = game.whitePlayer.field.cards[index] as Monster
             val getsAttackedCopy: Monster = Utils.clone(getsAttacked) as Monster
 
             game.attackMonster(attacker, getsAttacked)
@@ -173,9 +186,8 @@ internal class GameTest {
                 "Attacked card should have new health values"
             )
             assertTrue(getsAttacked.cardId == getsAttackedCopy.cardId, "Attacked card isn't the same after attack")
-        }
-        assertEquals(4, player1.field.cards.size, "Dead cards wasn't removed from field")
-
+            index++
+        } while(index < game.blackPlayer.field.cards.size)
         println(
             """
             
@@ -184,14 +196,15 @@ internal class GameTest {
 
             """.trimIndent()
         )
-        println(player1.field)
+        println(game.whitePlayer.field)
         println()
+        assertEquals(4, game.whitePlayer.field.cards.size, "Dead cards wasn't removed from field")
     }
 
     @Test
     fun `printCurrentGame() test`() {
         createMockData()
-        val game = Game(Deck(), Deck(), "player1", "player2")
+        val game = Game(player1.deck, player2.deck, player1.name, player2.name)
         game.whitePlayer = player1
         game.blackPlayer = player2
 
@@ -209,26 +222,27 @@ ${player2.field}
 
         """.trimIndent()
 
-        assertEquals(println(testPrint), game.printCurrentGame())
+//        assertEquals(println(testPrint), game.printCurrentGame())
     }
 
     private fun createMockData() {
         // reset players for mock data
-        player1 = Player("1")
-        player2 = Player("2")
-
+        player1 = Player("player1")
+        player2 = Player("player2")
 
 
         val players: Array<Player> = arrayOf(player1, player2)
 
         repeat(2) {
             val testCards: ArrayList<Monster> = arrayListOf(
-            Monster("Ogre", 4, 7),
-            Monster("Wolf", 3, 2),
-            Monster("Ranger", 3, 4),
-            Monster("Slime", 2, 2),
-            Monster("Murloc", 1, 4)
-        )
+
+                Monster("Ogre", 4, 7),
+                Monster("Wolf", 3, 2),
+                Monster("Ranger", 3, 4),
+                Monster("Slime", 2, 2),
+                Monster("Murloc", 1, 4)
+            )
+
             val deck = Deck()
             val hand = Hand()
             val field = Field()
