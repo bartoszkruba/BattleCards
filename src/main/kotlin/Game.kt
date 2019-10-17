@@ -49,7 +49,8 @@ ${blackPlayer.field}
     }
 
     fun checkGameOver():Boolean{
-
+       return (whitePlayer.deck.cardsInList().size == 0 && whitePlayer.field.cardsInList().size == 0 && whitePlayer.hand.cardsInList().size == 0)
+           || (blackPlayer.deck.cardsInList().size == 0 && blackPlayer.field.cardsInList().size == 0 && blackPlayer.hand.cardsInList().size == 0)
     }
 
     fun placeCardOnField(card: Card): Boolean {
