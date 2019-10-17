@@ -16,8 +16,12 @@ internal class GameTest {
     internal fun nextTurn() {
         createMockData()
         var game: Game = Game(player1.deck,player2.deck,player1.name,player2.name)
+        game.whitePlayer.mana = 0
+        game.blackPlayer.mana = 0
         game.nextTurn()
-        assertEquals(1, game.turn, "Turn should have increased by one")
+        assertEquals(2, game.turn, "Turn should have increased by one")
+        assertEquals(Settings.PLAYER_MANA,game.whitePlayer.mana)
+        assertEquals(Settings.PLAYER_MANA,game.blackPlayer.mana)
     }
 
 
