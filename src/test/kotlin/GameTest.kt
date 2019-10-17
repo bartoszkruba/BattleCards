@@ -6,7 +6,6 @@ import models.Player
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import utilities.Utils
-import java.util.*
 import kotlin.collections.ArrayList
 
 internal class GameTest {
@@ -21,6 +20,7 @@ internal class GameTest {
         assertEquals(1, game.turn, "Turn should have increased by one")
     }
 
+
    @Test
    internal fun gameConstructorTest(){
        createMockData()
@@ -34,21 +34,32 @@ internal class GameTest {
    }
 
     @Test
+    fun currentPlayerTest() {
+        val game = Game(Deck(), Deck(), "player1", "player2")
+        val whitePlayer: Player = game.whitePlayer
+        val blackPlayer: Player = game.blackPlayer
+
+        assertTrue(game.turn % 2 != 0 && game.currentPlayer() == whitePlayer)
+        game.nextTurn()
+        assertTrue(game.turn % 2 == 0 && game.currentPlayer() == blackPlayer)
+        game.nextTurn()
+        assertTrue(game.turn % 2 != 0 && game.currentPlayer() == whitePlayer)
+        game.nextTurn()
+        assertTrue(game.turn % 2 == 0 && game.currentPlayer() == blackPlayer)
+    }
+
+
+    @Test
     internal fun attackMonsterTest() {
         createMockData()
-        val game = Game()
+        val game = Game(Deck(), Deck(), "player1", "player2")
 
-        var index = 0
         repeat(player1.field.cards.size) {
-            val attacker: Monster = player1.field.cards[index] as Monster
-            val getsAttacked: Monster = player2.field.cards[index] as Monster
+            val attacker: Monster = player1.field.cards[it] as Monster
+            val getsAttacked: Monster = player2.field.cards[it] as Monster
             val getsAttackedCopy: Monster = Utils.clone(getsAttacked) as Monster
 
-            val killsCard = game.attackMonster(attacker, getsAttacked)
-            if (killsCard) {
-                player2.field.removeCard(getsAttacked)
-                index--
-            }
+            game.attackMonster(attacker, getsAttacked)
             assertEquals(
                 getsAttackedCopy.health - attacker.attack,
                 getsAttacked.health,
@@ -60,7 +71,6 @@ internal class GameTest {
                 "Attacked card should have new health values"
             )
             assertTrue(getsAttacked.cardId == getsAttackedCopy.cardId, "Attacked card isn't the same after attack")
-            index++
         }
         assertEquals(3, player2.field.cards.size, "Dead cards wasn't removed from field")
 
@@ -74,17 +84,12 @@ internal class GameTest {
         )
         println(player2.field)
 
-        index = 0
         repeat(player2.field.cards.size) {
-            val attacker: Monster = player2.field.cards[index] as Monster
-            val getsAttacked: Monster = player1.field.cards[index] as Monster
+            val attacker: Monster = player2.field.cards[it] as Monster
+            val getsAttacked: Monster = player1.field.cards[it] as Monster
             val getsAttackedCopy: Monster = Utils.clone(getsAttacked) as Monster
 
-            val killsCard = game.attackMonster(attacker, getsAttacked)
-            if (killsCard) {
-                player1.field.removeCard(getsAttacked)
-                index--
-            }
+            game.attackMonster(attacker, getsAttacked)
             assertEquals(
                 getsAttackedCopy.health - attacker.attack,
                 getsAttacked.health,
@@ -96,7 +101,6 @@ internal class GameTest {
                 "Attacked card should have new health values"
             )
             assertTrue(getsAttacked.cardId == getsAttackedCopy.cardId, "Attacked card isn't the same after attack")
-            index++
         }
         assertEquals(4, player1.field.cards.size, "Dead cards wasn't removed from field")
 
@@ -115,7 +119,7 @@ internal class GameTest {
     @Test
     fun `printCurrentGame() test`() {
         createMockData()
-        val game = Game()
+        val game = Game(Deck(), Deck(), "player1", "player2")
         game.whitePlayer = player1
         game.blackPlayer = player2
 

@@ -9,20 +9,23 @@ class Game(
     lateinit var whitePlayer: Player;
     lateinit var blackPlayer: Player;
     var status:String = ""
-    var turn:Int = 0
+    var turn:Int = 1
 
     init {
         whitePlayer = Player(player1Name,player1Deck)
         blackPlayer = Player(player2Name,player2Deck)
     }
 
+    fun currentPlayer(): Player {
+        return Player("1")
+    }
+
     fun nextTurn(){
         turn++
     }
 
-    fun attackMonster(attacker: Monster, toBeAttacked: Monster): Boolean {
+    fun attackMonster(attacker: Monster, toBeAttacked: Monster) {
         toBeAttacked.takeDamge(attacker)
-        return toBeAttacked.isDead()
     }
 
     fun printCurrentGame(){
