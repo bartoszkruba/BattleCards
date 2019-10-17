@@ -15,23 +15,23 @@ internal class GameTest {
 
     @Test
     internal fun nextTurn() {
-        var game: Game = Game()
+        createMockData()
+        var game: Game = Game(player1.deck,player2.deck,player1.name,player2.name)
         game.nextTurn()
         assertEquals(1, game.turn, "Turn should have increased by one")
     }
 
-    @Test
-    internal fun newGameTest() {
-        createMockData()
-        var game: Game = Game()
-        game.turn = 2
-        game.status = "asdas"
-        game.newGame(player1, player2)
-        assertEquals(0, game.turn)
-        assertEquals("", game.status)
-        assertEquals(player1, game.whitePlayer)
-        assertEquals(player2, game.blackPlayer)
-    }
+   @Test
+   internal fun gameConstructorTest(){
+       createMockData()
+       var game: Game = Game(player1.deck,player2.deck,player1.name,player2.name)
+       assertEquals(0,game.turn)
+       assertEquals("",game.status)
+       assertEquals(player1.name,game.whitePlayer.name)
+       assertEquals(player1.deck,game.whitePlayer.deck)
+       assertEquals(player2.name,game.whitePlayer.name)
+       assertEquals(player2.deck,game.whitePlayer.deck)
+   }
 
     @Test
     internal fun attackMonsterTest() {
