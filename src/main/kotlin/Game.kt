@@ -2,17 +2,18 @@ import models.Deck
 import models.Player
 
 class Game(
-        val player1Deck: Deck,
-        val player2Deck: Deck,
-        val player1Name: String,
-        val player2Name: String) {
+        player1Deck: Deck,
+        player2Deck: Deck,
+        player1Name: String,
+        player2Name: String) {
     lateinit var whitePlayer: Player;
     lateinit var blackPlayer: Player;
     var status:String = ""
     var turn:Int = 0
 
     init {
-
+        whitePlayer = Player(player1Name,player1Deck)
+        blackPlayer = Player(player2Name,player2Deck)
     }
 
     fun nextTurn(){
