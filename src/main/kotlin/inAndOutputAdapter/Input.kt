@@ -18,12 +18,16 @@ class Input() {
             }
         }
 
-        fun userNameValidation(name: String): Boolean {
-            val regex = Regex("^[a-zA-Z]{1,9}")
+        private fun userNameValidation(name: String): Boolean {
+            val regex = Regex("^[a-zA-Z]{1,9}") //ignore ÄÖÅ öäå ?????
             return name.length in 1..9 && regex.matches(name)
         }
 
         fun readGameOptions(option: String, optionsList:  Map<Int, String>): String? {
+            optionsList.forEach { (k, v) ->
+                 if (k.toString() == option|| option.toLowerCase() == v.toLowerCase()) return v
+
+            }
             return null
         }
     }
