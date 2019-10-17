@@ -237,7 +237,7 @@ internal class CardListTest {
         val fieldPattern = """
                 ___        ___        ___        ___        ___     
                |   |      |   |      |   |      |   |      |   |    
-               |   |      |   |      |   |      |   |      |   |    
+               | 1 |      | 2 |      | 3 |      | 4 |      | 5 |    
              4 |___| 7  1 |___| 3  3 |___| 4  2 |___| 2  1 |___| 4  
                Ogre       Wolf      Ranger      Slime     Murloc    
         """.trimIndent()
@@ -257,7 +257,7 @@ internal class CardListTest {
         val handPattern = """
                 ___        ___        ___        ___        ___     
                |   |      |   |      |   |      |   |      |   |    
-               |   |      |   |      |   |      |   |      |   |    
+               | 1 |      | 2 |      | 3 |      | 4 |      | 5 |    
              2 |___| 4  1 |___| 3  7 |___| 4  5 |___| 9  1 |___| 4  
                Gnarl      Wolf     Skeleton   WereWolf    Murloc    
         """.trimIndent()
@@ -273,5 +273,43 @@ internal class CardListTest {
         ).toString()
 
         assertEquals(handPattern, hand, "Hand toString doesn't match pattern")
+    }
+
+    @Test
+    fun cardToStringTest() {
+        val field = Field()
+
+        val wolfCard = Monster("Wolf", 3, 6)
+        val wolfCardTest = """
+             ___     
+            |   |    
+            | 1 |    
+          3 |___| 6  
+            Wolf     
+        """.trimIndent()
+
+        assertEquals(wolfCardTest, field.cardToString(wolfCard, 0), "The toString doesn't match")
+
+        val gnarlCard = Monster("Gnarl", 8, 5)
+        val gnarlCardTest = """
+             ___     
+            |   |    
+            | 3 |    
+          8 |___| 5  
+            Gnarl    
+        """.trimIndent()
+
+        assertEquals(gnarlCardTest, field.cardToString(gnarlCard, 2), "The toString doesn't match")
+
+        val skeletonCard = Monster("Skeleton",10, 10)
+        val skeletonCardTest = """
+             ___     
+            |   |    
+            | 5 |    
+          10|___|10  
+          Skeleton   
+        """.trimIndent()
+
+        assertEquals(skeletonCardTest, field.cardToString(skeletonCard, 4), "The toString doesn't match")
     }
 }
