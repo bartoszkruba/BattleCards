@@ -33,7 +33,6 @@ internal class GameTest {
 
         var index = 1
         for(i in 1..(Settings.FIELD_SIZE +1)*2){
-            println(index)
             game.whitePlayer.hand.cards = arrayListOf(player1.deck.cards[i])
             game.blackPlayer.hand.cards = arrayListOf(player2.deck.cards[i])
 
@@ -42,6 +41,7 @@ internal class GameTest {
             if(index > Settings.FIELD_SIZE){
                 assertFalse(result,"Should be false because field is full")
                 assertEquals(1,game.currentPlayer().hand.cards.size,"Card should not have been removed from hand")
+                assertFalse(game.currentPlayer().field.cardsInList().contains(placedCard),"Card should not have been placed on field")
                 assertEquals(Settings.PLAYER_MANA,game.currentPlayer().mana,"Mana should be unchanged")
             } else{
                 assertTrue(result,"Should be true because field is not full")
@@ -59,6 +59,39 @@ internal class GameTest {
         game = Game(player1.deck, player2.deck, player1.name, player2.name)
         game.whitePlayer.hand = Hand()
         assertFalse(game.placeCardOnField(player1.hand.cards[0]),"Should return false because no cards in hand")
+    }
+
+    @Test
+    internal fun drawCardFromDeckTest(){
+        createMockData()
+        var game: Game = Game(player1.deck, player2.deck, player1.name, player2.name)
+
+        var index = 1
+        for (i in 1..(Settings.HAND_SIZE + 1)*2){
+            val prevDeckSize = game.currentPlayer().deck.cardsInList().size
+            var result = game.drawCardFromDeck()
+            var drawnCard = game.currentPlayer().deck.cardsInList()[0]
+            if(index > Settings.HAND_SIZE){
+                assertFalse(result)
+                assertEquals(prevDeckSize,game.currentPlayer().deck.cards.size,"Card should not have been removed from deck")
+                assertTrue(game.currentPlayer().deck.cardsInList().contains(drawnCard))
+                assertFalse(game.currentPlayer().hand.cardsInList().contains(drawnCard))
+                assertEquals(Settings.PLAYER_MANA,game.currentPlayer().mana,"Mana should be unchanged")
+            }else{
+                assertTrue(result)
+                assertEquals(i,game.currentPlayer().hand.cardsInList().size)
+                assertTrue(game.currentPlayer().hand.cardsInList().contains(drawnCard))
+                assertFalse(game.currentPlayer().deck.cardsInList().contains(drawnCard))
+                assertEquals(Settings.PLAYER_MANA-1,game.currentPlayer().mana,"Mana should have decreased")
+            }
+
+            game.nextTurn()
+            if (i % 2 == 0) index++
+        }
+
+        game = Game(player1.deck, player2.deck, player1.name, player2.name)
+        game.currentPlayer().deck = Deck()
+        assertFalse(game.drawCardFromDeck(),"Should return false because no cards in hand")
     }
 
 
