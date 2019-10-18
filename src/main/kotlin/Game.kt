@@ -77,6 +77,19 @@ ${blackPlayer.field}
     }
 
     fun drawCardFromDeck(): Boolean {
+        val player = currentPlayer()
+        if (player.hand.cardsInList().size < Settings.HAND_SIZE){
+            val drawnCard = player.deck.drawCard()
+            if(drawnCard is Card){
+                return if(player.hand.addCard(drawnCard)){
+                    player.mana--
+                    true
+                }else{
+                    player.deck.addCard(drawnCard)
+                    false
+                }
+            }
+        }
         return false
     }
 
