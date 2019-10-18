@@ -6,6 +6,6 @@ class Player(
     var hand: Hand = Hand(),
     var field: Field = Field()
 ) : User(name) {
-    val mana: Int = Settings.PLAYER_MANA
+    var mana: Int = Settings.PLAYER_MANA
 }
 
