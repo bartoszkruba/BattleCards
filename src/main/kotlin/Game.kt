@@ -8,15 +8,10 @@ class Game(
     player1Name: String,
     player2Name: String
 ) {
-    lateinit var whitePlayer: Player;
-    lateinit var blackPlayer: Player;
+    var whitePlayer: Player = Player(player1Name, player1Deck);
+    var blackPlayer: Player = Player(player2Name, player2Deck);
     var status: String = ""
     var turn: Int = 1
-
-    init {
-        whitePlayer = Player(player1Name, player1Deck)
-        blackPlayer = Player(player2Name, player2Deck)
-    }
 
     fun currentPlayer() = if (turn % 2 != 0) whitePlayer else blackPlayer
 
@@ -56,8 +51,8 @@ ${blackPlayer.field}
     }
 
     fun checkGameOver(): Boolean {
-        return (whitePlayer.deck.cardsInList().size == 0 && whitePlayer.field.cardsInList().size == 0 && whitePlayer.hand.cardsInList().size == 0)
-                || (blackPlayer.deck.cardsInList().size == 0 && blackPlayer.field.cardsInList().size == 0 && blackPlayer.hand.cardsInList().size == 0)
+        return (whitePlayer.deck.size() == 0 && whitePlayer.field.size() == 0 && whitePlayer.hand.size() == 0)
+                || (blackPlayer.deck.size() == 0 && blackPlayer.field.size() == 0 && blackPlayer.hand.size() == 0)
     }
 
     fun placeCardOnField(card: Card): Boolean {

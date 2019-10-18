@@ -33,21 +33,21 @@ internal class GameTest {
 
         var index = 1
         for(i in 1..(Settings.FIELD_SIZE +1)*2){
-            game.whitePlayer.hand.cards = arrayListOf(player1.deck.cards[i])
-            game.blackPlayer.hand.cards = arrayListOf(player2.deck.cards[i])
+            game.whitePlayer.hand = Hand(arrayListOf(player1.deck.cardsInList()[i]))
+            game.blackPlayer.hand = Hand(arrayListOf(player2.deck.cardsInList()[i]))
 
-            var placedCard = game.currentPlayer().hand.cards[0]
-            var result = game.placeCardOnField(game.currentPlayer().hand.cards[0])
+            var placedCard = game.currentPlayer().hand.cardsInList()[0]
+            var result = game.placeCardOnField(game.currentPlayer().hand.cardsInList()[0])
             if(index > Settings.FIELD_SIZE){
                 assertFalse(result,"Should be false because field is full")
-                assertEquals(1,game.currentPlayer().hand.cards.size,"Card should not have been removed from hand")
+                assertEquals(1,game.currentPlayer().hand.size(),"Card should not have been removed from hand")
                 assertFalse(game.currentPlayer().field.cardsInList().contains(placedCard),"Card should not have been placed on field")
                 assertEquals(Settings.PLAYER_MANA,game.currentPlayer().mana,"Mana should be unchanged")
             } else{
                 assertTrue(result,"Should be true because field is not full")
                 assertEquals(index,game.currentPlayer().field.cardsInList().size,"Should be $index because card is added")
                 assertEquals(placedCard, game.currentPlayer().field.cardsInList()[index-1],"Card should be the same")
-                assertEquals(0,game.currentPlayer().hand.cards.size,"Card should have been removed from hand")
+                assertEquals(0,game.currentPlayer().hand.size(),"Card should have been removed from hand")
                 assertEquals(Settings.PLAYER_MANA-1,game.currentPlayer().mana,"Mana should have decreased")
             }
 
@@ -58,7 +58,7 @@ internal class GameTest {
 
         game = Game(player1.deck, player2.deck, player1.name, player2.name)
         game.whitePlayer.hand = Hand()
-        assertFalse(game.placeCardOnField(player1.hand.cards[0]),"Should return false because no cards in hand")
+        assertFalse(game.placeCardOnField(player1.hand.cardsInList()[0]),"Should return false because no cards in hand")
     }
 
     @Test
@@ -73,7 +73,7 @@ internal class GameTest {
             var result = game.drawCardFromDeck()
             if(index > Settings.HAND_SIZE){
                 assertFalse(result)
-                assertEquals(prevDeckSize,game.currentPlayer().deck.cards.size,"Card should not have been removed from deck")
+                assertEquals(prevDeckSize,game.currentPlayer().deck.size(),"Card should not have been removed from deck")
                 assertTrue(game.currentPlayer().deck.cardsInList().contains(drawnCard))
                 assertFalse(game.currentPlayer().hand.cardsInList().contains(drawnCard))
                 assertEquals(Settings.PLAYER_MANA,game.currentPlayer().mana,"Mana should be unchanged")
@@ -109,8 +109,8 @@ internal class GameTest {
             game.blackPlayer.hand = Hand(getListWithRandomAmountOfCards(Settings.HAND_SIZE))
             game.blackPlayer.field = Field(getListWithRandomAmountOfCards(Settings.FIELD_SIZE))
             var expectedResult: Boolean
-            expectedResult = (game.whitePlayer.deck.cardsInList().size == 0 && game.whitePlayer.field.cardsInList().size == 0 && game.whitePlayer.hand.cardsInList().size == 0)
-                    || (game.blackPlayer.deck.cardsInList().size == 0 && game.blackPlayer.field.cardsInList().size == 0 && game.blackPlayer.hand.cardsInList().size == 0)
+            expectedResult = (game.whitePlayer.deck.size() == 0 && game.whitePlayer.field.size() == 0 && game.whitePlayer.hand.size() == 0)
+                    || (game.blackPlayer.deck.size() == 0 && game.blackPlayer.field.size() == 0 && game.blackPlayer.hand.size() == 0)
 
             assertEquals(expectedResult,game.checkGameOver())
         }
@@ -199,8 +199,8 @@ internal class GameTest {
 
         var index = 0
         do {
-            val attacker: Monster = game.whitePlayer.field.cards[index] as Monster
-            val getsAttacked: Monster = game.blackPlayer.field.cards[index] as Monster
+            val attacker: Monster = game.whitePlayer.field.cardsInList()[index] as Monster
+            val getsAttacked: Monster = game.blackPlayer.field.cardsInList()[index] as Monster
             val getsAttackedCopy: Monster = Utils.clone(getsAttacked) as Monster
 
             game.attackMonster(attacker, getsAttacked)
@@ -217,7 +217,7 @@ internal class GameTest {
             assertTrue(getsAttacked.cardId == getsAttackedCopy.cardId, "Attacked card isn't the same after attack")
             index++
             assertEquals(Settings.PLAYER_MANA -index,game.whitePlayer.mana,"Mana should have decreased")
-        } while(index < game.blackPlayer.field.cards.size)
+        } while(index < game.blackPlayer.field.size())
         println(
             """
             
@@ -227,13 +227,13 @@ internal class GameTest {
             """.trimIndent()
         )
         println(game.blackPlayer.field)
-        assertEquals(3, game.blackPlayer.field.cards.size, "Dead cards wasn't removed from field")
+        assertEquals(3, game.blackPlayer.field.size(), "Dead cards wasn't removed from field")
 
         game.nextTurn()
         index = 0
         do {
-            val attacker: Monster = game.blackPlayer.field.cards[index] as Monster
-            val getsAttacked: Monster = game.whitePlayer.field.cards[index] as Monster
+            val attacker: Monster = game.blackPlayer.field.cardsInList()[index] as Monster
+            val getsAttacked: Monster = game.whitePlayer.field.cardsInList()[index] as Monster
             val getsAttackedCopy: Monster = Utils.clone(getsAttacked) as Monster
 
             game.attackMonster(attacker, getsAttacked)
@@ -250,7 +250,7 @@ internal class GameTest {
             assertTrue(getsAttacked.cardId == getsAttackedCopy.cardId, "Attacked card isn't the same after attack")
             index++
             assertEquals(Settings.PLAYER_MANA-index,game.blackPlayer.mana,"Mana should have decreased")
-        } while(index < game.blackPlayer.field.cards.size)
+        } while(index < game.blackPlayer.field.cardsInList().size)
         println(
             """
             
@@ -261,7 +261,7 @@ internal class GameTest {
         )
         println(game.whitePlayer.field)
         println()
-        assertEquals(4, game.whitePlayer.field.cards.size, "Dead cards wasn't removed from field")
+        assertEquals(4, game.whitePlayer.field.size(), "Dead cards wasn't removed from field")
     }
 
     @Test
