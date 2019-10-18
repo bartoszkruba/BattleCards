@@ -2,20 +2,21 @@ import models.Deck
 import models.Player
 
 class Game(
-        val player1Deck: Deck,
-        val player2Deck: Deck,
-        val player1Name: String,
-        val player2Name: String) {
+    val player1Deck: Deck,
+    val player2Deck: Deck,
+    val player1Name: String,
+    val player2Name: String
+) {
     lateinit var whitePlayer: Player;
     lateinit var blackPlayer: Player;
-    var status:String = ""
-    var turn:Int = 0
+    var status: String = ""
+    var turn: Int = 0
 
     init {
 
     }
 
-    fun nextTurn(){
+    fun nextTurn() {
         turn++
     }
 
@@ -24,8 +25,9 @@ class Game(
         return toBeAttacked.isDead()
     }
 
-    fun printCurrentGame(){
-        println("""
+    fun printCurrentGame() {
+        println(
+            """
 
                      ${whitePlayer.name}
 
@@ -37,11 +39,12 @@ ${blackPlayer.field}
 
                      ${blackPlayer.name}
 
-        """.trimIndent())
+        """.trimIndent()
+        )
 //    TODO: Add ${messageLogger.lastLog()} to print
     }
 
-    fun checkGameOver(){
+    fun checkGameOver() {
 
     }
 

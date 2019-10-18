@@ -3,6 +3,7 @@ package inAndOutputAdapter
 import Card
 import Game
 import Monster
+import factory.DeckFactory
 import inAndOutputAdapter.ASCII.Companion.ANSI_BLUE
 import inAndOutputAdapter.ASCII.Companion.ANSI_PURPLE
 import inAndOutputAdapter.ASCII.Companion.ANSI_RED
@@ -63,6 +64,8 @@ class OutputAdapter {
 
         fun printBoard(game: Game) {
             val whiteTurn = game.turn % 2 != 0
+
+            println(game.whitePlayer.field)
         }
 
         fun illegalInputInfo() {
@@ -87,8 +90,19 @@ class OutputAdapter {
             println(delimiter(ANSI_BLUE))
         }
 
-        fun printAttackMenu() {
+        fun printChooseCardToAttackWith(game: Game) {
+            println(delimiter(ANSI_PURPLE))
 
+            println(centreLine("Choose Monster To Attack With (1 - 5)"))
+            print(centreLine("Your Choice: ").trimEnd() + " ")
+
+        }
+
+        fun printChooseTarget(game: Game) {
+            println(delimiter(ANSI_PURPLE))
+
+            println(centreLine("Choose Target (1 - 5)"))
+            print(centreLine("Your Choice: ").trimEnd() + " ")
         }
 
         fun printGameOptions(options: Map<Int, String>) {
@@ -107,19 +121,20 @@ class OutputAdapter {
         fun printGameOver(winner: Player) {
             println(delimiter(ANSI_RED))
 
-            println(centreLine("Game Over, ${winner.mana} Wins."))
+            println(centreLine("Game Over, ${winner.name} Wins.\n"))
 
             println(delimiter(ANSI_RED))
 
         }
 
         fun delimiter(color: String): String {
-            val line = "$color<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" +
-                    ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>$ANSI_RESET\n"
-            return centreLine(line)
+            val line = "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" +
+                    ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"
+            return "$color${centreLine(line)}$ANSI_RESET"
         }
 
         private fun centreLine(line: String): String {
+
             val indent: Int = (ASCII.BATTLE_CARDS.lines()[1].length - line.length) / 2
             val sb = StringBuilder()
             repeat(indent) { sb.append(" ") }
@@ -159,4 +174,18 @@ fun main() {
     options[4] = "Attack Monster"
 
     OutputAdapter.printGameOptions(options)
+
+    val playerOne = Player("Ricardo")
+    OutputAdapter.printGameOver(playerOne)
+
+    val game = Game(
+        player1Deck = DeckFactory.createDeck(deckPrototype),
+        player2Deck = DeckFactory.createDeck(deckPrototype),
+        player1Name = "Ricardo",
+        player2Name = "Dennis"
+    )
+
+    OutputAdapter.printChooseCardToAttackWith(game)
+    println()
+    OutputAdapter.printChooseTarget(game)
 }
