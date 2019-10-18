@@ -34,27 +34,33 @@ internal class GameTest {
             game.whitePlayer.hand.cards = arrayListOf(player1.deck.cards[i])
             game.blackPlayer.hand.cards = arrayListOf(player2.deck.cards[i])
 
-            var result = game.placeCardOnField(player1.hand.cards[0])
-            var placedCard = player1.hand.cards[0]
+            var placedCard = game.whitePlayer.hand.cards[0]
+            var result = game.placeCardOnField(game.whitePlayer.hand.cards[0])
             if(i > Settings.FIELD_SIZE){
                 assertFalse(result,"Should be false because field is full")
+                assertEquals(1,game.whitePlayer.hand.cards.size,"Card should not have been removed from hand")
             } else{
                 assertTrue(result,"Should be true because field is not full")
                 assertEquals(i,game.whitePlayer.field.cardsInList().size,"Should be $i because card is added")
-                assertEquals(placedCard, game.whitePlayer.field.cardsInList()[i],"Card should be the same")
+                assertEquals(placedCard, game.whitePlayer.field.cardsInList()[i-1],"Card should be the same")
+                assertEquals(0,game.whitePlayer.hand.cards.size,"Card should have been removed from hand")
             }
 
             game.nextTurn()
 
-            result = game.placeCardOnField(player2.hand.cards[0])
-            placedCard = player2.hand.cards[0]
+            placedCard = game.blackPlayer.hand.cards[0]
+            result = game.placeCardOnField(game.blackPlayer.hand.cards[0])
             if(i > Settings.FIELD_SIZE){
                 assertFalse(result,"Should be false because field is full")
+                assertEquals(1,game.blackPlayer.hand.cards.size,"Card should not have been removed from hand")
             } else{
                 assertTrue(result,"Should be true because field is not full")
                 assertEquals(i,game.blackPlayer.field.cardsInList().size,"Should be $i because card is added")
-                assertEquals(placedCard, game.blackPlayer.field.cardsInList()[i],"Card should be the same")
+                assertEquals(placedCard, game.blackPlayer.field.cardsInList()[i-1],"Card should be the same")
+                assertEquals(0,game.blackPlayer.hand.cards.size,"Card should have been removed from hand")
             }
+
+            game.nextTurn()
         }
 
         game = Game(player1.deck, player2.deck, player1.name, player2.name)
@@ -234,14 +240,7 @@ ${player2.field}
         val players: Array<Player> = arrayOf(player1, player2)
 
         repeat(2) {
-            val testCards: ArrayList<Monster> = arrayListOf(
-
-                Monster("Ogre", 4, 7),
-                Monster("Wolf", 3, 2),
-                Monster("Ranger", 3, 4),
-                Monster("Slime", 2, 2),
-                Monster("Murloc", 1, 4)
-            )
+            var testCards: ArrayList<Monster> = generateCards()
 
             val deck = Deck()
             val hand = Hand()
@@ -256,7 +255,10 @@ ${player2.field}
             repeat(Settings.DECK_SIZE) {
                 val card: Monster = Utils.clone(testCards[index++]) as Monster
                 deck.addCard(card)
-                if (index > 4) index = 0
+                if (index > 4){
+                    index = 0
+                    testCards = generateCards()
+                }
             }
             index = 0
             repeat(Settings.FIELD_SIZE) {
@@ -265,7 +267,18 @@ ${player2.field}
             }
             players[it] = Player("Player$it", deck, hand, field)
         }
+
         player1 = players[0]
         player2 = players[1]
+    }
+
+    private fun generateCards(): ArrayList<Monster>{
+        return arrayListOf(
+            Monster("Ogre", 4, 7),
+            Monster("Wolf", 3, 2),
+            Monster("Ranger", 3, 4),
+            Monster("Slime", 2, 2),
+            Monster("Murloc", 1, 4)
+        )
     }
 }
