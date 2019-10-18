@@ -27,11 +27,6 @@ internal class UserTest {
                 "val"
             ), "Id should be immutable, declared as val"
         )
-        assertTrue(
-            player::class.declaredMemberProperties.find { it.name == "mana" }!!.toString().contains(
-                "val"
-            ), "Mana should be immutable, declared as val"
-        )
         assertEquals("TestNisse", player.name, "Name does not match passed name")
         assertNotNull(player.id, "Player id is not allowed to be null")
 
