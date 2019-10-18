@@ -15,7 +15,7 @@ class Input() {
 
         fun readGameOptions(option: String, optionsList:  Map<Int, String>): String? {
             optionsList.forEach { (k, v) ->
-                 if (k.toString() == option|| option.toLowerCase() == v.toLowerCase()) return v
+                 if (k.toString() == option|| option.toLowerCase() == v.toLowerCase()) return v.toLowerCase()
             }
             return null
         }
