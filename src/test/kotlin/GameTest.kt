@@ -69,8 +69,8 @@ internal class GameTest {
         var index = 1
         for (i in 1..(Settings.HAND_SIZE + 1)*2){
             val prevDeckSize = game.currentPlayer().deck.cardsInList().size
-            var result = game.drawCardFromDeck()
             var drawnCard = game.currentPlayer().deck.cardsInList()[0]
+            var result = game.drawCardFromDeck()
             if(index > Settings.HAND_SIZE){
                 assertFalse(result)
                 assertEquals(prevDeckSize,game.currentPlayer().deck.cards.size,"Card should not have been removed from deck")
@@ -79,7 +79,7 @@ internal class GameTest {
                 assertEquals(Settings.PLAYER_MANA,game.currentPlayer().mana,"Mana should be unchanged")
             }else{
                 assertTrue(result)
-                assertEquals(i,game.currentPlayer().hand.cardsInList().size)
+                assertEquals(index,game.currentPlayer().hand.cardsInList().size)
                 assertTrue(game.currentPlayer().hand.cardsInList().contains(drawnCard))
                 assertFalse(game.currentPlayer().deck.cardsInList().contains(drawnCard))
                 assertEquals(Settings.PLAYER_MANA-1,game.currentPlayer().mana,"Mana should have decreased")
