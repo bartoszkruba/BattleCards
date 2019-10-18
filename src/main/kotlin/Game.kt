@@ -33,6 +33,7 @@ class Game(
             val player = if (currentPlayer() == whitePlayer) blackPlayer else whitePlayer
             player.field.removeCard(toBeAttacked)
         }
+        currentPlayer().mana--
     }
 
     fun printCurrentGame() {
