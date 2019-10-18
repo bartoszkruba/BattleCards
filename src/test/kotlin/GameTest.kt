@@ -39,11 +39,13 @@ internal class GameTest {
             if(i > Settings.FIELD_SIZE){
                 assertFalse(result,"Should be false because field is full")
                 assertEquals(1,game.whitePlayer.hand.cards.size,"Card should not have been removed from hand")
+                assertEquals(Settings.PLAYER_MANA,game.whitePlayer.mana,"Mana should be unchanged")
             } else{
                 assertTrue(result,"Should be true because field is not full")
                 assertEquals(i,game.whitePlayer.field.cardsInList().size,"Should be $i because card is added")
                 assertEquals(placedCard, game.whitePlayer.field.cardsInList()[i-1],"Card should be the same")
                 assertEquals(0,game.whitePlayer.hand.cards.size,"Card should have been removed from hand")
+                assertEquals(Settings.PLAYER_MANA-1,game.whitePlayer.mana,"Mana should have decreased")
             }
 
             game.nextTurn()
@@ -53,11 +55,13 @@ internal class GameTest {
             if(i > Settings.FIELD_SIZE){
                 assertFalse(result,"Should be false because field is full")
                 assertEquals(1,game.blackPlayer.hand.cards.size,"Card should not have been removed from hand")
+                assertEquals(Settings.PLAYER_MANA,game.blackPlayer.mana,"Mana should be unchanged")
             } else{
                 assertTrue(result,"Should be true because field is not full")
                 assertEquals(i,game.blackPlayer.field.cardsInList().size,"Should be $i because card is added")
                 assertEquals(placedCard, game.blackPlayer.field.cardsInList()[i-1],"Card should be the same")
                 assertEquals(0,game.blackPlayer.hand.cards.size,"Card should have been removed from hand")
+                assertEquals(Settings.PLAYER_MANA-1,game.blackPlayer.mana,"Mana should have decreased")
             }
 
             game.nextTurn()
