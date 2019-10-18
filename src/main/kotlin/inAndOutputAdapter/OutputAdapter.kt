@@ -16,8 +16,6 @@ import prototype.DeckPrototype
 class OutputAdapter {
 
     companion object {
-
-
         fun printWelcome() {
 
             for (line in ASCII.BATTLE_CARDS.lines()) {
@@ -65,7 +63,48 @@ class OutputAdapter {
         fun printBoard(game: Game) {
             val whiteTurn = game.turn % 2 != 0
 
-            println(game.whitePlayer.field)
+            println(delimiter(Settings.ANSI_GREEN))
+            val stringsToPrint = ArrayList<String>()
+
+            val currentPlayer: Player
+            val opponent: Player
+
+            if (whiteTurn) {
+                currentPlayer = game.whitePlayer
+                opponent = game.blackPlayer
+            } else {
+                currentPlayer = game.blackPlayer
+                opponent = game.whitePlayer
+            }
+
+            stringsToPrint.add(
+                "Hand: ${opponent.hand.cards.size}/${Settings.HAND_SIZE} | " +
+                        "Deck: ${opponent.deck.cardsInList().size}/${opponent.deck.maxSize}"
+            )
+            stringsToPrint.add("*** ${opponent.name} ***")
+            stringsToPrint.add("")
+            stringsToPrint.add("==============================================================")
+            stringsToPrint.add(opponent.field.toString())
+            stringsToPrint.add("--------------------------------------------------------------")
+            stringsToPrint.add(currentPlayer.field.toString())
+            stringsToPrint.add("==============================================================")
+            stringsToPrint.add("")
+            stringsToPrint.add("Your Hand: ")
+            stringsToPrint.add(currentPlayer.hand.toString())
+            stringsToPrint.add("")
+            stringsToPrint.add("*** ${currentPlayer.name} ***")
+            stringsToPrint.add(
+                "Mana: ${currentPlayer.mana}/${Settings.PLAYER_MANA} | Deck: " +
+                        "${currentPlayer.deck.cardsInList().size}/${currentPlayer.deck.maxSize}"
+            )
+            stringsToPrint.add("")
+
+            stringsToPrint.forEach {
+                for (line in it.lines()) {
+                    println(centreLine(line))
+                }
+            }
+            println(delimiter(Settings.ANSI_GREEN))
         }
 
         fun illegalInputInfo() {
@@ -73,7 +112,7 @@ class OutputAdapter {
 
             println(centreLine("Invalid Input! Please Try Again.\n"))
 
-            println(delimiter(ANSI_PURPLE))
+            println(delimiter(ANSI_RED))
         }
 
         fun printDrawCardFromDeck(card: Card) {
@@ -93,15 +132,24 @@ class OutputAdapter {
         fun printChooseCardToAttackWith(game: Game) {
             println(delimiter(ANSI_PURPLE))
 
-            println(centreLine("Choose Monster To Attack With (1 - 5)"))
-            print(centreLine("Your Choice: ").trimEnd() + " ")
+            val range = when (game.turn % 2 != 0) {
+                true -> game.whitePlayer.field.cards.size
+                false -> game.blackPlayer.field.cards.size
+            }
 
+            println(centreLine("Choose Monster To Attack With (1 - $range)"))
+            print(centreLine("Your Choice: ").trimEnd() + " ")
         }
 
         fun printChooseTarget(game: Game) {
             println(delimiter(ANSI_PURPLE))
 
-            println(centreLine("Choose Target (1 - 5)"))
+            val range = when (game.turn % 2 != 0) {
+                true -> game.whitePlayer.field.cards.size
+                false -> game.blackPlayer.field.cards.size
+            }
+
+            println(centreLine("Choose Target (1 - $range)"))
             print(centreLine("Your Choice: ").trimEnd() + " ")
         }
 
@@ -152,13 +200,27 @@ class OutputAdapter {
             repeat(indent) { sb.append(" ") }
             return sb.toString() + line + sb.toString()
         }
+
+        fun printChooseCardToPlay(game: Game) {
+            println(delimiter(ANSI_PURPLE))
+
+            val range = when (game.turn % 2 != 0) {
+                true -> game.whitePlayer.hand.cardsInList().size
+                false -> game.blackPlayer.hand.cardsInList().size
+            }
+
+            println(centreLine("Choose Card To Play (1 - $range)"))
+            print(centreLine("Your Choice: "))
+
+        }
     }
+
 
 }
 
 
 fun clear() {
-    println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+    println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 }
 
 fun main() {
@@ -167,6 +229,8 @@ fun main() {
     println()
     OutputAdapter.printEnterName(2)
     println()
+
+    clear()
 
     val cardLoader = CardLoader()
     val deckPrototype = cardLoader.loadDeck("test")
@@ -185,7 +249,6 @@ fun main() {
     options[3] = "Play Card"
     options[4] = "Attack Monster"
 
-    OutputAdapter.printGameOptions(options)
 
     val playerOne = Player("Ricardo")
     OutputAdapter.printGameOver(playerOne)
@@ -197,7 +260,38 @@ fun main() {
         player2Name = "Dennis"
     )
 
+    OutputAdapter.printGameOptions(game.validMoves())
+
     OutputAdapter.printChooseCardToAttackWith(game)
     println()
     OutputAdapter.printChooseTarget(game)
+    println()
+
+    val white = game.whitePlayer
+    val black = game.blackPlayer
+
+    white.deck.shuffleDeck()
+    black.deck.shuffleDeck()
+
+    repeat(4) {
+        white.hand.addCard(white.deck.drawCard()!!)
+    }
+
+    repeat(0) {
+        black.hand.addCard(black.deck.drawCard()!!)
+    }
+
+    repeat(5) {
+        white.field.addCard(white.deck.drawCard()!!)
+    }
+
+    repeat(0) {
+        black.field.addCard(black.deck.drawCard()!!)
+    }
+
+    game.nextTurn()
+
+    OutputAdapter.printBoard(game)
+
+    OutputAdapter.printChooseCardToPlay(game)
 }
