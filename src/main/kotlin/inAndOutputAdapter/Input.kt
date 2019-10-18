@@ -1,5 +1,7 @@
 package inAndOutputAdapter
 
+import models.Hand
+
 class Input() {
     companion object {
 
@@ -20,8 +22,9 @@ class Input() {
             return null
         }
 
-        fun readCardToPlaceOnField(): Boolean {
-            return true
+        fun readCardToPlaceOnField(chosenCardToPlace: String, hand: Hand): Boolean? {
+            //var cardsInHand= hand.cardsInList()
+            return null
         }
     }
 }

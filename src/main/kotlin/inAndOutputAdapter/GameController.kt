@@ -16,7 +16,7 @@ class GameController {
         this.playerOneName = userNameInput(1)
         this.playerTwoName = userNameInput(2)
         var playerDecks = printGameBoard()
-        val chosenOption = gameOptions()
+        var chosenOption = gameOptions()
         doTheChoice(chosenOption, playerDecks)
 
     }
@@ -30,6 +30,7 @@ class GameController {
 
         this.game = Game(playerOneDeck, playerTwoDeck, this.playerOneName!!, this.playerTwoName!!)
         OutputAdapter.printBoard(game)
+        OutputAdapter.printDeckPrototype(deckPrototype)
         return Pair(playerOneDeck, playerTwoDeck)
     }
 
@@ -46,12 +47,12 @@ class GameController {
         when(option){
             "1", "draw card" -> {
                 OutputAdapter.printDrawCardFromDeck(drawCard!!)
+                game.drawCardFromDeck()
                 printGameBoard()
             }
             "2", "place card" -> {
                 chooseCardToPlaceOnField()
-                game.placeCardOnField()
-                OutputAdapter.printBoard(this.game)
+                //OutputAdapter.printBoard(this.game)
             }
             "3", "attack monster" ->{}
             "4", "end round" -> {}
@@ -60,9 +61,12 @@ class GameController {
         return option
     }
 
+
+
     private fun chooseCardToPlaceOnField() {
-        OutputAdapter.whichCardToPace()
-        Input.readCardToPlaceOnField()
+        OutputAdapter.printChooseCardToPlay(game)
+        val chosenCardToPlace = readLine()
+        Input.readCardToPlaceOnField(chosenCardToPlace!!, game.blackPlayer.hand)
     }
 
 
@@ -79,7 +83,8 @@ class GameController {
     }
 
     private fun gameOptions(): String? {
-        val gameOptions = game.validMoves()
+        //val gameOptions = game.validMoves()
+        val gameOptions= mapOf( 1 to "draw card", 2 to "place card",3 to "attack monster", 4 to "end round")
         OutputAdapter.printGameOptions(gameOptions)
 
         var chosenOption = readLine()
