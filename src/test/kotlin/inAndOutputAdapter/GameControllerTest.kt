@@ -14,13 +14,9 @@ internal class GameControllerTest {
         val deckPrototype = cardLoader.loadDeck("test")
         val playerOneDeck = DeckFactory.createDeck(deckPrototype)
         val playerTwoDeck = DeckFactory.createDeck(deckPrototype)
-        var decks = Pair(playerOneDeck, playerTwoDeck)
+        val decks = Pair(playerOneDeck, playerTwoDeck)
 
-        val deckPrototype2 = cardLoader.loadDeck("random json file")
-        val playerTwoDeck2 = DeckFactory.createDeck(deckPrototype2)
-        var invalidDecks = Pair(playerOneDeck, playerTwoDeck2)
-
-        var gameController = GameController()
+        val gameController = GameController()
 
         assertNotNull(gameController.doTheChoice("1", decks))
         assertNotNull(gameController.doTheChoice("2", decks))
@@ -38,7 +34,5 @@ internal class GameControllerTest {
         assertNull(gameController.doTheChoice("Draw Card", decks))
         assertNull(gameController.doTheChoice("DRAW CARD", decks))
         assertNull(gameController.doTheChoice("random option", decks))
-        //invalid/does not exist one deck out of the 2 decks
-        assertNull(gameController.doTheChoice("validOption", invalidDecks))
     }
 }
