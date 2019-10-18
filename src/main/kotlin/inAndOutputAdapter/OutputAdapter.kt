@@ -78,7 +78,7 @@ class OutputAdapter {
             }
 
             stringsToPrint.add(
-                "Hand: ${opponent.hand.cards.size}/${Settings.HAND_SIZE} | " +
+                "Hand: ${opponent.hand.size()}/${Settings.HAND_SIZE} | " +
                         "Deck: ${opponent.deck.cardsInList().size}/${opponent.deck.maxSize}"
             )
             stringsToPrint.add("*** ${opponent.name} ***")
@@ -133,8 +133,8 @@ class OutputAdapter {
             println(delimiter(ANSI_PURPLE))
 
             val range = when (game.turn % 2 != 0) {
-                true -> game.whitePlayer.field.cards.size
-                false -> game.blackPlayer.field.cards.size
+                true -> game.whitePlayer.field.size()
+                false -> game.blackPlayer.field.size()
             }
 
             println(centreLine("Choose Monster To Attack With (1 - $range)"))
@@ -145,8 +145,8 @@ class OutputAdapter {
             println(delimiter(ANSI_PURPLE))
 
             val range = when (game.turn % 2 != 0) {
-                true -> game.whitePlayer.field.cards.size
-                false -> game.blackPlayer.field.cards.size
+                true -> game.whitePlayer.field.size()
+                false -> game.blackPlayer.field.size()
             }
 
             println(centreLine("Choose Target (1 - $range)"))

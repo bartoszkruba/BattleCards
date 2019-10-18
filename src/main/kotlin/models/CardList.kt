@@ -6,11 +6,15 @@ import utilities.Utils
 import kotlin.math.floor
 
 abstract class CardList(var empty: Boolean, cards: ArrayList<Card>, var maxSize: Int) {
-    internal var cards: ArrayList<Card> = ArrayList()
+    protected var cards: ArrayList<Card> = ArrayList()
 
     init {
         require(cards.size <= maxSize) { "Card list is too big, ohh nooo!" }
         this.cards = cards.map { Utils.clone(it) as Card } as ArrayList<Card>
+    }
+
+    fun size(): Int{
+        return cards.size
     }
 
     fun cardsInList(): ArrayList<Card> {

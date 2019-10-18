@@ -25,44 +25,75 @@ internal class GameTest {
         assertEquals(Settings.PLAYER_MANA, game.blackPlayer.mana)
     }
 
-    /*
+
     @Test
     internal fun placeCardOnFieldTest(){
         createMockData()
         var game: Game = Game(player1.deck, player2.deck, player1.name, player2.name)
 
-        for(i in 1..Settings.FIELD_SIZE +1){
-            game.whitePlayer.hand.cards = arrayListOf(player1.deck.cards[i])
-            game.blackPlayer.hand.cards = arrayListOf(player2.deck.cards[i])
+        var index = 1
+        for(i in 1..(Settings.FIELD_SIZE +1)*2){
+            game.whitePlayer.hand = Hand(arrayListOf(player1.deck.cardsInList()[i]))
+            game.blackPlayer.hand = Hand(arrayListOf(player2.deck.cardsInList()[i]))
 
-            var result = game.placeCardOnField(player1.hand.cards[0])
-            var placedCard = player1.hand.cards[0]
-            if(i > Settings.FIELD_SIZE){
+            var placedCard = game.currentPlayer().hand.cardsInList()[0]
+            var result = game.placeCardOnField(game.currentPlayer().hand.cardsInList()[0])
+            if(index > Settings.FIELD_SIZE){
                 assertFalse(result,"Should be false because field is full")
+                assertEquals(1,game.currentPlayer().hand.size(),"Card should not have been removed from hand")
+                assertFalse(game.currentPlayer().field.cardsInList().contains(placedCard),"Card should not have been placed on field")
+                assertEquals(Settings.PLAYER_MANA,game.currentPlayer().mana,"Mana should be unchanged")
             } else{
                 assertTrue(result,"Should be true because field is not full")
-                assertEquals(i,game.whitePlayer.field.cardsInList().size,"Should be $i because card is added")
-                assertEquals(placedCard, game.whitePlayer.field.cardsInList()[i],"Card should be the same")
+                assertEquals(index,game.currentPlayer().field.cardsInList().size,"Should be $index because card is added")
+                assertEquals(placedCard, game.currentPlayer().field.cardsInList()[index-1],"Card should be the same")
+                assertEquals(0,game.currentPlayer().hand.size(),"Card should have been removed from hand")
+                assertEquals(Settings.PLAYER_MANA-1,game.currentPlayer().mana,"Mana should have decreased")
             }
 
             game.nextTurn()
+            if (i % 2 == 0) index++
 
-            result = game.placeCardOnField(player2.hand.cards[0])
-            placedCard = player2.hand.cards[0]
-            if(i > Settings.FIELD_SIZE){
-                assertFalse(result,"Should be false because field is full")
-            } else{
-                assertTrue(result,"Should be true because field is not full")
-                assertEquals(i,game.blackPlayer.field.cardsInList().size,"Should be $i because card is added")
-                assertEquals(placedCard, game.blackPlayer.field.cardsInList()[i],"Card should be the same")
-            }
         }
 
         game = Game(player1.deck, player2.deck, player1.name, player2.name)
         game.whitePlayer.hand = Hand()
-        assertFalse(game.placeCardOnField(player1.hand.cards[0]),"Should return false because no cards in hand")
+        assertFalse(game.placeCardOnField(player1.hand.cardsInList()[0]),"Should return false because no cards in hand")
     }
-     */
+
+    @Test
+    internal fun drawCardFromDeckTest(){
+        createMockData()
+        var game: Game = Game(player1.deck, player2.deck, player1.name, player2.name)
+
+        var index = 1
+        for (i in 1..(Settings.HAND_SIZE + 1)*2){
+            val prevDeckSize = game.currentPlayer().deck.cardsInList().size
+            var drawnCard = game.currentPlayer().deck.cardsInList()[0]
+            var result = game.drawCardFromDeck()
+            if(index > Settings.HAND_SIZE){
+                assertFalse(result)
+                assertEquals(prevDeckSize,game.currentPlayer().deck.size(),"Card should not have been removed from deck")
+                assertTrue(game.currentPlayer().deck.cardsInList().contains(drawnCard))
+                assertFalse(game.currentPlayer().hand.cardsInList().contains(drawnCard))
+                assertEquals(Settings.PLAYER_MANA,game.currentPlayer().mana,"Mana should be unchanged")
+            }else{
+                assertTrue(result)
+                assertEquals(index,game.currentPlayer().hand.cardsInList().size)
+                assertTrue(game.currentPlayer().hand.cardsInList().contains(drawnCard))
+                assertFalse(game.currentPlayer().deck.cardsInList().contains(drawnCard))
+                assertEquals(Settings.PLAYER_MANA-1,game.currentPlayer().mana,"Mana should have decreased")
+            }
+
+            game.nextTurn()
+            if (i % 2 == 0) index++
+        }
+
+        game = Game(player1.deck, player2.deck, player1.name, player2.name)
+        game.currentPlayer().deck = Deck()
+        assertFalse(game.drawCardFromDeck(),"Should return false because no cards in hand")
+    }
+
 
     @Test
     internal fun checkGameOverTest() {
@@ -78,8 +109,8 @@ internal class GameTest {
             game.blackPlayer.hand = Hand(getListWithRandomAmountOfCards(Settings.HAND_SIZE))
             game.blackPlayer.field = Field(getListWithRandomAmountOfCards(Settings.FIELD_SIZE))
             var expectedResult: Boolean
-            expectedResult = (game.whitePlayer.deck.cardsInList().size == 0 && game.whitePlayer.field.cardsInList().size == 0 && game.whitePlayer.hand.cardsInList().size == 0)
-                    || (game.blackPlayer.deck.cardsInList().size == 0 && game.blackPlayer.field.cardsInList().size == 0 && game.blackPlayer.hand.cardsInList().size == 0)
+            expectedResult = (game.whitePlayer.deck.size() == 0 && game.whitePlayer.field.size() == 0 && game.whitePlayer.hand.size() == 0)
+                    || (game.blackPlayer.deck.size() == 0 && game.blackPlayer.field.size() == 0 && game.blackPlayer.hand.size() == 0)
 
             assertEquals(expectedResult,game.checkGameOver())
         }
@@ -168,8 +199,8 @@ internal class GameTest {
 
         var index = 0
         do {
-            val attacker: Monster = game.whitePlayer.field.cards[index] as Monster
-            val getsAttacked: Monster = game.blackPlayer.field.cards[index] as Monster
+            val attacker: Monster = game.whitePlayer.field.cardsInList()[index] as Monster
+            val getsAttacked: Monster = game.blackPlayer.field.cardsInList()[index] as Monster
             val getsAttackedCopy: Monster = Utils.clone(getsAttacked) as Monster
 
             game.attackMonster(attacker, getsAttacked)
@@ -185,7 +216,8 @@ internal class GameTest {
             )
             assertTrue(getsAttacked.cardId == getsAttackedCopy.cardId, "Attacked card isn't the same after attack")
             index++
-        } while(index < game.blackPlayer.field.cards.size)
+            assertEquals(Settings.PLAYER_MANA -index,game.whitePlayer.mana,"Mana should have decreased")
+        } while(index < game.blackPlayer.field.size())
         println(
             """
             
@@ -195,13 +227,13 @@ internal class GameTest {
             """.trimIndent()
         )
         println(game.blackPlayer.field)
-        assertEquals(3, game.blackPlayer.field.cards.size, "Dead cards wasn't removed from field")
+        assertEquals(3, game.blackPlayer.field.size(), "Dead cards wasn't removed from field")
 
         game.nextTurn()
         index = 0
         do {
-            val attacker: Monster = game.blackPlayer.field.cards[index] as Monster
-            val getsAttacked: Monster = game.whitePlayer.field.cards[index] as Monster
+            val attacker: Monster = game.blackPlayer.field.cardsInList()[index] as Monster
+            val getsAttacked: Monster = game.whitePlayer.field.cardsInList()[index] as Monster
             val getsAttackedCopy: Monster = Utils.clone(getsAttacked) as Monster
 
             game.attackMonster(attacker, getsAttacked)
@@ -217,7 +249,8 @@ internal class GameTest {
             )
             assertTrue(getsAttacked.cardId == getsAttackedCopy.cardId, "Attacked card isn't the same after attack")
             index++
-        } while(index < game.blackPlayer.field.cards.size)
+            assertEquals(Settings.PLAYER_MANA-index,game.blackPlayer.mana,"Mana should have decreased")
+        } while(index < game.blackPlayer.field.cardsInList().size)
         println(
             """
             
@@ -228,7 +261,7 @@ internal class GameTest {
         )
         println(game.whitePlayer.field)
         println()
-        assertEquals(4, game.whitePlayer.field.cards.size, "Dead cards wasn't removed from field")
+        assertEquals(4, game.whitePlayer.field.size(), "Dead cards wasn't removed from field")
     }
 
     @Test
@@ -264,14 +297,7 @@ ${player2.field}
         val players: Array<Player> = arrayOf(player1, player2)
 
         repeat(2) {
-            val testCards: ArrayList<Monster> = arrayListOf(
-
-                Monster("Ogre", 4, 7),
-                Monster("Wolf", 3, 2),
-                Monster("Ranger", 3, 4),
-                Monster("Slime", 2, 2),
-                Monster("Murloc", 1, 4)
-            )
+            var testCards: ArrayList<Monster> = generateCards()
 
             val deck = Deck()
             val hand = Hand()
@@ -286,7 +312,10 @@ ${player2.field}
             repeat(Settings.DECK_SIZE) {
                 val card: Monster = Utils.clone(testCards[index++]) as Monster
                 deck.addCard(card)
-                if (index > 4) index = 0
+                if (index > 4){
+                    index = 0
+                    testCards = generateCards()
+                }
             }
             index = 0
             repeat(Settings.FIELD_SIZE) {
@@ -295,7 +324,18 @@ ${player2.field}
             }
             players[it] = Player("Player$it", deck, hand, field)
         }
+
         player1 = players[0]
         player2 = players[1]
+    }
+
+    private fun generateCards(): ArrayList<Monster>{
+        return arrayListOf(
+            Monster("Ogre", 4, 7),
+            Monster("Wolf", 3, 2),
+            Monster("Ranger", 3, 4),
+            Monster("Slime", 2, 2),
+            Monster("Murloc", 1, 4)
+        )
     }
 }
