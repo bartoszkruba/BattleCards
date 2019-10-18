@@ -32,12 +32,14 @@ class GameController {
         return Pair(playerOneDeck, playerTwoDeck)
     }
 
-    private fun doTheChoice(option: String?, playersDecks: Pair<Deck, Deck>) {
+    private fun doTheChoice(option: String?, playersDecks: Pair<Deck, Deck>): String? {
         val whiteTurn = this.game.turn % 2 != 0
         when(option){
             "1", "draw" -> OutputAdapter.printDrawCardFromDeck(playersDecks.first.drawCard()!!)
-            //"2", "put" -> if(whiteTurn) OutputAdapter.
+           //"2", "put" -> if(whiteTurn) OutputAdapter.
+            else -> return null
         }
+        return option
     }
 
     private fun userNameInput(playerNumber:Int): String? {
@@ -53,17 +55,15 @@ class GameController {
     }
 
     private fun gameOptions(): String? {
-        //val gameOptions = game.validMoves()
-        val gameOptions= mapOf( 1 to "Draw", 2 to "PUT",3 to "Attack", 4 to "Pass")
-
+        val gameOptions = game.validMoves()
         OutputAdapter.printGameOptions(gameOptions)
 
         var chosenOption = readLine()
-        val validChoice = Input.readGameOptions(chosenOption!!, gameOptions)
+        var validChoice = Input.readGameOptions(chosenOption!!, gameOptions)
         while(validChoice == null){
             OutputAdapter.illegalInputInfo()
             chosenOption = readLine()
-            if(Input.readName(chosenOption!!) != null) {
+            if(Input.readGameOptions(chosenOption!!, gameOptions) != null) {
                 return chosenOption
             }
         }
