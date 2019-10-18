@@ -28,7 +28,7 @@ class OutputAdapter {
             println("\n\n\n")
 
             for (line in ASCII.CREATED_WITH.lines()) {
-                println(line)
+                println(centreLine(line))
                 Thread.sleep(250)
             }
 
@@ -37,7 +37,7 @@ class OutputAdapter {
             Thread.sleep(250)
 
             for (line in ASCII.KOTLIN.lines()) {
-                println(line)
+                println(centreLine(line))
                 Thread.sleep(250)
             }
 
@@ -135,7 +135,19 @@ class OutputAdapter {
 
         private fun centreLine(line: String): String {
 
-            val indent: Int = (ASCII.BATTLE_CARDS.lines()[1].length - line.length) / 2
+            var newLine = line
+
+            newLine = newLine.replace(Settings.ANSI_BLACK, "")
+                .replace(Settings.ANSI_BLUE, "")
+                .replace(Settings.ANSI_CYAN, "")
+                .replace(Settings.ANSI_GREEN, "")
+                .replace(Settings.ANSI_PURPLE, "")
+                .replace(Settings.ANSI_RED, "")
+                .replace(Settings.ANSI_RESET, "")
+                .replace(Settings.ANSI_WHITE, "")
+                .replace(Settings.ANSI_YELLOW, "")
+
+            val indent: Int = (ASCII.BATTLE_CARDS.lines()[1].length - newLine.length) / 2
             val sb = StringBuilder()
             repeat(indent) { sb.append(" ") }
             return sb.toString() + line + sb.toString()
