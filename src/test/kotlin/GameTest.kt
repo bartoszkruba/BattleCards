@@ -77,7 +77,7 @@ internal class GameTest {
     @Test
     internal fun drawCardFromDeckTest() {
         createMockData()
-        var game: Game = Game(player1.deck, player2.deck, player1.name, player2.name)
+        var game = Game(player1.deck, player2.deck, player1.name, player2.name)
 
         var index = 1
         for (i in 1..(Settings.HAND_SIZE + 1) * 2) {
@@ -106,6 +106,7 @@ internal class GameTest {
             if (i % 2 == 0) index++
         }
 
+        createMockData()
         game = Game(player1.deck, player2.deck, player1.name, player2.name)
         game.currentPlayer().deck = Deck()
         assertFalse(game.drawCardFromDeck(), "Should return false because no cards in hand")
@@ -114,15 +115,19 @@ internal class GameTest {
 
     @Test
     internal fun checkGameOverTest() {
+        val deckPrototype = DeckPrototype("aaaa")
+        repeat(Settings.DECK_SIZE) { deckPrototype.addCard(MonsterPrototype(1, "aaaa", 5, 5)) }
         for (i in 0..10000) {
-            var game = Game(
-                Deck(getListWithRandomAmountOfCards(Settings.DECK_SIZE)),
-                Deck(getListWithRandomAmountOfCards(Settings.DECK_SIZE)),
+            val game = Game(
+                DeckFactory.createDeck(deckPrototype),
+                DeckFactory.createDeck(deckPrototype),
                 "player1",
                 "player2"
             )
+            game.whitePlayer.deck = Deck(getListWithRandomAmountOfCards(Settings.DECK_SIZE))
             game.whitePlayer.hand = Hand(getListWithRandomAmountOfCards(Settings.HAND_SIZE))
             game.whitePlayer.field = Field(getListWithRandomAmountOfCards(Settings.FIELD_SIZE))
+            game.blackPlayer.deck = Deck(getListWithRandomAmountOfCards(Settings.DECK_SIZE))
             game.blackPlayer.hand = Hand(getListWithRandomAmountOfCards(Settings.HAND_SIZE))
             game.blackPlayer.field = Field(getListWithRandomAmountOfCards(Settings.FIELD_SIZE))
             var expectedResult: Boolean
@@ -132,7 +137,6 @@ internal class GameTest {
 
             assertEquals(expectedResult, game.checkGameOver())
         }
-
     }
 
     private fun getListWithRandomAmountOfCards(maxSize: Int): ArrayList<Card> {
@@ -143,6 +147,24 @@ internal class GameTest {
         return listOfCards
     }
 
+    @Test
+    internal fun `gameOver(), test return true`() {
+        val deckPrototype = DeckPrototype("aaaa")
+        repeat(Settings.DECK_SIZE) { deckPrototype.addCard(MonsterPrototype(1, "aaaa", 5, 5)) }
+
+        val game = Game(
+            DeckFactory.createDeck(deckPrototype),
+            DeckFactory.createDeck(deckPrototype),
+            "player1",
+            "player2"
+        )
+
+        game.whitePlayer.deck = Deck(ArrayList())
+        game.whitePlayer.hand = Hand(ArrayList())
+        game.whitePlayer.field = Field(ArrayList())
+
+        assertTrue(game.checkGameOver())
+    }
 
     @Test
     internal fun gameConstructorTest() {
@@ -156,49 +178,177 @@ internal class GameTest {
         assertEquals(player2.deck, game.blackPlayer.deck)
     }
 
+//    @Test
+//    fun validMovesTest() {
+//        val deckPrototype = DeckPrototype("aaaaa")
+//
+//        repeat(Settings.DECK_SIZE) { deckPrototype.addCard(MonsterPrototype(1, "aaaaa", 5, 5)) }
+//
+//        val game = Game(
+//            DeckFactory.createDeck(deckPrototype), DeckFactory.createDeck(deckPrototype),
+//            "player1", "player2"
+//        )
+//        game.whitePlayer.deck = Deck(arrayListOf(Monster("Wolf", 3, 2)))
+//        game.whitePlayer.hand = Hand(arrayListOf(Monster("Murloc", 1, 3)))
+//
+//        var testMapPattern = mapOf(
+//            1 to "Place Card",
+//            2 to "Draw Card",
+//            3 to "End Round"
+//        )
+//
+//        assertArrayEquals(testMapPattern.values.toTypedArray(), game.validMoves().values.toTypedArray())
+//
+//        testMapPattern = mapOf(
+//            1 to "Attack Monster",
+//            2 to "Place Card",
+//            3 to "Draw Card",
+//            4 to "End Round"
+//        )
+//        game.whitePlayer.field = Field(arrayListOf(Monster("Murloc", 1, 3)))
+//        assertArrayEquals(testMapPattern.values.toTypedArray(), game.validMoves().values.toTypedArray())
+//
+//        testMapPattern = mapOf(
+//            1 to "Attack Monster",
+//            2 to "End Round"
+//        )
+//        game.whitePlayer.deck = Deck()
+//        game.whitePlayer.hand = Hand()
+//        assertArrayEquals(testMapPattern.values.toTypedArray(), game.validMoves().values.toTypedArray())
+//
+//        testMapPattern = mapOf(
+//            1 to "Attack Monster",
+//            2 to "Draw Card",
+//            3 to "End Round"
+//        )
+//        game.whitePlayer.deck = Deck(arrayListOf(Monster("Murloc", 1, 3)))
+//        assertArrayEquals(testMapPattern.values.toTypedArray(), game.validMoves().values.toTypedArray())
+//    }
+
     @Test
-    fun validMovesTest() {
-        val game = Game(Deck(), Deck(), "player1", "player2")
-        game.whitePlayer.deck = Deck(arrayListOf(Monster("Wolf", 3, 2)))
-        game.whitePlayer.hand = Hand(arrayListOf(Monster("Murloc", 1, 3)))
+    internal fun `validMoves(), all moves valid`() {
+        val game = createGameForTesting()
 
-        var testMapPattern = mapOf(
-            1 to "Place Card",
-            2 to "Draw Card",
-            3 to "End Round"
+        val whiteP = game.whitePlayer
+        val blackP = game.blackPlayer
+
+        blackP.field.addCard(blackP.deck.drawCard()!!)
+        whiteP.field.addCard(whiteP.deck.drawCard()!!)
+        whiteP.hand.addCard(whiteP.deck.drawCard()!!)
+
+        val generatedMoves = ArrayList<String>()
+        game.validMoves().forEach { generatedMoves.add(it.value) }
+
+        assertContains(
+            arrayListOf(
+                Settings.MENU_OPTION_DRAW_CARD, Settings.MENU_OPTION_ATTACK_MONSTER,
+                Settings.MENU_OPTION_END_ROUND, Settings.MENU_OPTION_PLACE_CARD
+            ), generatedMoves
         )
+    }
 
-        assertArrayEquals(testMapPattern.values.toTypedArray(), game.validMoves().values.toTypedArray())
+    @Test
+    internal fun `validMoves(), only draw valid`() {
+        val game = createGameForTesting()
 
-        testMapPattern = mapOf(
-            1 to "Attack Monster",
-            2 to "Place Card",
-            3 to "Draw Card",
-            4 to "End Round"
+        val generatedMoves = ArrayList<String>()
+        game.validMoves().forEach { generatedMoves.add(it.value) }
+
+        assertContains(arrayListOf(Settings.MENU_OPTION_DRAW_CARD, Settings.MENU_OPTION_END_ROUND), generatedMoves)
+    }
+
+    @Test
+    internal fun `validMoves(), only attack valid`() {
+        val game = createGameForTesting()
+
+        val whiteP = game.whitePlayer
+        val blackP = game.blackPlayer
+
+        blackP.field.addCard(blackP.deck.drawCard()!!)
+        repeat(Settings.FIELD_SIZE) { whiteP.field.addCard(whiteP.deck.drawCard()!!) }
+        repeat(Settings.HAND_SIZE) { whiteP.hand.addCard(whiteP.deck.drawCard()!!) }
+
+        val generatedMoves = ArrayList<String>()
+        game.validMoves().forEach { generatedMoves.add(it.value) }
+
+        assertContains(arrayListOf(Settings.MENU_OPTION_END_ROUND, Settings.MENU_OPTION_ATTACK_MONSTER), generatedMoves)
+    }
+
+    @Test
+    internal fun `validMoves, only place valid`() {
+        val game = createGameForTesting()
+
+        val whiteP = game.whitePlayer
+
+        repeat(Settings.HAND_SIZE) { whiteP.hand.addCard(whiteP.deck.drawCard()!!) }
+
+        val generatedMoves = ArrayList<String>()
+        game.validMoves().forEach { generatedMoves.add(it.value) }
+
+        assertContains(arrayListOf(Settings.MENU_OPTION_END_ROUND, Settings.MENU_OPTION_PLACE_CARD), generatedMoves)
+    }
+
+    @Test
+    internal fun `validMoves(), only place and attack valid`() {
+        val game = createGameForTesting()
+
+        val whiteP = game.whitePlayer
+        val blackP = game.blackPlayer
+
+        blackP.field.addCard(blackP.deck.drawCard()!!)
+        repeat(1) { whiteP.field.addCard(whiteP.deck.drawCard()!!) }
+        repeat(Settings.HAND_SIZE) { whiteP.hand.addCard(whiteP.deck.drawCard()!!) }
+
+        val generatedMoves = ArrayList<String>()
+        game.validMoves().forEach { generatedMoves.add(it.value) }
+
+        assertContains(
+            arrayListOf(
+                Settings.MENU_OPTION_END_ROUND,
+                Settings.MENU_OPTION_ATTACK_MONSTER,
+                Settings.MENU_OPTION_PLACE_CARD
+            ),
+            generatedMoves
         )
-        game.whitePlayer.field = Field(arrayListOf(Monster("Murloc", 1, 3)))
-        assertArrayEquals(testMapPattern.values.toTypedArray(), game.validMoves().values.toTypedArray())
+    }
 
-        testMapPattern = mapOf(
-            1 to "Attack Monster",
-            2 to "End Round"
-        )
-        game.whitePlayer.deck = Deck()
-        game.whitePlayer.hand = Hand()
-        assertArrayEquals(testMapPattern.values.toTypedArray(), game.validMoves().values.toTypedArray())
+    @Test
+    internal fun `validMoves, only draw and attack valid`() {
+        val game = createGameForTesting()
 
-        testMapPattern = mapOf(
-            1 to "Attack Monster",
-            2 to "Draw Card",
-            3 to "End Round"
+        val whiteP = game.whitePlayer
+        val blackP = game.blackPlayer
+
+        blackP.field.addCard(blackP.deck.drawCard()!!)
+        repeat(Settings.FIELD_SIZE) { whiteP.field.addCard(whiteP.deck.drawCard()!!) }
+
+        val generatedMoves = ArrayList<String>()
+        game.validMoves().forEach { generatedMoves.add(it.value) }
+
+        assertContains(
+            arrayListOf(
+                Settings.MENU_OPTION_END_ROUND,
+                Settings.MENU_OPTION_ATTACK_MONSTER,
+                Settings.MENU_OPTION_DRAW_CARD
+            ),
+            generatedMoves
         )
-        game.whitePlayer.deck = Deck(arrayListOf(Monster("Murloc", 1, 3)))
-        assertArrayEquals(testMapPattern.values.toTypedArray(), game.validMoves().values.toTypedArray())
+    }
+
+    private fun assertContains(required: ArrayList<String>, result: ArrayList<String>) {
+        assertTrue(required.containsAll(result))
     }
 
     @Test
     fun currentPlayerTest() {
-        val game = Game(Deck(), Deck(), "player1", "player2")
+        val deckPrototype = DeckPrototype("aaaa")
+
+        repeat(Settings.DECK_SIZE) { deckPrototype.addCard(MonsterPrototype(1, "aaaaa", 5, 5)) }
+
+        val game = Game(
+            DeckFactory.createDeck(deckPrototype), DeckFactory.createDeck(deckPrototype),
+            "player1", "player2"
+        )
         val whitePlayer: Player = game.whitePlayer
         val blackPlayer: Player = game.blackPlayer
 
@@ -290,8 +440,8 @@ internal class GameTest {
     fun `printCurrentGame() test`() {
         createMockData()
         val game = Game(player1.deck, player2.deck, player1.name, player2.name)
-        game.whitePlayer = player1
-        game.blackPlayer = player2
+//        game.whitePlayer = player1
+//        game.blackPlayer = player2
 
         val testPrint = """
 
@@ -422,6 +572,46 @@ ${player2.field}
     private fun listsExactlySame(listOne: List<Card>, listTwo: List<Card>): Boolean {
         for (i in listOne.indices) if (listOne[i] != listTwo[i]) return false
         return true
+    }
+
+    @Test
+    internal fun `constructor test, white deck too short`() {
+        val deckPrototypeOne = DeckPrototype("aaaa")
+        repeat(Settings.DECK_SIZE - 1) {
+            deckPrototypeOne.addCard(MonsterPrototype(1, "aaaaa", 5, 5))
+        }
+
+        val deckPrototypeTwo = DeckPrototype("bbbb")
+        repeat(Settings.DECK_SIZE) {
+            deckPrototypeTwo.addCard(MonsterPrototype(1, "aaaaa", 5, 5))
+        }
+
+        assertThrows(RuntimeException::class.java) {
+            Game(
+                DeckFactory.createDeck(deckPrototypeOne), DeckFactory.createDeck(deckPrototypeTwo),
+                "aaaa", "bbbb"
+            )
+        }
+    }
+
+    @Test
+    internal fun `constructor test, black deck too short`() {
+        val deckPrototypeOne = DeckPrototype("aaaa")
+        repeat(Settings.DECK_SIZE - 1) {
+            deckPrototypeOne.addCard(MonsterPrototype(1, "aaaaa", 5, 5))
+        }
+
+        val deckPrototypeTwo = DeckPrototype("bbbb")
+        repeat(Settings.DECK_SIZE) {
+            deckPrototypeTwo.addCard(MonsterPrototype(1, "aaaaa", 5, 5))
+        }
+
+        assertThrows(RuntimeException::class.java) {
+            Game(
+                DeckFactory.createDeck(deckPrototypeTwo), DeckFactory.createDeck(deckPrototypeOne),
+                "aaaa", "bbbb"
+            )
+        }
     }
 
     @Test
