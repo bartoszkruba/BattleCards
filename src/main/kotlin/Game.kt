@@ -90,7 +90,7 @@ ${blackPlayer.field}
     }
 
     fun validMoves(): Map<Int, String> {
-        var moves: HashMap<Int, String> = hashMapOf()
+        val moves: HashMap<Int, String> = hashMapOf()
         var index = 0
         if(!currentPlayer().field.empty) moves[++index] = "Attack Monster"
         if(!currentPlayer().hand.empty) moves[++index] = "Place Card"
