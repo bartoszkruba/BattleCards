@@ -9,7 +9,7 @@ class Input() {
         }
 
         private fun userNameValidation(name: String): Boolean {
-            val regex = Regex("^[a-zA-Z]{1,9}") //ignore ÄÖÅ öäå ?????
+            val regex = Regex("^[a-zåäöA-ZÅÄÖ]{1,9}") //ignore ÄÖÅ öäå ?????
             return name.length in 1..9 && regex.matches(name)
         }
 

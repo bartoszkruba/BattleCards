@@ -20,10 +20,12 @@ internal class InputTest {
 
     @Test
     fun readGameOptions(){
-        val gameOptions= mapOf( 1 to "Draw", 2 to "Put",3 to "Attack", 4 to "Pass")
+        val gameOptions= mapOf( 1 to "Draw", 2 to "PUT",3 to "Attack", 4 to "Pass")
 
         assertNotNull(Input.readGameOptions("1", gameOptions))
         assertNotNull(Input.readGameOptions("Draw", gameOptions))
+        assertNotNull(Input.readGameOptions("DRAW", gameOptions))
+        assertNotNull(Input.readGameOptions("put", gameOptions))
         assertNotNull(Input.readGameOptions("draw", gameOptions))
 
         assertNull(Input.readGameOptions("someOption", gameOptions))
