@@ -9,6 +9,9 @@ internal class InputTest {
     @Test
     fun userNameInput() {
         assertNotNull(Input.readName("name"))
+        assertNotNull(Input.readName("NAME"))
+        assertNotNull(Input.readName("nWithöåä"))
+        assertNotNull(Input.readName("NWITHÖÅÄ"))
         assertNull(Input.readName(""))
         assertNull(Input.readName("1"))
         assertNull(Input.readName("1234"))
