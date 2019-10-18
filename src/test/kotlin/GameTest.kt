@@ -227,6 +227,7 @@ internal class GameTest {
         )
         println(game.blackPlayer.field)
         assertEquals(3, game.blackPlayer.field.cards.size, "Dead cards wasn't removed from field")
+        assertEquals(Settings.PLAYER_MANA -1,game.blackPlayer.mana,"Mana should have decreased")
 
         game.nextTurn()
         index = 0
@@ -260,6 +261,7 @@ internal class GameTest {
         println(game.whitePlayer.field)
         println()
         assertEquals(4, game.whitePlayer.field.cards.size, "Dead cards wasn't removed from field")
+        assertEquals(Settings.PLAYER_MANA-1,game.whitePlayer.mana,"Mana should have decreased")
     }
 
     @Test
