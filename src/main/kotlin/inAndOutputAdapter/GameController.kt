@@ -1,5 +1,6 @@
 package inAndOutputAdapter
 
+import Card
 import Game
 import factory.DeckFactory
 import models.Deck
@@ -32,15 +33,38 @@ class GameController {
         return Pair(playerOneDeck, playerTwoDeck)
     }
 
+
+
+
+
     private fun doTheChoice(option: String?, playersDecks: Pair<Deck, Deck>): String? {
-        val whiteTurn = this.game.turn % 2 != 0
+        val drawCard: Card?
+        game.nextTurn()
+        val whiteTurn = game.currentPlayer() == game.whitePlayer
+
+        drawCard = if (whiteTurn) playersDecks.first.drawCard() else playersDecks.second.drawCard()
         when(option){
-            "1", "draw" -> OutputAdapter.printDrawCardFromDeck(playersDecks.first.drawCard()!!)
-           //"2", "put" -> if(whiteTurn) OutputAdapter.
+            "1", "draw card" -> {
+                OutputAdapter.printDrawCardFromDeck(drawCard!!)
+                printGameBoard()
+            }
+            "2", "place card" -> {
+                chooseCardToPlaceOnField()
+                game.placeCardOnField()
+                OutputAdapter.printBoard(this.game)
+            }
+            "3", "attack monster" ->{}
+            "4", "end round" -> {}
             else -> return null
         }
         return option
     }
+
+    private fun chooseCardToPlaceOnField() {
+        OutputAdapter.whichCardToPace()
+        Input.readCardToPlaceOnField()
+    }
+
 
     private fun userNameInput(playerNumber:Int): String? {
         OutputAdapter.printEnterName(playerNumber)

@@ -19,5 +19,9 @@ class Input() {
             }
             return null
         }
+
+        fun readCardToPlaceOnField(): Boolean {
+            return true
+        }
     }
 }
