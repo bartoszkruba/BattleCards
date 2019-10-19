@@ -254,21 +254,21 @@ fun clear() {
 }
 
 fun main() {
+    val cardLoader = CardLoader()
 //    OutputAdapter.printWelcome()
     OutputAdapter.printEnterName(1)
     println()
     OutputAdapter.printEnterName(2)
     println()
 
-    OutputAdapter.printAvailableDecks(listOf("Demons", "Murlocs", "Humans", "Test"))
+    OutputAdapter.printAvailableDecks(cardLoader.listAvailableDecks())
 
     OutputAdapter.printChooseDeck("Ricardo")
     println()
     OutputAdapter.printChooseDeck("Dennis")
     println()
 
-    val cardLoader = CardLoader()
-    val deckPrototype = cardLoader.loadDeck("test")
+    val deckPrototype = cardLoader.loadDeck("Demons")
 
     OutputAdapter.printDeckPrototype(deckPrototype)
 
