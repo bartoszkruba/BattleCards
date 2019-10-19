@@ -71,6 +71,10 @@ class CardLoader(
         return deckPrototype
     }
 
+    fun listAvailableDecks(): Collection<String> {
+        return ArrayList()
+    }
+
     private fun loadDeckFile(name: String): JsonDeck {
 
         val path = Path.of("json", "decks", "$name.json").toAbsolutePath().toString()
