@@ -744,6 +744,33 @@ internal class CardLoaderTest {
         verifyNoMoreInteractions(objectMapper)
     }
 
+    @Test
+    internal fun `Test listing all available decks`() {
+        val fileOne = "deckOne.json"
+        val fileTwo = "deckTwo.json"
+        val fileThree = "deckThree.json"
+
+        val decksPath = Path.of("json", "decks").toAbsolutePath().toString()
+
+        given(fileWriter.filesInDirectory(decksPath)).willReturn(listOf(fileOne, fileTwo, fileThree))
+
+        val decks = cardLoader.listAvailableDecks()
+
+        assertEquals(3, decks.size)
+
+        assertTrue(
+            listOf(
+                fileOne.replace(".json", ""),
+                fileTwo.replace(".json", ""),
+                fileThree.replace(".json", "")
+            ).containsAll(decks)
+        )
+
+        verify(fileWriter, times(1)).filesInDirectory(decksPath)
+        verifyNoMoreInteractions(fileWriter)
+        verifyNoMoreInteractions(objectMapper)
+    }
+
     private fun shouldThrowRuntimeException(executable: Executable) {
         assertThrows(RuntimeException::class.java, executable)
         return Unit

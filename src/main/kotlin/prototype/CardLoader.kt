@@ -2,6 +2,7 @@ package prototype
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import java.nio.file.Path
+import kotlin.streams.toList
 
 class CardLoader(
     private val objectMapper: ObjectMapper = ObjectMapper(),
@@ -17,6 +18,7 @@ class CardLoader(
     }
 
     private val cardsPath = Path.of("json", "cards.json").toAbsolutePath().toString()
+    private val decksPath = Path.of("json", "decks").toAbsolutePath().toString()
     private val listType =
         ObjectMapper().typeFactory.constructCollectionType(ArrayList::class.java, CardPrototype::class.java)
 
@@ -70,6 +72,10 @@ class CardLoader(
 
         return deckPrototype
     }
+
+    fun listAvailableDecks(): Collection<String> = fileWriter.filesInDirectory(decksPath).stream().map {
+        it.replace(".json", "")
+    }.toList()
 
     private fun loadDeckFile(name: String): JsonDeck {
 
