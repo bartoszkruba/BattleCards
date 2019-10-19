@@ -14,4 +14,8 @@ class PrototypeFileWriter {
         val file = File(filePath)
         return if (file.exists()) file.readText() else null
     }
+
+    fun filesInDirectory(directoryPath: String): Collection<String> {
+        return ArrayList()
+    }
 }
