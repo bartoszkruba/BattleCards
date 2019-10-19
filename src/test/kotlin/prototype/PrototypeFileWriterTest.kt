@@ -86,7 +86,7 @@ internal class PrototypeFileWriterTest {
         File(fileTwo).writeText(TEST_STRING)
         File(fileThree).mkdir()
 
-        val files = prototypeFileWriter.filesInDirectory(testPath)
+        val files = prototypeFileWriter.filesInDirectory(Path.of("test").toString())
 
         assertEquals(2, files.size)
         assertTrue(listOf(NAME_ONE, NAME_TWO).containsAll(files))
@@ -96,8 +96,7 @@ internal class PrototypeFileWriterTest {
     internal fun `Read files in non existing directory`() {
         val path = Path.of("test", "test", "test").toString()
 
-        assertThrows<RuntimeException> {
-            prototypeFileWriter.filesInDirectory(path)
-        }
+        val files = prototypeFileWriter.filesInDirectory(path)
+        assertEquals(0, files.size)
     }
 }

@@ -16,6 +16,8 @@ class PrototypeFileWriter {
     }
 
     fun filesInDirectory(directoryPath: String): Collection<String> {
-        return ArrayList()
+        val files = ArrayList<String>()
+        File(directoryPath).walk().forEach { if (!it.isDirectory) files.add(it.name) }
+        return files
     }
 }
