@@ -91,4 +91,13 @@ internal class PrototypeFileWriterTest {
         assertEquals(2, files.size)
         assertTrue(listOf(NAME_ONE, NAME_TWO).containsAll(files))
     }
+
+    @Test
+    internal fun `Read files in non existing directory`() {
+        val path = Path.of("test", "test", "test").toString()
+
+        assertThrows<RuntimeException> {
+            prototypeFileWriter.filesInDirectory(path)
+        }
+    }
 }
