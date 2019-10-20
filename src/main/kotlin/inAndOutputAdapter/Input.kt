@@ -1,5 +1,6 @@
 package inAndOutputAdapter
 
+import Card
 import models.Field
 import models.Hand
 
@@ -23,14 +24,18 @@ class Input() {
             return null
         }
 
-        fun readCardToPlaceOnField(chosenCardToPlace: String, hand: Hand): Boolean? {
+        fun readCardToPlaceOnField(chosenCardToPlace: String, hand: Hand): Card? {
             //var cardsInHand= hand.cardsInList()
             return null
         }
 
-        fun readChosenCardToAttackWith(chosenCardToAttackWith: String?, field: Field): String? {
+        fun readChosenCardToAttackWith(chosenCardToAttackWith: String?, field: Field): Card? {
             return null
 
+        }
+
+        fun readTargetCard(chosenTargetCard: String?, field: Field): Card? {
+            return null
         }
     }
 }

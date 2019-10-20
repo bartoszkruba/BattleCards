@@ -56,7 +56,7 @@ class GameController {
             }
             "3", "attack monster" ->{
                 cardToAttackWith()
-                targetAttackCard()
+                targetCard()
             }
             "4", "end round" -> {}
             else -> return null
@@ -64,11 +64,11 @@ class GameController {
         return option
     }
 
-    private fun targetAttackCard() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    private fun targetCard(): Card? {
+        return null
     }
 
-    private fun cardToAttackWith() {
+    private fun cardToAttackWith(): Card{
         OutputAdapter.printChooseCardToAttackWith(game)
         var chosenCardToAttackWith = readLine()
 
@@ -76,21 +76,25 @@ class GameController {
         while(validChoice == null){
             OutputAdapter.illegalInputInfo()
             chosenCardToAttackWith = readLine()
-            if(Input.readChosenCardToAttackWith(chosenCardToAttackWith!!, game.blackPlayer.field) != null)
-                validChoice != null
+            validChoice = Input.readChosenCardToAttackWith(chosenCardToAttackWith!!, game.blackPlayer.field)
+            if(validChoice != null)
+                return validChoice
         }
+        return validChoice
     }
 
 
-    private fun chooseCardToPlaceOnField(){
+    private fun chooseCardToPlaceOnField(): Card{
         OutputAdapter.printChooseCardToPlay(game)
         var chosenCardToPlace = readLine()
         var validChoice = Input.readCardToPlaceOnField(chosenCardToPlace!!, game.blackPlayer.hand)
         while(validChoice == null){
             OutputAdapter.illegalInputInfo()
             chosenCardToPlace = readLine()
-            if(Input.readCardToPlaceOnField(chosenCardToPlace!!, game.blackPlayer.hand) != null) {validChoice != null}
+            validChoice = Input.readCardToPlaceOnField(chosenCardToPlace!!, game.blackPlayer.hand)
+            if(validChoice != null) return validChoice
         }
+        return validChoice
     }
 
 
