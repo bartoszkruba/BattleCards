@@ -64,8 +64,19 @@ class GameController {
         return option
     }
 
-    private fun targetCard(): Card? {
-        return null
+    private fun targetCard(): Card {
+        OutputAdapter.printChooseTarget(game)
+        var chosenTargetCard = readLine()
+
+        var validChoice = Input.readTargetCard(chosenTargetCard, game.whitePlayer.field)
+        while(validChoice == null){
+            OutputAdapter.illegalInputInfo()
+            chosenTargetCard = readLine()
+            validChoice = Input.readTargetCard(chosenTargetCard!!, game.whitePlayer.field)
+            if(validChoice != null)
+               return validChoice
+        }
+        return validChoice
     }
 
     private fun cardToAttackWith(): Card{
