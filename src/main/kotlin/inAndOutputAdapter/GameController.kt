@@ -44,7 +44,7 @@ class GameController {
         val whiteTurn = game.currentPlayer() == game.whitePlayer
 
         drawCard = if (whiteTurn) playersDecks.first.drawCard() else playersDecks.second.drawCard()
-        when(option){
+        when(option!!.toLowerCase()){
             "1", "draw card" -> {
                 OutputAdapter.printDrawCardFromDeck(drawCard!!)
                 game.drawCardFromDeck()
@@ -54,13 +54,32 @@ class GameController {
                 chooseCardToPlaceOnField()
                 OutputAdapter.printBoard(this.game)
             }
-            "3", "attack monster" ->{}
+            "3", "attack monster" ->{
+                cardToAttackWith()
+                targetAttackCard()
+            }
             "4", "end round" -> {}
             else -> return null
         }
         return option
     }
 
+    private fun targetAttackCard() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    private fun cardToAttackWith() {
+        OutputAdapter.printChooseCardToAttackWith(game)
+        var chosenCardToAttackWith = readLine()
+
+        var validChoice = Input.readChosenCardToAttackWith(chosenCardToAttackWith, game.blackPlayer.field)
+        while(validChoice == null){
+            OutputAdapter.illegalInputInfo()
+            chosenCardToAttackWith = readLine()
+            if(Input.readChosenCardToAttackWith(chosenCardToAttackWith!!, game.blackPlayer.field) != null)
+                validChoice != null
+        }
+    }
 
 
     private fun chooseCardToPlaceOnField(){

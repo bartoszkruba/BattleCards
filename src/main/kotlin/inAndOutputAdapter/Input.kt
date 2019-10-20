@@ -1,5 +1,6 @@
 package inAndOutputAdapter
 
+import models.Field
 import models.Hand
 
 class Input() {
@@ -17,7 +18,7 @@ class Input() {
 
         fun readGameOptions(option: String, optionsList:  Map<Int, String>): String? {
             optionsList.forEach { (k, v) ->
-                 if (k.toString() == option|| option.toLowerCase() == v.toLowerCase()) return v.toLowerCase()
+                 if (k.toString() == option|| option.toLowerCase() == v.toLowerCase()) return v
             }
             return null
         }
@@ -25,6 +26,11 @@ class Input() {
         fun readCardToPlaceOnField(chosenCardToPlace: String, hand: Hand): Boolean? {
             //var cardsInHand= hand.cardsInList()
             return null
+        }
+
+        fun readChosenCardToAttackWith(chosenCardToAttackWith: String?, field: Field): String? {
+            return null
+
         }
     }
 }
