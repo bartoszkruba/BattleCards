@@ -34,6 +34,7 @@ test {
 sonarqube {
     properties {
         property "sonar.projectKey", "bartoszkruba_BattleCards"
+        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
     }
 }
 
