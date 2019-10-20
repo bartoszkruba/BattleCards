@@ -23,14 +23,14 @@ internal class InputTest {
 
     @Test
     fun readGameOptions(){
-        val gameOptions= mapOf( 1 to "Draw", 2 to "PUT",3 to "Attack", 4 to "Pass")
+        val gameOptions= mapOf( 1 to "Draw Card", 2 to "Place Card",3 to "Attack Monster", 4 to "End Round")
 
         assertNotNull(Input.readGameOptions("1", gameOptions))
-        assertNotNull(Input.readGameOptions("Draw", gameOptions))
-        assertNotNull(Input.readGameOptions("DRAW", gameOptions))
-        assertNotNull(Input.readGameOptions("put", gameOptions))
-        assertNotNull(Input.readGameOptions("draw", gameOptions))
+        assertNotNull(Input.readGameOptions("Draw Card", gameOptions))
+        assertNotNull(Input.readGameOptions("DRAW CARD", gameOptions))
+        assertNotNull(Input.readGameOptions("place card", gameOptions))
 
+        assertNull(Input.readGameOptions("Draw", gameOptions))
         assertNull(Input.readGameOptions("someOption", gameOptions))
         assertNull(Input.readGameOptions("5", gameOptions))
         assertNull(Input.readGameOptions("0", gameOptions))
@@ -49,6 +49,7 @@ internal class InputTest {
 
         val playerHand = game.blackPlayer.hand
         var cardsInHand = playerHand.cardsInList()
+        println("${1..30}")
 
         //if the hand has the number/name of the card and
         assertNotNull(Input.readCardToPlaceOnField("${1..30}", playerHand))
