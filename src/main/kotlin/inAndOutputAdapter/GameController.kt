@@ -52,7 +52,7 @@ class GameController {
             }
             "2", "place card" -> {
                 chooseCardToPlaceOnField()
-                //OutputAdapter.printBoard(this.game)
+                OutputAdapter.printBoard(this.game)
             }
             "3", "attack monster" ->{}
             "4", "end round" -> {}
@@ -63,10 +63,15 @@ class GameController {
 
 
 
-    private fun chooseCardToPlaceOnField() {
+    private fun chooseCardToPlaceOnField(){
         OutputAdapter.printChooseCardToPlay(game)
-        val chosenCardToPlace = readLine()
-        Input.readCardToPlaceOnField(chosenCardToPlace!!, game.blackPlayer.hand)
+        var chosenCardToPlace = readLine()
+        var validChoice = Input.readCardToPlaceOnField(chosenCardToPlace!!, game.blackPlayer.hand)
+        while(validChoice == null){
+            OutputAdapter.illegalInputInfo()
+            chosenCardToPlace = readLine()
+            if(Input.readCardToPlaceOnField(chosenCardToPlace!!, game.blackPlayer.hand) != null) {validChoice != null}
+        }
     }
 
 
