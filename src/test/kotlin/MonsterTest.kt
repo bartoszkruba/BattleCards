@@ -13,7 +13,7 @@ internal class MonsterTest {
         constructorWithArgument();
     }
 
-    fun constructorWithNoArgument(){
+    fun constructorWithNoArgument() {
         var monster = Monster()
         var monster2 = Monster()
         assertNotEquals(monster.cardId, monster2.cardId)
@@ -58,5 +58,51 @@ internal class MonsterTest {
 
         monster2.takeDamge(monster1)
         assertTrue(monster2.isDead())
+    }
+
+    @Test
+    fun toStringTest() {
+        val wolfCard = Monster("Wolf", 3, 6).toString()
+
+        var atk = "${Settings.ANSI_BLUE}3 ${Settings.ANSI_RESET}"
+        var hp = "${Settings.ANSI_RED} 6${Settings.ANSI_RESET}"
+        var name = "${Settings.ANSI_GREEN}  Wolf     ${Settings.ANSI_RESET}"
+        val wolfCardTest = """
+            ___     
+           |   |    
+           |   |    
+         $atk|___|$hp  
+         $name
+        """.trimIndent()
+
+        assertEquals(wolfCardTest, wolfCard, "The toString doesn't match")
+
+        val gnarlCard = Monster("Gnarl", 8, 5).toString()
+        atk = "${Settings.ANSI_BLUE}8 ${Settings.ANSI_RESET}"
+        hp = "${Settings.ANSI_RED} 5${Settings.ANSI_RESET}"
+        name = "${Settings.ANSI_GREEN}  Gnarl    ${Settings.ANSI_RESET}"
+        val gnarlCardTest = """
+            ___     
+           |   |    
+           |   |    
+         $atk|___|$hp  
+         $name
+        """.trimIndent()
+
+        assertEquals(gnarlCardTest, gnarlCard, "The toString doesn't match")
+
+        val skeletonCard = Monster("Skeleton",10, 10).toString()
+        atk = "${Settings.ANSI_BLUE}10${Settings.ANSI_RESET}"
+        hp = "${Settings.ANSI_RED}10${Settings.ANSI_RESET}"
+        name = "${Settings.ANSI_GREEN}Skeleton   ${Settings.ANSI_RESET}"
+        val skeletonCardTest = """
+            ___     
+           |   |    
+           |   |    
+         $atk|___|$hp  
+         $name
+        """.trimIndent()
+
+        assertEquals(skeletonCardTest, skeletonCard, "The toString doesn't match")
     }
 }

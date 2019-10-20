@@ -3,9 +3,9 @@ package prototype
 class DeckPrototype(val name: String) {
 
     companion object {
-        private const val MIN_NAME_LENGTH = 1
-        private const val MAX_NAME_LENGTH = 20
-        private const val MAX_DECK_LENGTH = 30
+        private const val MIN_NAME_LENGTH = Settings.MIN_DECK_NAME_LENGTH
+        private const val MAX_NAME_LENGTH = Settings.MAX_DECK_NAME_LENGTH
+        private const val MAX_DECK_LENGTH = Settings.DECK_SIZE
         val NAME_REGEX = Regex("[a-zA-z ]*")
     }
 
@@ -21,10 +21,9 @@ class DeckPrototype(val name: String) {
         private set
 
     fun addCard(card: CardPrototype): Boolean {
-        var key: CardPrototype? = null
-        if (card is MonsterPrototype) key = card.copy()
+        if (size >= MAX_DECK_LENGTH) return false
 
-        if (size >= MAX_DECK_LENGTH || key == null) return false
+        val key = card.clone()
         this.cards[key]?.let {
             this.cards[card] = this.cards[card]!!.plus(1)
         } ?: run {

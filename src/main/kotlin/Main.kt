@@ -1,8 +1,6 @@
-fun main(args: Array<String>) {
-  println("Hello World")
-}
+import inAndOutputAdapter.OutputAdapter
 
-class HelloWorld {
-    fun helloWorld(): String = "Hello World"
+fun main(args: Array<String>) {
+    var printMAnScreen = OutputAdapter()
 }
 

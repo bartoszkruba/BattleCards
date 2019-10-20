@@ -7,6 +7,7 @@ class InitCards(private val cardLoader: CardLoader = CardLoader()) {
 
     fun initCards() {
         Path.of("json").toAbsolutePath().toFile().mkdir()
+        Path.of("json", "decks").toAbsolutePath().toFile().mkdir()
 
         println("Deleting old cards...")
         val cardsToDelete = ArrayList<Int>()
@@ -29,11 +30,57 @@ class InitCards(private val cardLoader: CardLoader = CardLoader()) {
         cards.add(newMonster("Rat", 1, 9))
         cards.add(newMonster("Dwarf", 9, 4))
         cards.add(newMonster("Elf", 8, 6))
-        cards.add(newMonster("Demon", 6, 10))
+        cards.add(newMonster("Fel Orc", 6, 10))
+        cards.add(newMonster("Imp", 1, 3))
+        cards.add(newMonster("Succub", 9, 6))
+        cards.add(newMonster("Felhound", 4, 8))
+        cards.add(newMonster("Void Cat", 1, 3))
+        cards.add(newMonster("Souleater", 7, 7))
+        cards.add(newMonster("Fel Rat", 2, 2))
+        cards.add(newMonster("Fire Ogre", 2, 10))
+        cards.add(newMonster("Dark Pig", 8, 5))
+        cards.add(newMonster("Abyss Imp", 2, 8))
 
         println("Saving new cards...")
         cardLoader.saveCards(cards)
-        println("Done!")
+
+        println("\nAdding new deck...")
+
+        val deckPrototypeOne = DeckPrototype("Standard")
+        repeat(2) {
+            for (i in 0 until 15) {
+                deckPrototypeOne.addCard(cards[i])
+            }
+        }
+
+        cardLoader.saveDeck(deckPrototypeOne)
+        cardLoader.loadDeck("Standard")
+        println("Added new deck: Standard\n")
+
+        val deckPrototypeTwo = DeckPrototype("Demons")
+
+        repeat(3) {
+            for (i in 14 until 24) {
+                deckPrototypeTwo.addCard(cards[i])
+            }
+        }
+
+        cardLoader.saveDeck(deckPrototypeTwo)
+        cardLoader.loadDeck("Demons")
+        println("Added new deck: Demons\n")
+
+        val deckPrototypeThree = DeckPrototype("Rats")
+
+        repeat(15) {
+            deckPrototypeThree.addCard(cards[11])
+            deckPrototypeThree.addCard(cards[20])
+        }
+
+        cardLoader.saveDeck(deckPrototypeThree)
+        cardLoader.loadDeck("Rats")
+        println("Added new deck: Rats\n")
+
+        println("\nDone!")
     }
 
     private fun newMonster(name: String, baseHealth: Int, baseAttack: Int): MonsterPrototype {

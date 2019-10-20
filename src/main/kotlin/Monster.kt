@@ -1,4 +1,5 @@
 import java.util.*
+import kotlin.math.floor
 
 class Monster : Card {
     override var name: String
@@ -36,4 +37,27 @@ class Monster : Card {
     }
 
     fun isDead() = this.health <= 0
+
+    override fun toString(): String {
+        var atk = if(attack > 9) "${attack}" else "${attack} "
+        var hp = if(health > 9) "${health}" else " ${health}"
+        hp = if(health <= 0) " 0" else hp
+        atk = "${Settings.ANSI_BLUE}${atk}${Settings.ANSI_RESET}"
+        hp = "${Settings.ANSI_RED}${hp}${Settings.ANSI_RESET}"
+        var sb = StringBuilder()
+        repeat((4 - floor(name.length * 0.5)).toInt()) { sb.append(" ") }
+        var cardName = "$sb${name}"
+        sb.clear()
+        repeat(11 - cardName.length) { sb.append(" ") }
+        cardName += sb
+        cardName = "${Settings.ANSI_GREEN}${cardName}${Settings.ANSI_RESET}"
+
+        return """
+             ___     
+            |   |    
+            |   |    
+          $atk|___|$hp  
+          $cardName
+        """.trimIndent()
+    }
 }
