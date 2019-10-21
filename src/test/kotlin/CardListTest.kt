@@ -75,14 +75,14 @@ internal class CardListTest {
         var deckClass = deck::class
         var deckClassVariables = getAllVariables(deckClass, deck)
         var originalDeckInClass = deckClassVariables["cards"] as ArrayList<Card>
-        assertTrue(deck.cardsInList() !== originalDeckInClass, "Returned list is not a copy of original list")
+        assertTrue(deck.cardsInList() === originalDeckInClass, "Returned list is not a reference of original list")
         assertTrue(
-            deck.cardsInList()[0] !== originalDeckInClass[0],
-            "Returned objects in list is not a copy of the original object"
+            deck.cardsInList()[0] === originalDeckInClass[0],
+            "Returned objects in list is not a reference of the original object"
         )
         assertTrue(
             deck.cardsInList().containsAll(originalDeckInClass),
-            "The returned copy doesnt contain the objects from the original list"
+            "The returned list doesn't contain the objects from the original list"
         )
     }
 

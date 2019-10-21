@@ -25,7 +25,7 @@ internal class InputTest {
     fun readCardToPlaceOnField(){
         val cardLoader = CardLoader()
 
-        val deckPrototype = cardLoader.loadDeck("test")
+        val deckPrototype = cardLoader.loadDeck("Standard")
         val playerOneDeck = DeckFactory.createDeck(deckPrototype)
         val playerTwoDeck = DeckFactory.createDeck(deckPrototype)
 
