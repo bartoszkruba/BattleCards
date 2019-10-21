@@ -31,6 +31,8 @@ class Game(
 
     fun currentPlayer() = if (turn % 2 != 0) whitePlayer else blackPlayer
 
+    fun oppositePlayer() = if (turn % 2 != 0) blackPlayer else whitePlayer
+
     fun nextTurn() {
         turn++
         whitePlayer.mana = Settings.PLAYER_MANA
