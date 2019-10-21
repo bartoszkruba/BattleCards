@@ -3,9 +3,7 @@ package models
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
-import Game
 import Monster
-import Card
 
 internal class FieldTest {
 
@@ -29,16 +27,16 @@ internal class FieldTest {
     }
 
     @Test
-    fun monstersIsSleepingTest(){
+    fun cardsAreSleepingTest(){
         var field:Field = Field(arrayListOf(Monster("Hejsan",2,5),Monster("Svejsan",2,5),Monster("Haj",2,5)))
         field.cardsInList().forEach { if (it is Monster){
             it.sleeping = true}
         }
-        assertTrue(field.monstersIsSleeping())
+        assertTrue(field.allCardsAreSleeping())
         field.wakeUpMonsters()
-        assertFalse(field.monstersIsSleeping())
+        assertFalse(field.allCardsAreSleeping())
         var monster = field.cardsInList()[0] as Monster
         monster.sleeping = true
-        assertTrue(field.monstersIsSleeping())
+        assertTrue(field.allCardsAreSleeping())
     }
 }
