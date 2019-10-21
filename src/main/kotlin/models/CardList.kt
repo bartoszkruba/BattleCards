@@ -18,7 +18,7 @@ abstract class CardList(var empty: Boolean, cards: ArrayList<Card>, var maxSize:
     }
 
     fun cardsInList(): ArrayList<Card> {
-        return cards.map { Utils.clone(it) as Card } as ArrayList<Card>
+        return cards
     }
 
     fun addCard(card: Card): Boolean {

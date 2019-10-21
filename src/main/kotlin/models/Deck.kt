@@ -7,9 +7,10 @@ class Deck(
 ) : CardList(cards.size == 0, cards, Settings.DECK_SIZE) {
 
     fun shuffleDeck() {
-        val cardsBefore = cardsInList()
+        if (size() == 1) return
+        val cardsBefore = ArrayList(cards)
         cards.shuffle()
-        val cardsAfter = cardsInList()
+        val cardsAfter = ArrayList(cards)
         if (listsExactlySame(cardsBefore, cardsAfter)) shuffleDeck()
     }
 
