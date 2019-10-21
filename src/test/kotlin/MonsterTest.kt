@@ -65,11 +65,10 @@ internal class MonsterTest {
             val sleepStart = if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_RESET
             val sleepEnd = Settings.ANSI_RESET
 
-            val wolfCardObj = Monster("Wolf", 3, 6)
-            wolfCardObj.sleeping = sleepTest
-            val wolfCard = wolfCardObj.toString()
+            val wolfCard = Monster("Wolf", 3, 6)
+            wolfCard.sleeping = sleepTest
             var atk = "${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_BLUE}3 ${if(sleepTest) "" else Settings.ANSI_RESET}"
-            var hp =  "${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_RED} 6${if(sleepTest) "" else Settings.ANSI_RESET}"
+            var hp =  "${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_RED} 6${Settings.ANSI_RESET}"
             var name ="${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_GREEN}  Wolf     ${Settings.ANSI_RESET}"
 
             val wolfCardLines: Array<String> = arrayOf(
@@ -81,13 +80,12 @@ internal class MonsterTest {
             )
             val wolfCardTest = wolfCardLines.joinToString("\n")
 
-            assertEquals(wolfCardTest, wolfCard, "The toString doesn't match")
+            assertEquals(wolfCardTest, wolfCard.toString(), "The toString doesn't match")
 
-            val gnarlCardObj = Monster("Gnarl", 8, 5)
-            gnarlCardObj.sleeping = sleepTest
-            val gnarlCard = gnarlCardObj.toString()
+            val gnarlCard = Monster("Gnarl", 8, 5)
+            gnarlCard.sleeping = sleepTest
             atk = "${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_BLUE}8 ${if(sleepTest) "" else Settings.ANSI_RESET}"
-            hp =  "${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_RED} 5${if(sleepTest) "" else Settings.ANSI_RESET}"
+            hp =  "${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_RED} 5${Settings.ANSI_RESET}"
             name ="${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_GREEN}  Gnarl    ${Settings.ANSI_RESET}"
 
             val gnarlCardLines: Array<String> = arrayOf(
@@ -99,13 +97,12 @@ internal class MonsterTest {
             )
             val gnarlCardTest = gnarlCardLines.joinToString("\n")
 
-            assertEquals(gnarlCardTest, gnarlCard, "The toString doesn't match")
+            assertEquals(gnarlCardTest, gnarlCard.toString(), "The toString doesn't match")
 
-            val skeletonCardObj = Monster("Skeleton",10, 10)
-            skeletonCardObj.sleeping = sleepTest
-            val skeletonCard = skeletonCardObj.toString()
+            val skeletonCard = Monster("Skeleton",10, 10)
+            skeletonCard.sleeping = sleepTest
             atk = "${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_BLUE}10${if(sleepTest) "" else Settings.ANSI_RESET}"
-            hp =  "${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_RED}10${if(sleepTest) "" else Settings.ANSI_RESET}"
+            hp =  "${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_RED}10${Settings.ANSI_RESET}"
             name ="${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_GREEN}Skeleton   ${Settings.ANSI_RESET}"
 
             val skeletonCardLines: Array<String> = arrayOf(
@@ -117,7 +114,7 @@ internal class MonsterTest {
             )
             val skeletonCardTest = skeletonCardLines.joinToString("\n")
 
-            assertEquals(skeletonCardTest, skeletonCard, "The toString doesn't match")
+            assertEquals(skeletonCardTest, skeletonCard.toString(), "The toString doesn't match")
         }
     }
 }
