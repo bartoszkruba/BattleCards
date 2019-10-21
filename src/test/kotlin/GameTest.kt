@@ -269,6 +269,7 @@ internal class GameTest {
                 Settings.MENU_OPTION_END_ROUND, Settings.MENU_OPTION_PLACE_CARD
             ), generatedMoves
         )
+        assertEquals(4,generatedMoves.size)
     }
 
     @Test
@@ -279,6 +280,7 @@ internal class GameTest {
         game.validMoves().forEach { generatedMoves.add(it.value) }
 
         assertContains(arrayListOf(Settings.MENU_OPTION_DRAW_CARD, Settings.MENU_OPTION_END_ROUND), generatedMoves)
+        assertEquals(2,generatedMoves.size)
     }
 
     @Test
@@ -296,6 +298,7 @@ internal class GameTest {
         game.validMoves().forEach { generatedMoves.add(it.value) }
 
         assertContains(arrayListOf(Settings.MENU_OPTION_END_ROUND, Settings.MENU_OPTION_ATTACK_MONSTER), generatedMoves)
+        assertEquals(2,generatedMoves.size)
     }
 
     @Test
@@ -310,6 +313,7 @@ internal class GameTest {
         game.validMoves().forEach { generatedMoves.add(it.value) }
 
         assertContains(arrayListOf(Settings.MENU_OPTION_END_ROUND, Settings.MENU_OPTION_PLACE_CARD), generatedMoves)
+        assertEquals(2,generatedMoves.size)
     }
 
     @Test
@@ -334,6 +338,34 @@ internal class GameTest {
             ),
             generatedMoves
         )
+        assertEquals(3,generatedMoves.size)
+    }
+
+    @Test
+    internal fun `validMoves, only draw and place valid because monster is sleeping`() {
+        val game = createGameForTesting()
+
+        val whiteP = game.whitePlayer
+        val blackP = game.blackPlayer
+
+        var monster:Monster = Monster("Hej",2,2)
+        var monster2:Monster= Monster("aas",2,2)
+        monster.sleeping = true
+        whiteP.field.addCard(monster)
+        blackP.field.addCard(monster2)
+
+        val generatedMoves = ArrayList<String>()
+        game.validMoves().forEach { generatedMoves.add(it.value) }
+
+        assertContains(
+            arrayListOf(
+                Settings.MENU_OPTION_PLACE_CARD,
+                Settings.MENU_OPTION_END_ROUND,
+                Settings.MENU_OPTION_DRAW_CARD
+            ),
+            generatedMoves
+        )
+        assertEquals(3,generatedMoves.size)
     }
 
     @Test
@@ -357,6 +389,7 @@ internal class GameTest {
             ),
             generatedMoves
         )
+        assertEquals(3,generatedMoves.size)
     }
 
     private fun assertContains(required: ArrayList<String>, result: ArrayList<String>) {
