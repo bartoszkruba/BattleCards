@@ -1,4 +1,5 @@
 import models.Deck
+import models.Field
 import models.Player
 import java.lang.RuntimeException
 
@@ -19,6 +20,8 @@ class Game(
         turn++
         whitePlayer.mana = Settings.PLAYER_MANA
         blackPlayer.mana = Settings.PLAYER_MANA
+        whitePlayer.field.wakeUpMonsters()
+        blackPlayer.field.wakeUpMonsters()
         checkGameOver()
     }
 
