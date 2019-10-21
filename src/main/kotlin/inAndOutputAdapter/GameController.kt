@@ -4,21 +4,38 @@ import Card
 import Game
 import factory.DeckFactory
 import models.Deck
+import models.Field
+import models.Hand
 import prototype.CardLoader
 
 class GameController {
     private var playerOneName: String? = null
     private var playerTwoName: String? = null
     lateinit var game:Game
+    private var whiteTurn: Boolean? = null
+    private var blackTurn: Boolean? = null
 
     fun printMainScreen() {
         //OutputAdapter.printWelcome()
         this.playerOneName = userNameInput(1)
         this.playerTwoName = userNameInput(2)
-        var playerDecks = printGameBoard()
-        var chosenOption = gameOptions()
-        doTheChoice(chosenOption, playerDecks)
-
+        val playerDecks = printGameBoard()
+        while (!game.checkGameOver()) {
+            whiteTurn = game.currentPlayer() == game.whitePlayer
+            blackTurn = game.currentPlayer() == game.blackPlayer
+            while (whiteTurn as Boolean) {
+                OutputAdapter.printBoard(game)
+                val chosenOption = gameOptions()
+                doTheChoice(chosenOption, playerDecks)
+                whiteTurn = game.currentPlayer() == game.whitePlayer
+            }
+            while (blackTurn as Boolean) {
+                OutputAdapter.printBoard(game)
+                val chosenOption = gameOptions()
+                doTheChoice(chosenOption, playerDecks)
+                blackTurn = game.currentPlayer() == game.blackPlayer
+            }
+        }
     }
 
     private fun printGameBoard(): Pair<Deck, Deck> {
@@ -34,17 +51,11 @@ class GameController {
         return Pair(playerOneDeck, playerTwoDeck)
     }
 
-
-
-
-
     private fun doTheChoice(option: String?, playersDecks: Pair<Deck, Deck>): String? {
-        game.nextTurn()
-        val whiteTurn = game.currentPlayer() == game.whitePlayer
         when(option!!){
             Settings.MENU_OPTION_DRAW_CARD -> {
                 game.drawCardFromDeck()
-                val drawCard: Card = if(whiteTurn)
+                val drawCard: Card = if(whiteTurn!!)
                     game.whitePlayer.hand.cardsInList().get(game.whitePlayer.hand.cardsInList().size - 1)
                 else
                     game.blackPlayer.hand.cardsInList().get(game.blackPlayer.hand.cardsInList().size - 1)
@@ -52,14 +63,17 @@ class GameController {
                 OutputAdapter.printBoard(this.game)
             }
             Settings.MENU_OPTION_PLACE_CARD -> {
-                chooseCardToPlaceOnField()
+                val card = chooseCardToPlaceOnField()
+                game.placeCardOnField(card)
                 OutputAdapter.printBoard(this.game)
             }
             Settings.MENU_OPTION_ATTACK_MONSTER ->{
                 cardToAttackWith()
                 targetCard()
             }
-            Settings.MENU_OPTION_END_ROUND -> {}
+            Settings.MENU_OPTION_END_ROUND -> {
+                game.nextTurn()
+            }
             else -> return null
         }
         return option
@@ -81,14 +95,15 @@ class GameController {
     }
 
     private fun cardToAttackWith(): Card{
+        val playerField: Field = if(whiteTurn!!) game.whitePlayer.field else game.blackPlayer.field
         OutputAdapter.printChooseCardToAttackWith(game)
         var chosenCardToAttackWith = readLine()
 
-        var validChoice = Input.readChosenCardToAttackWith(chosenCardToAttackWith, game.blackPlayer.field)
+        var validChoice = Input.readChosenCardToAttackWith(chosenCardToAttackWith,playerField)
         while(validChoice == null){
             OutputAdapter.illegalInputInfo()
             chosenCardToAttackWith = readLine()
-            validChoice = Input.readChosenCardToAttackWith(chosenCardToAttackWith!!, game.blackPlayer.field)
+            validChoice = Input.readChosenCardToAttackWith(chosenCardToAttackWith!!, playerField)
             if(validChoice != null)
                 return validChoice
         }
@@ -97,13 +112,14 @@ class GameController {
 
 
     private fun chooseCardToPlaceOnField(): Card{
+        val playerHand: Hand = if(whiteTurn!!) game.whitePlayer.hand else game.blackPlayer.hand
         OutputAdapter.printChooseCardToPlay(game)
         var chosenCardToPlace = readLine()
-        var validChoice = Input.readCardToPlaceOnField(chosenCardToPlace!!, game.blackPlayer.hand)
+        var validChoice = Input.readCardToPlaceOnField(chosenCardToPlace!!, playerHand)
         while(validChoice == null){
             OutputAdapter.illegalInputInfo()
             chosenCardToPlace = readLine()
-            validChoice = Input.readCardToPlaceOnField(chosenCardToPlace!!, game.blackPlayer.hand)
+            validChoice = Input.readCardToPlaceOnField(chosenCardToPlace!!, playerHand)
             if(validChoice != null) return validChoice
         }
         return validChoice
