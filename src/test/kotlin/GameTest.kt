@@ -342,6 +342,34 @@ internal class GameTest {
     }
 
     @Test
+    internal fun `validMoves, only place and draw enabled`() {
+        createMockData()
+        val game = Game(player1.deck,player2.deck,player1.name,player2.name)
+
+        val whiteP = game.whitePlayer
+
+        whiteP.field = player1.field
+        whiteP.hand = Hand(arrayListOf(player1.hand.cardsInList()[0],player1.hand.cardsInList()[1]))
+
+        whiteP.field.removeCard(whiteP.field.cardsInList()[0])
+
+        val generatedMoves = ArrayList<String>()
+        game.validMoves().forEach {
+            generatedMoves.add(it.value)
+        }
+
+        assertContains(
+            arrayListOf(
+                Settings.MENU_OPTION_PLACE_CARD,
+                Settings.MENU_OPTION_END_ROUND,
+                Settings.MENU_OPTION_DRAW_CARD
+            ),
+            generatedMoves
+        )
+        assertEquals(3,generatedMoves.size)
+    }
+
+    @Test
     internal fun `validMoves, sleepingMonsters no attack`() {
         createMockData()
         val game = Game(player1.deck,player2.deck,player1.name,player2.name)
