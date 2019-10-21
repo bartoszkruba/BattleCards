@@ -1,7 +1,6 @@
 import models.Deck
 import models.Field
 import models.Player
-import java.lang.RuntimeException
 
 class Game(
     player1Deck: Deck,
@@ -9,10 +8,26 @@ class Game(
     player1Name: String,
     player2Name: String
 ) {
-    var whitePlayer: Player = Player(player1Name, player1Deck);
-    var blackPlayer: Player = Player(player2Name, player2Deck);
+
+    companion object {
+        const val DECK_SIZE = Settings.DECK_SIZE
+    }
+
+    val whitePlayer: Player = Player(player1Name, player1Deck)
+    val blackPlayer: Player = Player(player2Name, player2Deck);
+
+    init {
+        if (whitePlayer.deck.size() != DECK_SIZE || blackPlayer.deck.size() != DECK_SIZE)
+            throw RuntimeException("Invalid deck length")
+
+        whitePlayer.deck.shuffleDeck()
+        blackPlayer.deck.shuffleDeck()
+    }
+
     var status: String = ""
+        private set
     var turn: Int = 1
+        private set
 
     fun currentPlayer() = if (turn % 2 != 0) whitePlayer else blackPlayer
 
@@ -78,13 +93,13 @@ ${blackPlayer.field}
 
     fun drawCardFromDeck(): Boolean {
         val player = currentPlayer()
-        if (player.hand.cardsInList().size < Settings.HAND_SIZE){
+        if (player.hand.cardsInList().size < Settings.HAND_SIZE) {
             val drawnCard = player.deck.drawCard()
-            if(drawnCard is Card){
-                return if(player.hand.addCard(drawnCard)){
+            if (drawnCard is Card) {
+                return if (player.hand.addCard(drawnCard)) {
                     player.mana--
                     true
-                }else{
+                } else {
                     player.deck.addCard(drawnCard)
                     false
                 }
@@ -94,12 +109,38 @@ ${blackPlayer.field}
     }
 
     fun validMoves(): Map<Int, String> {
-        var moves: HashMap<Int, String> = hashMapOf()
+        val moves: HashMap<Int, String> = hashMapOf()
         var index = 0
-        if(!currentPlayer().field.empty) moves[++index] = "Attack Monster"
-        if(!currentPlayer().hand.empty) moves[++index] = "Place Card"
-        if(!currentPlayer().deck.empty) moves[++index] = "Draw Card"
+        val currentPlayer: Player
+        val opponent: Player
+
+        when (turn % 2 != 0) {
+            true -> {
+                currentPlayer = whitePlayer
+                opponent = blackPlayer
+            }
+            false -> {
+                currentPlayer = blackPlayer
+                opponent = whitePlayer
+            }
+        }
+
+        if (currentPlayer.mana == 0) {
+            moves[++index] = "End Round"
+            return moves
+        }
+
+        if (!currentPlayer.field.empty && !opponent.field.empty)
+            moves[++index] = "Attack Monster"
+
+        if (!currentPlayer.hand.empty && currentPlayer.field.size() != Settings.FIELD_SIZE)
+            moves[++index] = "Place Card"
+
+        if (!currentPlayer.deck.empty && currentPlayer.hand.size() != Settings.HAND_SIZE)
+            moves[++index] = "Draw Card"
+
         moves[++index] = "End Round"
+
         return moves
     }
 }

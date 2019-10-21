@@ -1,5 +1,10 @@
 abstract class Settings {
     companion object {
+        const val MENU_OPTION_ATTACK_MONSTER = "Attack Monster"
+        const val MENU_OPTION_DRAW_CARD = "Draw Card"
+        const val MENU_OPTION_PLACE_CARD = "Place Card"
+        const val MENU_OPTION_END_ROUND = "End Round"
+
         const val DECK_SIZE: Int = 30
         const val FIELD_SIZE: Int = 5
         const val HAND_SIZE: Int = 5

@@ -22,9 +22,21 @@ internal class PrototypeFileWriterTest {
         internal fun afterAll() {
             val file = File(testPath)
             if (file.exists()) file.delete()
+
+            val fileOne = Path.of("test", NAME_ONE).toFile()
+            val fileTwo = Path.of("test", NAME_TWO).toFile()
+            val fileThree = Path.of("test", NAME_THREE).toFile()
+
+            if (fileOne.exists()) fileOne.delete()
+            if (fileTwo.exists()) fileTwo.delete()
+            if (fileThree.exists()) fileThree.delete()
         }
 
         private const val TEST_STRING = "test"
+
+        private const val NAME_ONE = "test1.json"
+        private const val NAME_TWO = "test2.txt"
+        private const val NAME_THREE = "lol"
     }
 
     lateinit var prototypeFileWriter: PrototypeFileWriter
@@ -61,5 +73,30 @@ internal class PrototypeFileWriterTest {
         assertFalse(File(testPath).exists())
 
         assertNull(prototypeFileWriter.readFile(testPath))
+    }
+
+    @Test
+    internal fun `Read all files in directory`() {
+
+        val fileOne = Path.of("test", NAME_ONE).toAbsolutePath().toString()
+        val fileTwo = Path.of("test", NAME_TWO).toAbsolutePath().toString()
+        val fileThree = Path.of("test", NAME_THREE).toAbsolutePath().toString()
+
+        File(fileOne).writeText(TEST_STRING)
+        File(fileTwo).writeText(TEST_STRING)
+        File(fileThree).mkdir()
+
+        val files = prototypeFileWriter.filesInDirectory(Path.of("test").toString())
+
+        assertEquals(2, files.size)
+        assertTrue(listOf(NAME_ONE, NAME_TWO).containsAll(files))
+    }
+
+    @Test
+    internal fun `Read files in non existing directory`() {
+        val path = Path.of("test", "test", "test").toString()
+
+        val files = prototypeFileWriter.filesInDirectory(path)
+        assertEquals(0, files.size)
     }
 }
