@@ -37,6 +37,6 @@ internal class FieldTest {
         assertFalse(field.allCardsAreSleeping())
         var monster = field.cardsInList()[0] as Monster
         monster.sleeping = true
-        assertTrue(field.allCardsAreSleeping())
+        assertFalse(field.allCardsAreSleeping())
     }
 }
