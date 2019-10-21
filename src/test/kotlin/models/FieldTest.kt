@@ -12,6 +12,9 @@ internal class FieldTest {
     @Test
     fun wakeUpMonsters() {
         var field:Field = Field(arrayListOf(Monster("Hejsan",2,5),Monster("Svejsan",2,5),Monster("Haj",2,5)))
+        field.cardsInList().forEach { if (it is Monster){
+            it.sleeping = true}
+        }
         field.wakeUpMonsters()
         checkSleeping(field,false)
     }

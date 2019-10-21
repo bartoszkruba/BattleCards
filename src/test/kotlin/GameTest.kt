@@ -24,6 +24,12 @@ internal class GameTest {
         game.blackPlayer.mana = 0
         game.whitePlayer.field = player1.field
         game.blackPlayer.field = player2.field
+        game.whitePlayer.field.cardsInList().forEach { if (it is Monster){
+            it.sleeping = true}
+        }
+        game.blackPlayer.field.cardsInList().forEach { if (it is Monster){
+            it.sleeping = true}
+        }
         checkSleeping(game,true)
         game.nextTurn()
         checkSleeping(game,false)
