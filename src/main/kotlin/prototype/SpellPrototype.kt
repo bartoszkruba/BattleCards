@@ -2,7 +2,7 @@ package prototype
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-class SpellPrototype(
+data class SpellPrototype(
     @JsonProperty("id") override val id: Int,
     @JsonProperty("name") override val name: String
 ) : CardPrototype(id, name, CardType.SPEll) {
@@ -13,4 +13,7 @@ class SpellPrototype(
     }
 
     override fun clone() = SpellPrototype(id = id, name = name)
+    override fun equals(other: Any?): Boolean = super.equals(other)
+
+    override fun hashCode(): Int = super.hashCode()
 }

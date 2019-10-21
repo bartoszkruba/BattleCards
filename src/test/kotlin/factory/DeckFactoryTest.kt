@@ -100,7 +100,8 @@ internal class DeckFactoryTest {
     }
 
     @Test
-    internal fun `createCard() test, with spells`() {
+    internal fun `createDeck() test, with spells`() {
+
         val prototypeOne = SpellPrototype(ID_ONE, NAME_ONE)
         val prototypeTwo = SpellPrototype(ID_TWO, NAME_TWO)
         val prototypeThree = SpellPrototype(ID_THREE, NAME_THREE)

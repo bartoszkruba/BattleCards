@@ -11,9 +11,9 @@ abstract class CardPrototype(open val id: Int, open val name: String, val type: 
     }
 
     override fun equals(other: Any?): Boolean {
-
         if (other == null) return false
         if (this === other) return true
+
 
         return if (other is CardPrototype) {
             id == other.id
