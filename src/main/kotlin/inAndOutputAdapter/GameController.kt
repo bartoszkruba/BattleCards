@@ -24,11 +24,13 @@ class GameController {
             whiteTurn = game.currentPlayer() == game.whitePlayer
             blackTurn = game.currentPlayer() == game.blackPlayer
             while (whiteTurn as Boolean) {
+                OutputAdapter.printBoard(game)
                 val chosenOption = gameOptions()
                 doTheChoice(chosenOption, playerDecks)
                 whiteTurn = game.currentPlayer() == game.whitePlayer
             }
             while (blackTurn as Boolean) {
+                OutputAdapter.printBoard(game)
                 val chosenOption = gameOptions()
                 doTheChoice(chosenOption, playerDecks)
                 blackTurn = game.currentPlayer() == game.blackPlayer
@@ -61,8 +63,8 @@ class GameController {
                 OutputAdapter.printBoard(this.game)
             }
             Settings.MENU_OPTION_PLACE_CARD -> {
-                chooseCardToPlaceOnField()
-                //game.placeCardOnField()
+                val card = chooseCardToPlaceOnField()
+                game.placeCardOnField(card)
                 OutputAdapter.printBoard(this.game)
             }
             Settings.MENU_OPTION_ATTACK_MONSTER ->{
