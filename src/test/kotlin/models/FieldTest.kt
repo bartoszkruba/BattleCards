@@ -27,4 +27,18 @@ internal class FieldTest {
             }
         }
     }
+
+    @Test
+    fun monstersIsSleepingTest(){
+        var field:Field = Field(arrayListOf(Monster("Hejsan",2,5),Monster("Svejsan",2,5),Monster("Haj",2,5)))
+        field.cardsInList().forEach { if (it is Monster){
+            it.sleeping = true}
+        }
+        assertTrue(field.monstersIsSleeping())
+        field.wakeUpMonsters()
+        assertFalse(field.monstersIsSleeping())
+        var monster = field.cardsInList()[0] as Monster
+        monster.sleeping = true
+        assertTrue(field.monstersIsSleeping())
+    }
 }
