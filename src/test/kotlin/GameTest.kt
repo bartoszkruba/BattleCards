@@ -213,8 +213,12 @@ internal class GameTest {
         whiteP.field.addCard(whiteP.deck.drawCard()!!)
         whiteP.hand.addCard(whiteP.deck.drawCard()!!)
 
+        whiteP.field.wakeUpMonsters()
+
         val generatedMoves = ArrayList<String>()
-        game.validMoves().forEach { generatedMoves.add(it.value) }
+        game.validMoves().forEach {
+            generatedMoves.add(it.value)
+        }
 
         assertContains(
             arrayListOf(
@@ -246,6 +250,8 @@ internal class GameTest {
         blackP.field.addCard(blackP.deck.drawCard()!!)
         repeat(Settings.FIELD_SIZE) { whiteP.field.addCard(whiteP.deck.drawCard()!!) }
         repeat(Settings.HAND_SIZE) { whiteP.hand.addCard(whiteP.deck.drawCard()!!) }
+
+        whiteP.field.wakeUpMonsters()
 
         val generatedMoves = ArrayList<String>()
         game.validMoves().forEach { generatedMoves.add(it.value) }
@@ -279,6 +285,8 @@ internal class GameTest {
         blackP.field.addCard(blackP.deck.drawCard()!!)
         repeat(1) { whiteP.field.addCard(whiteP.deck.drawCard()!!) }
         repeat(Settings.HAND_SIZE) { whiteP.hand.addCard(whiteP.deck.drawCard()!!) }
+
+        whiteP.field.wakeUpMonsters()
 
         val generatedMoves = ArrayList<String>()
         game.validMoves().forEach { generatedMoves.add(it.value) }
@@ -366,6 +374,8 @@ internal class GameTest {
         whiteP.hand = Hand(arrayListOf(player1.hand.cardsInList()[0],player1.hand.cardsInList()[1]))
         blackP.field = player2.field
 
+        whiteP.field.wakeUpMonsters()
+
         var monsterToChange = whiteP.field.cardsInList()[0] as Monster
         monsterToChange.sleeping = true
 
@@ -374,6 +384,7 @@ internal class GameTest {
         val generatedMoves = ArrayList<String>()
         game.validMoves().forEach {
             generatedMoves.add(it.value)
+            println(it.value)
         }
 
         assertContains(
@@ -397,6 +408,8 @@ internal class GameTest {
 
         blackP.field.addCard(blackP.deck.drawCard()!!)
         repeat(Settings.FIELD_SIZE) { whiteP.field.addCard(whiteP.deck.drawCard()!!) }
+
+        whiteP.field.wakeUpMonsters()
 
         val generatedMoves = ArrayList<String>()
         game.validMoves().forEach { generatedMoves.add(it.value) }
