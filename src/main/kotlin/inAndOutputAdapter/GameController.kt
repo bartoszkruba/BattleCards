@@ -39,16 +39,18 @@ class GameController {
 
 
     private fun doTheChoice(option: String?, playersDecks: Pair<Deck, Deck>): String? {
-        val drawCard: Card?
         game.nextTurn()
         val whiteTurn = game.currentPlayer() == game.whitePlayer
 
-        drawCard = if (whiteTurn) playersDecks.first.drawCard() else playersDecks.second.drawCard()
         when(option!!.toLowerCase()){
             "1", "draw card" -> {
-                OutputAdapter.printDrawCardFromDeck(drawCard!!)
                 game.drawCardFromDeck()
-                printGameBoard()
+                val drawCard: Card = if(whiteTurn)
+                    game.whitePlayer.hand.cardsInList().get(game.whitePlayer.hand.cardsInList().size - 1)
+                else
+                    game.blackPlayer.hand.cardsInList().get(game.blackPlayer.hand.cardsInList().size - 1)
+                OutputAdapter.printDrawCardFromDeck(drawCard)
+                OutputAdapter.printBoard(this.game)
             }
             "2", "place card" -> {
                 chooseCardToPlaceOnField()
