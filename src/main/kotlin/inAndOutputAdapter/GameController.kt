@@ -10,15 +10,19 @@ class GameController {
     private var playerOneName: String? = null
     private var playerTwoName: String? = null
     lateinit var game:Game
+    private var whiteTurn: Boolean? = null
 
     fun printMainScreen() {
         //OutputAdapter.printWelcome()
         this.playerOneName = userNameInput(1)
         this.playerTwoName = userNameInput(2)
-        var playerDecks = printGameBoard()
-        var chosenOption = gameOptions()
-        doTheChoice(chosenOption, playerDecks)
+        val playerDecks = printGameBoard()
 
+        whiteTurn = game.currentPlayer() == game.whitePlayer
+        while (whiteTurn as Boolean) {
+            val chosenOption = gameOptions()
+            doTheChoice(chosenOption, playerDecks)
+        }
     }
 
     private fun printGameBoard(): Pair<Deck, Deck> {
@@ -34,17 +38,11 @@ class GameController {
         return Pair(playerOneDeck, playerTwoDeck)
     }
 
-
-
-
-
     private fun doTheChoice(option: String?, playersDecks: Pair<Deck, Deck>): String? {
-        game.nextTurn()
-        val whiteTurn = game.currentPlayer() == game.whitePlayer
-        when(option!!){
+            when(option!!){
             Settings.MENU_OPTION_DRAW_CARD -> {
                 game.drawCardFromDeck()
-                val drawCard: Card = if(whiteTurn)
+                val drawCard: Card = if(whiteTurn!!)
                     game.whitePlayer.hand.cardsInList().get(game.whitePlayer.hand.cardsInList().size - 1)
                 else
                     game.blackPlayer.hand.cardsInList().get(game.blackPlayer.hand.cardsInList().size - 1)
@@ -59,9 +57,11 @@ class GameController {
                 cardToAttackWith()
                 targetCard()
             }
-            Settings.MENU_OPTION_END_ROUND -> {}
+            Settings.MENU_OPTION_END_ROUND -> {
+                game.nextTurn()
+            }
             else -> return null
-        }
+            }
         return option
     }
 
