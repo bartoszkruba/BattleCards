@@ -2,6 +2,7 @@ package models
 
 import Card
 import Monster
+import utilities.Utils
 
 class Field(
     cards: ArrayList<Card> = ArrayList()
@@ -13,6 +14,22 @@ class Field(
                 it.sleeping = false
             }
         }
+    }
+
+    override fun addCard(card: Card): Boolean {
+        if (cards.size < maxSize) {
+            for (c in cards) {
+                if (c.cardId == card.cardId) {
+                    return false
+                }
+            }
+
+            val copied: Monster = Utils.clone(card) as Monster
+            empty = false
+            copied.sleeping = true
+            return cards.add(copied)
+        }
+        return false
     }
 
     fun allCardsAreSleeping():Boolean{

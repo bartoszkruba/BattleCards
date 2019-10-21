@@ -8,10 +8,17 @@ abstract class Card(open val name: String,
         if (this === other) return true
         other as Card
 
-        if (!this.name.equals(other.name)) return false
-        if (!this.type.equals(other.type)) return false
-        if (!this.cardId.equals(other.cardId)) return false
+        if (this.name != other.name) return false
+        if (this.type != other.type) return false
+        if (this.cardId != other.cardId) return false
 
         return true
+    }
+
+    override fun hashCode(): Int {
+        var result = name.hashCode()
+        result = 31 * result + type.hashCode()
+        result = 31 * result + cardId.hashCode()
+        return result
     }
 }

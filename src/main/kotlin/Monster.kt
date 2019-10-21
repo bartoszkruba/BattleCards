@@ -3,8 +3,8 @@ import kotlin.math.floor
 
 class Monster : Card {
     override var name: String
-    override var cardId: UUID
-    var cardType: CardType
+    override val cardId: UUID
+    private val cardType: CardType
     var attack: Int
     var health: Int
     var sleeping: Boolean = false
@@ -13,27 +13,27 @@ class Monster : Card {
         this.name = "Wolf"
         this.cardId = UUID.randomUUID()
         this.cardType =  CardType.MONSTER
-        this.attack = 7;
-        this.health = 5;
+        this.attack = 7
+        this.health = 5
     }
 
     constructor(name:String, attack:Int, health:Int) : super(name, CardType.MONSTER, UUID.randomUUID()){
         val regex = Regex("^[a-zA-Z]+(?:\\s[a-zA-Z]+)*$")
         if(name.length in 1..9 && regex.matches(name) && attack in 1..10  && health in 1..10) {
-            this.name = name;
+            this.name = name
             this.cardId = UUID.randomUUID()
             this.cardType = CardType.MONSTER
-            this.attack = attack;
-            this.health = health;
+            this.attack = attack
+            this.health = health
         }else{throw RuntimeException("Invalid properties of object")}
     }
 
-    fun takeDamge(card: Monster): Boolean {
-        if (this.health <= 0) {
-            return false
+    fun takeDamage(card: Monster): Boolean {
+        return if (this.health <= 0) {
+            false
         } else {
             this.health = this.health - card.attack
-            return true
+            true
         }
     }
 
@@ -50,7 +50,7 @@ class Monster : Card {
         hp =    (if(sleeping) Settings.ANSI_WHITE else Settings.ANSI_RED) +
                 hp +
                 Settings.ANSI_RESET
-        var sb = StringBuilder()
+        val sb = StringBuilder()
         repeat((4 - floor(name.length * 0.5)).toInt()) { sb.append(" ") }
         var cardName = "$sb${name}"
         sb.clear()
