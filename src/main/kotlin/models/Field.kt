@@ -14,4 +14,16 @@ class Field(
             }
         }
     }
+
+    fun allCardsAreSleeping():Boolean{
+        var sleepingCards:Int = 0
+        cards.forEach {
+            if (it is Monster && it.sleeping){
+                sleepingCards++
+            }else{
+                return false
+            }
+        }
+        return sleepingCards > 0
+    }
 }

@@ -132,7 +132,7 @@ ${blackPlayer.field}
             return moves
         }
 
-        if (!currentPlayer.field.empty && !opponent.field.empty)
+        if (!currentPlayer.field.empty && !opponent.field.empty && !currentPlayer.field.allCardsAreSleeping())
             moves[++index] = "Attack Monster"
 
         if (!currentPlayer.hand.empty && currentPlayer.field.size() != Settings.FIELD_SIZE)
