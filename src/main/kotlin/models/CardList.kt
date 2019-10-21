@@ -21,10 +21,10 @@ abstract class CardList(var empty: Boolean, cards: ArrayList<Card>, var maxSize:
         return cards
     }
 
-    fun addCard(card: Card): Boolean {
+    open fun addCard(card: Card): Boolean {
         if (cards.size < maxSize) {
             for (c in cards) {
-                if (c.cardId.equals(card.cardId)) {
+                if (c.cardId == card.cardId) {
                     return false
                 }
             }
@@ -40,7 +40,7 @@ abstract class CardList(var empty: Boolean, cards: ArrayList<Card>, var maxSize:
         val cardToRemove = cards.findLast { it.cardId == card.cardId }
         val indexToRemoveFrom = cards.indexOf(cardToRemove)
         if (indexToRemoveFrom != -1) {
-            val removedCard: Card = cards.removeAt(indexToRemoveFrom);
+            val removedCard: Card = cards.removeAt(indexToRemoveFrom)
             if (cards.size == 0) empty = true
             return removedCard
         }
@@ -82,16 +82,12 @@ abstract class CardList(var empty: Boolean, cards: ArrayList<Card>, var maxSize:
                 Settings.ANSI_RESET
         val sleepStart = if(card.sleeping) Settings.ANSI_WHITE else Settings.ANSI_RESET
         val sleepEnd = Settings.ANSI_RESET
-        val ID: Int = id + 1
-
-//        TODO: Fix icons
-//        var sword = "${Settings.ANSI_BLUE}${"\t%s".format(Settings.ASCII_SWORD)}${Settings.ANSI_RESET}"
-//        var heart = "${Settings.ANSI_RED}${Settings.ASCII_HEART}${Settings.ANSI_RESET}"
+        val index: Int = id + 1
 
         val lines: Array<String> = arrayOf(
             "$sleepStart   ___     $sleepEnd",
             "$sleepStart  |   |    $sleepEnd",
-           "$sleepStart  | $ID |    $sleepEnd",
+           "$sleepStart  | $index |    $sleepEnd",
                       "$atk|___|$hp  ",
                          cardName
         )

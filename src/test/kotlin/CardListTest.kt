@@ -23,30 +23,30 @@ internal class CardListTest {
 
     @Test
     internal fun addCardTest() {
-        var ogreCard = Monster("Ogre", MAX_ATTACK, MAX_HEALTH)
-        var wolfCard = Monster("Wolf", MAX_ATTACK, MAX_HEALTH)
-        var deck = Deck()
+        val ogreCard = Monster("Ogre", MAX_ATTACK, MAX_HEALTH)
+        val wolfCard = Monster("Wolf", MAX_ATTACK, MAX_HEALTH)
+        val deck = Deck()
 
         assertTrue(deck.addCard(ogreCard))
-        var cardsInList = getAllVariables(deck::class, deck)["cards"] as ArrayList<Card>
+        var cardsInList = getAllVariables(deck::class, deck)["cards"] as ArrayList<*>
         assertEquals(1, cardsInList.size, "The card wasn't added to the list")
         assertEquals(cardsInList[0], ogreCard, "Added card doesn't match the card that was added")
 
         ogreCard.attack = 20
-        var deckOgre: Monster = cardsInList[0] as Monster
+        val deckOgre: Monster = cardsInList[0] as Monster
         assertNotEquals(deckOgre.attack, ogreCard.attack, "Added card is not a copy of original object")
 
         assertTrue(deck.addCard(wolfCard))
-        cardsInList = getAllVariables(deck::class, deck)["cards"] as ArrayList<Card>
+        cardsInList = getAllVariables(deck::class, deck)["cards"] as ArrayList<*>
         assertEquals(2, cardsInList.size, "The card wasn't added to the list")
         assertEquals(cardsInList[1], wolfCard, "Added card doesn't match the card that was added")
 
         wolfCard.attack = 20
-        var deckWolf: Monster = cardsInList[1] as Monster
+        val deckWolf: Monster = cardsInList[1] as Monster
         assertNotEquals(deckWolf.attack, wolfCard.attack, "Added card is not a copy of original object")
 
         assertFalse(deck.addCard(ogreCard), "Card with unique ID already exists")
-        cardsInList = getAllVariables(deck::class, deck)["cards"] as ArrayList<Card>
+        cardsInList = getAllVariables(deck::class, deck)["cards"] as ArrayList<*>
         assertEquals(2, cardsInList.size, "Card with unique ID that already exists was added")
 
         testMaxAddCard(Deck(), Settings.DECK_SIZE)
@@ -56,7 +56,7 @@ internal class CardListTest {
 
     private fun testMaxAddCard(clazz: CardList, maxSize: Int) {
         for (i in 1..maxSize + 1) {
-            var wolfCard: Monster = Monster("Wolf", MAX_ATTACK, MAX_HEALTH)
+            val wolfCard = Monster("Wolf", MAX_ATTACK, MAX_HEALTH)
             if (i <= maxSize) assertTrue(clazz.addCard(wolfCard), "Should return true ass we are allowed to add cards")
             else assertFalse(
                 clazz.addCard(wolfCard),
@@ -67,13 +67,13 @@ internal class CardListTest {
 
     @Test
     internal fun cardsInListTest() {
-        var pigMonster: Monster = Monster("Pig", MAX_ATTACK, MAX_HEALTH)
-        var rabbitMonster: Monster = Monster("Rabbit", MAX_ATTACK, MAX_HEALTH)
-        var deck: Deck = Deck(arrayListOf(pigMonster, rabbitMonster))
+        val pigMonster = Monster("Pig", MAX_ATTACK, MAX_HEALTH)
+        val rabbitMonster = Monster("Rabbit", MAX_ATTACK, MAX_HEALTH)
+        val deck = Deck(arrayListOf(pigMonster, rabbitMonster))
 
-        var deckClass = deck::class
-        var deckClassVariables = getAllVariables(deckClass, deck)
-        var originalDeckInClass = deckClassVariables["cards"] as ArrayList<Card>
+        val deckClass = deck::class
+        val deckClassVariables = getAllVariables(deckClass, deck)
+        val originalDeckInClass = deckClassVariables["cards"] as ArrayList<*>
         assertTrue(deck.cardsInList() === originalDeckInClass, "Returned list is not a reference of original list")
         assertTrue(
             deck.cardsInList()[0] === originalDeckInClass[0],
@@ -87,9 +87,9 @@ internal class CardListTest {
 
     @Test
     internal fun removeCardTest() {
-        var pigMonster: Monster = Monster("Pig", MAX_ATTACK, MAX_HEALTH)
-        var rabbitMonster: Monster = Monster("Rabbit", MAX_ATTACK, MAX_HEALTH)
-        var deck: Deck = Deck(arrayListOf(pigMonster))
+        val pigMonster = Monster("Pig", MAX_ATTACK, MAX_HEALTH)
+        val rabbitMonster = Monster("Rabbit", MAX_ATTACK, MAX_HEALTH)
+        var deck = Deck(arrayListOf(pigMonster))
 
         var removedCard: Card = Monster()
 
@@ -133,34 +133,30 @@ internal class CardListTest {
     @Test
     internal fun handConstructorTest() {
         cardListConstructorTest(Hand::class)
-        var hand: Hand = Hand()
+        val hand = Hand()
         assertEquals(Settings.HAND_SIZE, hand.maxSize)
     }
 
     @Test
     internal fun fieldConstructorTest() {
         cardListConstructorTest(Field::class)
-        var field: Field = Field()
+        val field = Field()
         assertEquals(Settings.FIELD_SIZE, field.maxSize)
     }
 
     @Test
     internal fun deckConstructorTest() {
         cardListConstructorTest(Deck::class)
-        var deck: Deck = Deck()
+        val deck = Deck()
         assertEquals(Settings.DECK_SIZE, deck.maxSize)
     }
 
-    private fun maxCardsInListConstructorTest(clazz: CardList, maxSize: Int) {
-
-    }
-
     private fun cardListConstructorTest(kClass: KClass<*>) {
-        var pigMonster: Card = Monster("Pig", MAX_ATTACK, MAX_HEALTH)
-        var rabbitMonster: Card = Monster("Rabbit", MAX_ATTACK, MAX_HEALTH)
-        var listOfCards: ArrayList<Card> = arrayListOf(pigMonster, rabbitMonster)
+        val pigMonster: Card = Monster("Pig", MAX_ATTACK, MAX_HEALTH)
+        val rabbitMonster: Card = Monster("Rabbit", MAX_ATTACK, MAX_HEALTH)
+        val listOfCards: ArrayList<Card> = arrayListOf(pigMonster, rabbitMonster)
 
-        var constructorParams: MutableMap<String, KParameter> = mutableMapOf()
+        val constructorParams: MutableMap<String, KParameter> = mutableMapOf()
         kClass.primaryConstructor!!.parameters.forEach { constructorParams[it.name.toString()] = it }
 
         var createdObject: Any = kClass.primaryConstructor!!.callBy(mapOf())
@@ -169,12 +165,11 @@ internal class CardListTest {
 
         assertTrue(allVariables["empty"] as Boolean)
 
-        var cardListCards: ArrayList<Card> = allVariables["cards"] as ArrayList<Card>
+        var cardListCards= allVariables["cards"] as ArrayList<*>
         assertTrue(cardListCards.isEmpty())
 
         createdObject = kClass.primaryConstructor!!.callBy(
             mapOf(
-//                constructorParams["empty"]!! to false,
                 constructorParams["cards"]!! to listOfCards
             ) as Map<KParameter, Any>
         )
@@ -182,7 +177,7 @@ internal class CardListTest {
         allVariables = getAllVariables(kClass, createdObject)
 
         assertFalse(allVariables["empty"] as Boolean)
-        cardListCards = allVariables["cards"] as ArrayList<Card>
+        cardListCards = allVariables["cards"] as ArrayList<*>
         assertEquals(2, cardListCards.size)
         assertTrue(pigMonster !== cardListCards[0])
         assertTrue(cardListCards.containsAll(listOfCards))
@@ -215,7 +210,7 @@ internal class CardListTest {
     }
 
     private fun getToLargeCardList(maxSize: Int): ArrayList<Card> {
-        var toLargeCardList: ArrayList<Card> = arrayListOf()
+        val toLargeCardList: ArrayList<Card> = arrayListOf()
         for (i in 1..maxSize + 1) {
             toLargeCardList.add(Monster("monster", MAX_ATTACK, MAX_HEALTH))
         }
@@ -223,7 +218,7 @@ internal class CardListTest {
     }
 
     private fun getAllVariables(kClass: KClass<*>, createdObject: Any): MutableMap<String, Any?> {
-        var allVariables: MutableMap<String, Any?> = mutableMapOf()
+        val allVariables: MutableMap<String, Any?> = mutableMapOf()
         kClass.superclasses.first().memberProperties.forEach {
             it.getter.isAccessible = true
             allVariables[it.name] = it.getter.call(createdObject)

@@ -1,5 +1,4 @@
 import models.Deck
-import models.Field
 import models.Player
 
 class Game(
@@ -14,7 +13,7 @@ class Game(
     }
 
     val whitePlayer: Player = Player(player1Name, player1Deck)
-    val blackPlayer: Player = Player(player2Name, player2Deck);
+    val blackPlayer: Player = Player(player2Name, player2Deck)
 
     init {
         if (whitePlayer.deck.size() != DECK_SIZE || blackPlayer.deck.size() != DECK_SIZE)
@@ -43,32 +42,13 @@ class Game(
     }
 
     fun attackMonster(attacker: Monster, toBeAttacked: Monster) {
-        toBeAttacked.takeDamge(attacker)
+        toBeAttacked.takeDamage(attacker)
         if (toBeAttacked.isDead()) {
             val player = if (currentPlayer() == whitePlayer) blackPlayer else whitePlayer
             player.field.removeCard(toBeAttacked)
         }
         currentPlayer().mana--
         attacker.sleeping = true
-    }
-
-    fun printCurrentGame() {
-        println(
-            """
-
-                     ${whitePlayer.name}
-
-${whitePlayer.field}
-
-_____________________________________________________
-
-${blackPlayer.field}
-
-                     ${blackPlayer.name}
-
-        """.trimIndent()
-        )
-//    TODO: Add ${messageLogger.lastLog()} to print
     }
 
     fun checkGameOver(): Boolean {
