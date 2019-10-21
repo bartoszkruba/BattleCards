@@ -43,8 +43,8 @@ internal class InitCardsTest {
         verify(cardLoader, times(1)).loadCards()
         verify(cardLoader, times(1)).deleteCards(arrayListOf(1))
         verify(cardLoader, times(1)).saveCards(any())
-        verify(cardLoader, times(1)).saveDeck(any())
-        verify(cardLoader, times(1)).loadDeck(any())
+        verify(cardLoader, times(3)).saveDeck(any())
+        verify(cardLoader, times(3)).loadDeck(any())
 
         verifyNoMoreInteractions(cardLoader)
     }

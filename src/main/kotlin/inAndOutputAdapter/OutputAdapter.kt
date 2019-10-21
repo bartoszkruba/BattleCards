@@ -4,10 +4,14 @@ import Card
 import Game
 import Monster
 import factory.DeckFactory
-import inAndOutputAdapter.ASCII.Companion.ANSI_BLUE
-import inAndOutputAdapter.ASCII.Companion.ANSI_PURPLE
-import inAndOutputAdapter.ASCII.Companion.ANSI_RED
-import inAndOutputAdapter.ASCII.Companion.ANSI_RESET
+import Settings.Companion.ANSI_BLUE
+import Settings.Companion.ANSI_PURPLE
+import Settings.Companion.ANSI_RED
+import Settings.Companion.ANSI_RESET
+import Settings.Companion.ANSI_GREEN
+import Settings.Companion.ANSI_YELLOW
+import Settings.Companion.ANSI_CYAN
+import Settings.Companion.ANSI_WHITE
 import models.Player
 import prototype.CardLoader
 import prototype.DeckPrototype
@@ -45,7 +49,15 @@ class OutputAdapter {
         }
 
         fun printEnterName(player: Int) {
-            print("Player $player: Enter Your Name (Only big and small letters, no numbers or special characters):")
+            println(delimiter(ANSI_PURPLE))
+
+            println(
+                centreLine(
+                    "Player $player: Enter Your Name (Only big and small letters," +
+                            " no numbers or special characters)"
+                )
+            )
+            print(centreLine("Your Name:") + " ")
         }
 
         fun printDeckPrototype(deck: DeckPrototype) {
@@ -63,7 +75,7 @@ class OutputAdapter {
         fun printBoard(game: Game) {
             val whiteTurn = game.turn % 2 != 0
 
-            println(delimiter(Settings.ANSI_GREEN))
+            println(delimiter(ANSI_GREEN))
             val stringsToPrint = ArrayList<String>()
 
             val currentPlayer: Player
@@ -104,7 +116,7 @@ class OutputAdapter {
                     println(centreLine(line))
                 }
             }
-            println(delimiter(Settings.ANSI_GREEN))
+            println(delimiter(ANSI_GREEN))
         }
 
         fun illegalInputInfo() {
@@ -186,14 +198,14 @@ class OutputAdapter {
             var newLine = line
 
             newLine = newLine.replace(Settings.ANSI_BLACK, "")
-                .replace(Settings.ANSI_BLUE, "")
-                .replace(Settings.ANSI_CYAN, "")
-                .replace(Settings.ANSI_GREEN, "")
-                .replace(Settings.ANSI_PURPLE, "")
-                .replace(Settings.ANSI_RED, "")
-                .replace(Settings.ANSI_RESET, "")
-                .replace(Settings.ANSI_WHITE, "")
-                .replace(Settings.ANSI_YELLOW, "")
+                .replace(ANSI_BLUE, "")
+                .replace(ANSI_CYAN, "")
+                .replace(ANSI_GREEN, "")
+                .replace(ANSI_PURPLE, "")
+                .replace(ANSI_RED, "")
+                .replace(ANSI_RESET, "")
+                .replace(ANSI_WHITE, "")
+                .replace(ANSI_YELLOW, "")
 
             val indent: Int = (ASCII.BATTLE_CARDS.lines()[1].length - newLine.length) / 2
             val sb = StringBuilder()
@@ -213,8 +225,26 @@ class OutputAdapter {
             print(centreLine("Your Choice: "))
 
         }
-    }
 
+        fun printAvailableDecks(decks: Collection<String>) {
+            println(delimiter(ANSI_PURPLE))
+
+            println(centreLine("Available Decks: "))
+            for (deck in decks) {
+                println(centreLine("- $deck"))
+            }
+
+            println("")
+            println(delimiter(ANSI_PURPLE))
+        }
+
+        fun printChooseDeck(player: String) {
+            println(delimiter(ANSI_PURPLE))
+
+            println(centreLine("$player, Choose Your Deck"))
+            print(centreLine("Your Choice: "))
+        }
+    }
 
 }
 
@@ -224,16 +254,21 @@ fun clear() {
 }
 
 fun main() {
-    OutputAdapter.printWelcome()
+    val cardLoader = CardLoader()
+//    OutputAdapter.printWelcome()
     OutputAdapter.printEnterName(1)
     println()
     OutputAdapter.printEnterName(2)
     println()
 
-    clear()
+    OutputAdapter.printAvailableDecks(cardLoader.listAvailableDecks())
 
-    val cardLoader = CardLoader()
-    val deckPrototype = cardLoader.loadDeck("test")
+    OutputAdapter.printChooseDeck("Ricardo")
+    println()
+    OutputAdapter.printChooseDeck("Dennis")
+    println()
+
+    val deckPrototype = cardLoader.loadDeck("Demons")
 
     OutputAdapter.printDeckPrototype(deckPrototype)
 
@@ -294,4 +329,6 @@ fun main() {
     OutputAdapter.printBoard(game)
 
     OutputAdapter.printChooseCardToPlay(game)
+    println("")
+
 }
