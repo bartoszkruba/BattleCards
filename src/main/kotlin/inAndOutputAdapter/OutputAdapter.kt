@@ -308,23 +308,26 @@ fun main() {
     white.deck.shuffleDeck()
     black.deck.shuffleDeck()
 
-    repeat(4) {
-        white.hand.addCard(white.deck.drawCard()!!)
-    }
+//    repeat(4) {
+//        white.hand.addCard(white.deck.drawCard()!!)
+//    }
+//
+//    repeat(4) {
+//        black.hand.addCard(black.deck.drawCard()!!)
+//    }
+//
+//    repeat(5) {
+//        white.field.addCard(white.deck.drawCard()!!)
+//    }
+//
+//    repeat(4) {
+//        black.field.addCard(black.deck.drawCard()!!)
+//    }
 
-    repeat(0) {
-        black.hand.addCard(black.deck.drawCard()!!)
-    }
-
-    repeat(5) {
-        white.field.addCard(white.deck.drawCard()!!)
-    }
-
-    repeat(0) {
-        black.field.addCard(black.deck.drawCard()!!)
-    }
-
-    game.nextTurn()
+    repeat(2){ game.drawCardFromDeck() }
+//    game.nextTurn()
+//    repeat(2){ game.drawCardFromDeck() }
+//    print(game.turn)
 
     OutputAdapter.printBoard(game)
 
