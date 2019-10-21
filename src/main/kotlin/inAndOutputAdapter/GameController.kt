@@ -41,9 +41,8 @@ class GameController {
     private fun doTheChoice(option: String?, playersDecks: Pair<Deck, Deck>): String? {
         game.nextTurn()
         val whiteTurn = game.currentPlayer() == game.whitePlayer
-
-        when(option!!.toLowerCase()){
-            "1", "draw card" -> {
+        when(option!!){
+            Settings.MENU_OPTION_DRAW_CARD -> {
                 game.drawCardFromDeck()
                 val drawCard: Card = if(whiteTurn)
                     game.whitePlayer.hand.cardsInList().get(game.whitePlayer.hand.cardsInList().size - 1)
@@ -52,15 +51,15 @@ class GameController {
                 OutputAdapter.printDrawCardFromDeck(drawCard)
                 OutputAdapter.printBoard(this.game)
             }
-            "2", "place card" -> {
+            Settings.MENU_OPTION_PLACE_CARD -> {
                 chooseCardToPlaceOnField()
                 OutputAdapter.printBoard(this.game)
             }
-            "3", "attack monster" ->{
+            Settings.MENU_OPTION_ATTACK_MONSTER ->{
                 cardToAttackWith()
                 targetCard()
             }
-            "4", "end round" -> {}
+            Settings.MENU_OPTION_END_ROUND -> {}
             else -> return null
         }
         return option
@@ -124,19 +123,8 @@ class GameController {
     }
 
     private fun gameOptions(): String? {
-        //val gameOptions = game.validMoves()
-        val gameOptions= mapOf( 1 to "draw card", 2 to "place card",3 to "attack monster", 4 to "end round")
-        OutputAdapter.printGameOptions(gameOptions)
-
-        var chosenOption = readLine()
-        var validChoice = Input.readGameOptions(chosenOption!!, gameOptions)
-        while(validChoice == null){
-            OutputAdapter.illegalInputInfo()
-            chosenOption = readLine()
-            if(Input.readGameOptions(chosenOption!!, gameOptions) != null) {
-                return chosenOption
-            }
-        }
-        return chosenOption
+        val gameOptions = game.validMoves()
+        //val gameOptions= mapOf( 1 to "draw card", 2 to "place card",3 to "attack monster", 4 to "end round")
+        return Input.readGameOptions(gameOptions)
     }
 }
