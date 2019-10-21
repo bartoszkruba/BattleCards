@@ -32,6 +32,7 @@ class Game(
             player.field.removeCard(toBeAttacked)
         }
         currentPlayer().mana--
+        attacker.sleeping = true
     }
 
     fun printCurrentGame() {
