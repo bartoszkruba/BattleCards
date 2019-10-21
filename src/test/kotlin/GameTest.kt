@@ -342,20 +342,25 @@ internal class GameTest {
     }
 
     @Test
-    internal fun `validMoves, only draw and place valid because monster is sleeping`() {
-        val game = createGameForTesting()
+    internal fun `validMoves, sleepingMonsters no attack`() {
+        createMockData()
+        val game = Game(player1.deck,player2.deck,player1.name,player2.name)
 
         val whiteP = game.whitePlayer
         val blackP = game.blackPlayer
 
-        var monster:Monster = Monster("Hej",2,2)
-        var monster2:Monster= Monster("aas",2,2)
-        monster.sleeping = true
-        whiteP.field.addCard(monster)
-        blackP.field.addCard(monster2)
+        whiteP.field = player1.field
+        whiteP.hand = Hand(arrayListOf(player1.hand.cardsInList()[0],player1.hand.cardsInList()[1]))
+        blackP.field = player2.field
+
+        whiteP.field.cardsInList().forEach { if (it is Monster) it.sleeping = true }
+
+        whiteP.field.removeCard(whiteP.field.cardsInList()[0])
 
         val generatedMoves = ArrayList<String>()
-        game.validMoves().forEach { generatedMoves.add(it.value) }
+        game.validMoves().forEach {
+            generatedMoves.add(it.value)
+        }
 
         assertContains(
             arrayListOf(
@@ -366,6 +371,40 @@ internal class GameTest {
             generatedMoves
         )
         assertEquals(3,generatedMoves.size)
+    }
+
+    @Test
+    internal fun `validMoves, some sleeping monsters but not the hole field attack should be enabled`() {
+        createMockData()
+        val game = Game(player1.deck,player2.deck,player1.name,player2.name)
+
+        val whiteP = game.whitePlayer
+        val blackP = game.blackPlayer
+
+        whiteP.field = player1.field
+        whiteP.hand = Hand(arrayListOf(player1.hand.cardsInList()[0],player1.hand.cardsInList()[1]))
+        blackP.field = player2.field
+
+        var monsterToChange = whiteP.field.cardsInList()[0] as Monster
+        monsterToChange.sleeping = true
+
+        whiteP.field.removeCard(whiteP.field.cardsInList()[0])
+
+        val generatedMoves = ArrayList<String>()
+        game.validMoves().forEach {
+            generatedMoves.add(it.value)
+        }
+
+        assertContains(
+            arrayListOf(
+                Settings.MENU_OPTION_ATTACK_MONSTER,
+                Settings.MENU_OPTION_PLACE_CARD,
+                Settings.MENU_OPTION_END_ROUND,
+                Settings.MENU_OPTION_DRAW_CARD
+            ),
+            generatedMoves
+        )
+        assertEquals(4,generatedMoves.size)
     }
 
     @Test
