@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Assertions.*
 import java.lang.Exception
 import java.lang.IllegalArgumentException
 import java.lang.RuntimeException
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
@@ -320,53 +319,63 @@ internal class CardListTest {
     @Test
     fun cardToStringTest() {
         val field = Field()
+        val sleepTestArray: Array<Boolean> = arrayOf(true, false)
 
-        val wolfCard = Monster("Wolf", 3, 6)
+        repeat(2) {
+            val sleepTest = sleepTestArray[it]
+            val sleepStart = if (sleepTest) Settings.ANSI_WHITE else Settings.ANSI_RESET
+            val sleepEnd = Settings.ANSI_RESET
 
-        var atk = "${Settings.ANSI_BLUE}3 ${Settings.ANSI_RESET}"
-        var hp = "${Settings.ANSI_RED} 6${Settings.ANSI_RESET}"
-        var name = "${Settings.ANSI_GREEN}  Wolf     ${Settings.ANSI_RESET}"
+            val wolfCard = Monster("Wolf", 3, 6)
+            wolfCard.sleeping = sleepTest
+            var atk = "${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_BLUE}3 ${if(sleepTest) "" else Settings.ANSI_RESET}"
+            var hp = "${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_RED} 6${Settings.ANSI_RESET}"
+            var name = "${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_GREEN}  Wolf     ${Settings.ANSI_RESET}"
 
-        val wolfCardTest = """
-            ___     
-           |   |    
-           | 1 |    
-         $atk|___|$hp  
-         $name
-        """.trimIndent()
+            val wolfCardLines: Array<String> = arrayOf(
+                "$sleepStart   ___     $sleepEnd",
+                "$sleepStart  |   |    $sleepEnd",
+                "$sleepStart  | 1 |    $sleepEnd",
+                "$atk|___|$hp  ",
+                name
+            )
+            val wolfCardTest = wolfCardLines.joinToString("\n")
 
-        assertEquals(wolfCardTest, field.cardToString(wolfCard, 0), "The toString doesn't match")
+            assertEquals(wolfCardTest, field.cardToString(wolfCard, 0), "The toString doesn't match")
 
-        val gnarlCard = Monster("Gnarl", 8, 5)
+            val gnarlCard = Monster("Gnarl", 8, 5)
+            gnarlCard.sleeping = sleepTest
+            atk = "${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_BLUE}8 ${if(sleepTest) "" else Settings.ANSI_RESET}"
+            hp = "${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_RED} 5${Settings.ANSI_RESET}"
+            name = "${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_GREEN}  Gnarl    ${Settings.ANSI_RESET}"
 
-        atk = "${Settings.ANSI_BLUE}8 ${Settings.ANSI_RESET}"
-        hp = "${Settings.ANSI_RED} 5${Settings.ANSI_RESET}"
-        name = "${Settings.ANSI_GREEN}  Gnarl    ${Settings.ANSI_RESET}"
+            val gnarlCardTestLines: Array<String> = arrayOf(
+                "$sleepStart   ___     $sleepEnd",
+                "$sleepStart  |   |    $sleepEnd",
+                "$sleepStart  | 3 |    $sleepEnd",
+                "$atk|___|$hp  ",
+                name
+            )
+            val gnarlCardTest = gnarlCardTestLines.joinToString("\n")
 
-        val gnarlCardTest = """
-            ___     
-           |   |    
-           | 3 |    
-         $atk|___|$hp  
-         $name
-        """.trimIndent()
+            assertEquals(gnarlCardTest, field.cardToString(gnarlCard, 2), "The toString doesn't match")
 
-        assertEquals(gnarlCardTest, field.cardToString(gnarlCard, 2), "The toString doesn't match")
+            val skeletonCard = Monster("Skeleton", 10, 10)
+            skeletonCard.sleeping = sleepTest
+            atk = "${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_BLUE}10${if(sleepTest) "" else Settings.ANSI_RESET}"
+            hp = "${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_RED}10${Settings.ANSI_RESET}"
+            name = "${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_GREEN}Skeleton   ${Settings.ANSI_RESET}"
 
-        val skeletonCard = Monster("Skeleton",10, 10)
+            val skeletonCardTestLines: Array<String> = arrayOf(
+                "$sleepStart   ___     $sleepEnd",
+                "$sleepStart  |   |    $sleepEnd",
+                "$sleepStart  | 5 |    $sleepEnd",
+                "$atk|___|$hp  ",
+                name
+            )
+            val skeletonCardTest = skeletonCardTestLines.joinToString("\n")
 
-        atk = "${Settings.ANSI_BLUE}10${Settings.ANSI_RESET}"
-        hp = "${Settings.ANSI_RED}10${Settings.ANSI_RESET}"
-        name = "${Settings.ANSI_GREEN}Skeleton   ${Settings.ANSI_RESET}"
-
-        val skeletonCardTest = """
-            ___     
-           |   |    
-           | 5 |    
-         $atk|___|$hp  
-         $name
-        """.trimIndent()
-
-        assertEquals(skeletonCardTest, field.cardToString(skeletonCard, 4), "The toString doesn't match")
+            assertEquals(skeletonCardTest, field.cardToString(skeletonCard, 4), "The toString doesn't match")
+        }
     }
 }
