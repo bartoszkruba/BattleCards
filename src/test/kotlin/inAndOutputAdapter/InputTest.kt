@@ -22,22 +22,6 @@ internal class InputTest {
     }
 
     @Test
-    fun readGameOptions(){
-        val gameOptions= mapOf( 1 to "Draw Card", 2 to "Place Card",3 to "Attack Monster", 4 to "End Round")
-
-        assertNotNull(Input.readGameOptions("1", gameOptions))
-        assertNotNull(Input.readGameOptions("Draw Card", gameOptions))
-        assertNotNull(Input.readGameOptions("DRAW CARD", gameOptions))
-        assertNotNull(Input.readGameOptions("place card", gameOptions))
-
-        assertNull(Input.readGameOptions("Draw", gameOptions))
-        assertNull(Input.readGameOptions("someOption", gameOptions))
-        assertNull(Input.readGameOptions("5", gameOptions))
-        assertNull(Input.readGameOptions("0", gameOptions))
-        assertNull(Input.readGameOptions("-2", gameOptions))
-    }
-
-    @Test
     fun readCardToPlaceOnField(){
         val cardLoader = CardLoader()
 
