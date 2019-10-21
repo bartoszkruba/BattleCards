@@ -2,8 +2,8 @@ import java.util.*
 import kotlin.math.floor
 
 class Monster : Card {
-    override var name: String
-    override var cardId: UUID
+    override val name: String
+    override val cardId: UUID
     var cardType: CardType
     var attack: Int
     var health: Int
