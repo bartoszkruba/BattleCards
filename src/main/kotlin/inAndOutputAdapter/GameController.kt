@@ -41,7 +41,7 @@ class GameController {
     private fun printGameBoard(): Pair<Deck, Deck> {
         val cardLoader = CardLoader()
 
-        val deckPrototype = cardLoader.loadDeck("test")
+        val deckPrototype = cardLoader.loadDeck("Standard")
         val playerOneDeck = DeckFactory.createDeck(deckPrototype)
         val playerTwoDeck = DeckFactory.createDeck(deckPrototype)
 
@@ -80,34 +80,11 @@ class GameController {
     }
 
     private fun targetCard(): Card {
-        OutputAdapter.printChooseTarget(game)
-        var chosenTargetCard = readLine()
-
-        var validChoice = Input.readTargetCard(chosenTargetCard, game.whitePlayer.field)
-        while(validChoice == null){
-            OutputAdapter.illegalInputInfo()
-            chosenTargetCard = readLine()
-            validChoice = Input.readTargetCard(chosenTargetCard!!, game.whitePlayer.field)
-            if(validChoice != null)
-               return validChoice
-        }
-        return validChoice
+        return Input.readTargetCard(game)
     }
 
     private fun cardToAttackWith(): Card{
-        val playerField: Field = if(whiteTurn!!) game.whitePlayer.field else game.blackPlayer.field
-        OutputAdapter.printChooseCardToAttackWith(game)
-        var chosenCardToAttackWith = readLine()
-
-        var validChoice = Input.readChosenCardToAttackWith(chosenCardToAttackWith,playerField)
-        while(validChoice == null){
-            OutputAdapter.illegalInputInfo()
-            chosenCardToAttackWith = readLine()
-            validChoice = Input.readChosenCardToAttackWith(chosenCardToAttackWith!!, playerField)
-            if(validChoice != null)
-                return validChoice
-        }
-        return validChoice
+        return Input.readChosenCardToAttackWith(game)
     }
 
 
