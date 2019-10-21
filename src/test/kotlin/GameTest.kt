@@ -222,6 +222,7 @@ internal class GameTest {
             val getsAttackedCopy: Monster = Utils.clone(getsAttacked) as Monster
 
             game.attackMonster(attacker, getsAttacked)
+            assertTrue(attacker.sleeping,"attacker should be sleeping")
             assertEquals(
                 getsAttackedCopy.health - attacker.attack,
                 getsAttacked.health,
@@ -255,6 +256,7 @@ internal class GameTest {
             val getsAttackedCopy: Monster = Utils.clone(getsAttacked) as Monster
 
             game.attackMonster(attacker, getsAttacked)
+            assertTrue(attacker.sleeping,"Attacker should be sleeping")
             assertEquals(
                 getsAttackedCopy.health - attacker.attack,
                 getsAttacked.health,
