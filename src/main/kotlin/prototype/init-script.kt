@@ -40,6 +40,9 @@ class InitCards(private val cardLoader: CardLoader = CardLoader()) {
         cards.add(newMonster("Fire Ogre", 2, 10))
         cards.add(newMonster("Dark Pig", 8, 5))
         cards.add(newMonster("Abyss Imp", 2, 8))
+        cards.add(newSpell("Fireball"))
+        cards.add(newSpell("Hibernate"))
+        cards.add(newSpell("Heal"))
 
         println("Saving new cards...")
         cardLoader.saveCards(cards)
@@ -80,6 +83,21 @@ class InitCards(private val cardLoader: CardLoader = CardLoader()) {
         cardLoader.loadDeck("Rats")
         println("Added new deck: Rats\n")
 
+        val deckPrototypeFour = DeckPrototype("Spells")
+
+        repeat(2) {
+            for (i in 0 until 12) {
+                deckPrototypeFour.addCard(cards[i])
+            }
+            for (i in 24 until 27) {
+                deckPrototypeFour.addCard(cards[i])
+            }
+        }
+
+        cardLoader.saveDeck(deckPrototypeFour)
+        cardLoader.loadDeck("Spells")
+        println("Added new deck: Spells\n")
+
         println("\nDone!")
     }
 
@@ -96,6 +114,16 @@ class InitCards(private val cardLoader: CardLoader = CardLoader()) {
         return monster
     }
 
+    private fun newSpell(name: String): CardPrototype {
+        val spell = SpellPrototype(
+            id = counter++,
+            name = name
+        )
+
+        println("Created spell: $spell")
+
+        return spell
+    }
 }
 
 fun main() {
