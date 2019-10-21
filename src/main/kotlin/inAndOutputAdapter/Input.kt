@@ -48,14 +48,14 @@ class Input() {
 
         fun readChosenCardToAttackWith(game: Game): Card {
             var invalidInput = true
-            var choosenCard:Card = Monster("Ugly Placeholder",0,0)
+            var choosenCard:Card = Monster("Ugly",1,1)
             OutputAdapter.printChooseCardToAttackWith(game)
             do {
                 val input = readLine()
                 val choosenCardIndex:Int
                 if (input is String){
                     try {
-                        choosenCardIndex = input.toInt()
+                        choosenCardIndex = input.toInt() -1
                     }catch (err:Exception){
                         OutputAdapter.illegalInputInfo()
                         continue
@@ -83,14 +83,14 @@ class Input() {
 
         fun readTargetCard(game: Game): Card{
             var invalidInput = true
-            var choosenCard:Card = Monster("Ugly Placeholder",0,0)
+            var choosenCard:Card = Monster("Ugly",1,1)
             OutputAdapter.printChooseTarget(game)
             do {
                 val input = readLine()
                 val choosenCardIndex:Int
                 if (input is String){
                     try {
-                        choosenCardIndex = input.toInt()
+                        choosenCardIndex = input.toInt() -1
                     }catch (err:Exception){
                         OutputAdapter.illegalInputInfo()
                         continue
