@@ -2,9 +2,9 @@ package inAndOutputAdapter
 
 import Card
 import Game
+import Monster
 import factory.DeckFactory
 import models.Deck
-import models.Field
 import models.Hand
 import prototype.CardLoader
 
@@ -36,6 +36,7 @@ class GameController {
                 blackTurn = game.currentPlayer() == game.blackPlayer
             }
         }
+        //OutputAdapter.printGameOver()
     }
 
     private fun printGameBoard(): Pair<Deck, Deck> {
@@ -68,8 +69,10 @@ class GameController {
                 OutputAdapter.printBoard(this.game)
             }
             Settings.MENU_OPTION_ATTACK_MONSTER ->{
-                cardToAttackWith()
-                targetCard()
+                var cardToAttackWith = cardToAttackWith()
+                var targetCard = targetCard()
+                if (cardToAttackWith is Monster && targetCard is Monster)
+                game.attackMonster(cardToAttackWith, targetCard)
             }
             Settings.MENU_OPTION_END_ROUND -> {
                 game.nextTurn()
