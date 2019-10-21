@@ -76,6 +76,16 @@ ${blackPlayer.field}
                 || (blackPlayer.deck.size() == 0 && blackPlayer.field.size() == 0 && blackPlayer.hand.size() == 0)
     }
 
+    fun getWinner(): Player? {
+        return if (whitePlayer.deck.size() == 0 && whitePlayer.field.size() == 0 && whitePlayer.hand.size() == 0){
+            blackPlayer
+        }else if(blackPlayer.deck.size() == 0 && blackPlayer.field.size() == 0 && blackPlayer.hand.size() == 0){
+            whitePlayer
+        }else {
+            null
+        }
+    }
+
     fun placeCardOnField(card: Card): Boolean {
         val player = currentPlayer()
         val cardToPlace: Card

@@ -36,7 +36,7 @@ class GameController {
                 blackTurn = game.currentPlayer() == game.blackPlayer
             }
         }
-        //OutputAdapter.printGameOver()
+        OutputAdapter.printGameOver(game.getWinner()!!)
     }
 
     private fun printGameBoard(): Pair<Deck, Deck> {
