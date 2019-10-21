@@ -38,7 +38,9 @@ class Input() {
         }
 
         fun readCardToPlaceOnField(chosenCardToPlace: String, hand: Hand): Card? {
-            //var cardsInHand= hand.cardsInList()
+            if(chosenCardToPlace.toInt() in 1..hand.size()){
+                return hand.cardsInList()[chosenCardToPlace.toInt()-1]
+            }
             return null
         }
 
