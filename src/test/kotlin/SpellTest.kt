@@ -35,9 +35,7 @@ internal class SpellTest {
         repeat(MAX_NAME_LENGTH + 1) { sb.append("a") }
         val name = sb.toString()
 
-        assertThrows<RuntimeException> {
-            Spell(name)
-        }
+        assertThrows<RuntimeException> { Spell(name) }
     }
 
     @Test
