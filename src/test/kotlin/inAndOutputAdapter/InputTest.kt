@@ -2,6 +2,7 @@ package inAndOutputAdapter
 
 import Game
 import factory.DeckFactory
+import models.Hand
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
@@ -26,24 +27,23 @@ internal class InputTest {
         val cardLoader = CardLoader()
 
         val deckPrototype = cardLoader.loadDeck("Standard")
+
         val playerOneDeck = DeckFactory.createDeck(deckPrototype)
         val playerTwoDeck = DeckFactory.createDeck(deckPrototype)
-
         val game = Game(playerOneDeck, playerTwoDeck, "rami", "noha")
 
-        val playerHand = game.blackPlayer.hand
-        var cardsInHand = playerHand.cardsInList()
-        println("${1..30}")
+        game.drawCardFromDeck()
+        game.drawCardFromDeck()
+        game.drawCardFromDeck()
+        val whiteHand= game.whitePlayer.hand //contain 3 cards in this case
+        val blackHand= game.blackPlayer.hand //contain 0 cards in this case
 
         //if the hand has the number/name of the card and
-        assertNotNull(Input.readCardToPlaceOnField("${1..30}", playerHand))
-        assertNotNull(Input.readCardToPlaceOnField("${1..30}", playerHand))
+        assertNotNull(Input.readCardToPlaceOnField("1", whiteHand))
+        assertNotNull(Input.readCardToPlaceOnField("2", whiteHand))
+        assertNotNull(Input.readCardToPlaceOnField("3", whiteHand))
 
-        if (playerHand.size() == 0) assertNull(Input.readCardToPlaceOnField("${1..30}", playerHand))
-
-        //if the hand has not the number of the card
-        assertNull(Input.readCardToPlaceOnField("31",playerHand))
-
-
+        assertNull(Input.readCardToPlaceOnField("1", blackHand))
+        assertNull(Input.readCardToPlaceOnField("2", blackHand))
     }
 }
