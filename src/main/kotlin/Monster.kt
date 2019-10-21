@@ -7,7 +7,7 @@ class Monster : Card {
     var cardType: CardType
     var attack: Int
     var health: Int
-    var sleeping: Boolean = true
+    var sleeping: Boolean = false
 
     constructor() : super("Wolf", CardType.MONSTER, UUID.randomUUID()){
         this.name = "Wolf"
@@ -40,25 +40,36 @@ class Monster : Card {
     fun isDead() = this.health <= 0
 
     override fun toString(): String {
-        var atk = if(attack > 9) "${attack}" else "${attack} "
-        var hp = if(health > 9) "${health}" else " ${health}"
+        var atk: String = if(attack > 9) "$attack" else "$attack "
+        var hp: String = if(health > 9) "$health" else " $health"
         hp = if(health <= 0) " 0" else hp
-        atk = "${Settings.ANSI_BLUE}${atk}${Settings.ANSI_RESET}"
-        hp = "${Settings.ANSI_RED}${hp}${Settings.ANSI_RESET}"
+        atk =   (if(sleeping) Settings.ANSI_WHITE else Settings.ANSI_BLUE) +
+                atk +
+                if(sleeping) "" else Settings.ANSI_RESET
+
+        hp =    (if(sleeping) Settings.ANSI_WHITE else Settings.ANSI_RED) +
+                hp +
+                Settings.ANSI_RESET
         var sb = StringBuilder()
         repeat((4 - floor(name.length * 0.5)).toInt()) { sb.append(" ") }
         var cardName = "$sb${name}"
         sb.clear()
         repeat(11 - cardName.length) { sb.append(" ") }
         cardName += sb
-        cardName = "${Settings.ANSI_GREEN}${cardName}${Settings.ANSI_RESET}"
+        cardName = (if(sleeping) Settings.ANSI_WHITE else Settings.ANSI_GREEN) +
+                   cardName +
+                   Settings.ANSI_RESET
+        val sleepStart = if(sleeping) Settings.ANSI_WHITE else Settings.ANSI_RESET
+        val sleepEnd = Settings.ANSI_RESET
 
-        return """
-             ___     
-            |   |    
-            |   |    
-          $atk|___|$hp  
-          $cardName
-        """.trimIndent()
+        val lines: Array<String> = arrayOf(
+              "$sleepStart   ___     $sleepEnd",
+              "$sleepStart  |   |    $sleepEnd",
+              "$sleepStart  |   |    $sleepEnd",
+                       "$atk|___|$hp  ",
+                           cardName
+        )
+
+        return lines.joinToString("\n")
     }
 }
