@@ -13,15 +13,28 @@ class Input() {
         }
 
         private fun userNameValidation(name: String): Boolean {
-            val regex = Regex("^[a-zåäöA-ZÅÄÖ]{1,9}") //ignore ÄÖÅ öäå ?????
+            val regex = Regex("^[a-zåäöA-ZÅÄÖ]{1,9}")
             return name.length in 1..9 && regex.matches(name)
         }
 
-        fun readGameOptions(option: String, optionsList:  Map<Int, String>): String? {
-            optionsList.forEach { (k, v) ->
-                 if (k.toString() == option|| option.toLowerCase() == v.toLowerCase()) return v
+        fun readGameOptions(optionsList:  Map<Int, String>): String? {
+            while (true) {
+                OutputAdapter.printGameOptions(optionsList)
+                try {
+                    val choice = readLine()
+
+                    for (value in optionsList.values) {
+                        if (choice == value) return choice
+                    }
+                    if (optionsList[choice!!.toInt()] == null) {
+                        OutputAdapter.illegalInputInfo()
+                    } else {
+                        return optionsList[choice.toInt()]!!
+                    }
+                } catch (e: Exception) {
+                    OutputAdapter.illegalInputInfo()
+                }
             }
-            return null
         }
 
         fun readCardToPlaceOnField(chosenCardToPlace: String, hand: Hand): Card? {
