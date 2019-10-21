@@ -234,31 +234,36 @@ internal class CardListTest {
 
     @Test
     fun toStringTest() {
+        val sleepStart = Settings.ANSI_WHITE
+        val sleepEnd = Settings.ANSI_RESET
+        val wake = Settings.ANSI_RESET
+
         var atk1 = "${Settings.ANSI_BLUE}4 ${Settings.ANSI_RESET}"
-        var atk2 = "${Settings.ANSI_BLUE}1 ${Settings.ANSI_RESET}"
+        var atk2 = "${Settings.ANSI_WHITE}1 "
         var atk3 = "${Settings.ANSI_BLUE}3 ${Settings.ANSI_RESET}"
         var atk4 = "${Settings.ANSI_BLUE}2 ${Settings.ANSI_RESET}"
-        var atk5 = "${Settings.ANSI_BLUE}1 ${Settings.ANSI_RESET}"
+        var atk5 = "${Settings.ANSI_WHITE}1 "
 
         var hp1 = "${Settings.ANSI_RED} 7${Settings.ANSI_RESET}"
-        var hp2 = "${Settings.ANSI_RED} 3${Settings.ANSI_RESET}"
+        var hp2 = "${Settings.ANSI_WHITE} 3${Settings.ANSI_RESET}"
         var hp3 = "${Settings.ANSI_RED} 4${Settings.ANSI_RESET}"
         var hp4 = "${Settings.ANSI_RED} 2${Settings.ANSI_RESET}"
-        var hp5 = "${Settings.ANSI_RED} 4${Settings.ANSI_RESET}"
+        var hp5 = "${Settings.ANSI_WHITE} 4${Settings.ANSI_RESET}"
 
         var name1 = "${Settings.ANSI_GREEN}  Ogre     ${Settings.ANSI_RESET}"
-        var name2 = "${Settings.ANSI_GREEN}  Wolf     ${Settings.ANSI_RESET}"
+        var name2 = "${Settings.ANSI_WHITE}  Wolf     ${Settings.ANSI_RESET}"
         var name3 = "${Settings.ANSI_GREEN} Ranger    ${Settings.ANSI_RESET}"
         var name4 = "${Settings.ANSI_GREEN}  Slime    ${Settings.ANSI_RESET}"
-        var name5 = "${Settings.ANSI_GREEN} Murloc    ${Settings.ANSI_RESET}"
+        var name5 = "${Settings.ANSI_WHITE} Murloc    ${Settings.ANSI_RESET}"
 
-        val fieldPattern = """
-               ___        ___        ___        ___        ___     
-              |   |      |   |      |   |      |   |      |   |    
-              | 1 |      | 2 |      | 3 |      | 4 |      | 5 |    
-            $atk1|___|$hp1  $atk2|___|$hp2  $atk3|___|$hp3  $atk4|___|$hp4  $atk5|___|$hp5  
-            $name1$name2$name3$name4$name5
-        """.trimIndent()
+        val fieldPatternLines: Array<String> = arrayOf(
+            "$wake   ___     $wake$sleepStart   ___     $sleepEnd$wake   ___     $wake$wake   ___     $wake$sleepStart   ___     $sleepEnd",
+            "$wake  |   |    $wake$sleepStart  |   |    $sleepEnd$wake  |   |    $wake$wake  |   |    $wake$sleepStart  |   |    $sleepEnd",
+            "$wake  | 1 |    $wake$sleepStart  | 2 |    $sleepEnd$wake  | 3 |    $wake$wake  | 4 |    $wake$sleepStart  | 5 |    $sleepEnd",
+            "$atk1|___|$hp1  $atk2|___|$hp2  $atk3|___|$hp3  $atk4|___|$hp4  $atk5|___|$hp5  ",
+            "$name1$name2$name3$name4$name5"
+        )
+        val fieldPattern = fieldPatternLines.joinToString("\n")
 
         val field = Field(
             arrayListOf(
@@ -268,9 +273,10 @@ internal class CardListTest {
                 Monster("Slime", 2, 2),
                 Monster("Murloc", 1, 4)
             )
-        ).toString()
-
-        assertEquals(fieldPattern, field, "Field toString doesn't match pattern")
+        )
+        (field.cards[1] as Monster).sleeping = true
+        (field.cards[4] as Monster).sleeping = true
+        assertEquals(fieldPattern, field.toString(), "Field toString doesn't match pattern")
 
         atk1 = "${Settings.ANSI_BLUE}2 ${Settings.ANSI_RESET}"
         atk2 = "${Settings.ANSI_BLUE}1 ${Settings.ANSI_RESET}"
@@ -290,13 +296,14 @@ internal class CardListTest {
         name4 = "${Settings.ANSI_GREEN}WereWolf   ${Settings.ANSI_RESET}"
         name5 = "${Settings.ANSI_GREEN} Murloc    ${Settings.ANSI_RESET}"
 
-        val handPattern = """
-               ___        ___        ___        ___        ___     
-              |   |      |   |      |   |      |   |      |   |    
-              | 1 |      | 2 |      | 3 |      | 4 |      | 5 |    
-            $atk1|___|$hp1  $atk2|___|$hp2  $atk3|___|$hp3  $atk4|___|$hp4  $atk5|___|$hp5  
-            $name1$name2$name3$name4$name5
-        """.trimIndent()
+        val handPatternLines: Array<String> = arrayOf(
+            "$wake   ___     $wake$wake   ___     $wake$wake   ___     $wake$wake   ___     $wake$wake   ___     $wake",
+            "$wake  |   |    $wake$wake  |   |    $wake$wake  |   |    $wake$wake  |   |    $wake$wake  |   |    $wake",
+            "$wake  | 1 |    $wake$wake  | 2 |    $wake$wake  | 3 |    $wake$wake  | 4 |    $wake$wake  | 5 |    $wake",
+            "$atk1|___|$hp1  $atk2|___|$hp2  $atk3|___|$hp3  $atk4|___|$hp4  $atk5|___|$hp5  ",
+            "$name1$name2$name3$name4$name5"
+        )
+        val handPattern = handPatternLines.joinToString("\n")
 
         val hand = Hand(
             arrayListOf(
@@ -306,9 +313,8 @@ internal class CardListTest {
                 Monster("WereWolf", 5, 9),
                 Monster("Murloc", 1, 4)
             )
-        ).toString()
-
-        assertEquals(handPattern, hand, "Hand toString doesn't match pattern")
+        )
+        assertEquals(handPattern, hand.toString(), "Hand toString doesn't match pattern")
     }
 
     @Test
