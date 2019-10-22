@@ -43,14 +43,14 @@ class GameController {
 
     private fun decksOptions(): String? {
         decksList = CardLoader()
-        val decksList = decksList.listAvailableDecks()
-        OutputAdapter.printAvailableDecks(decksList)
+        val decksOption = decksList.listAvailableDecks()
+        OutputAdapter.printAvailableDecks(decksOption)
         var chosenDeck = readLine()
-        var validDeck = Input.readlistAvailableDecks(chosenDeck!!, decksList)
+        var validDeck = Input.readlistAvailableDecks(chosenDeck!!, decksOption)
         while(validDeck == null){
             OutputAdapter.illegalInputInfo()
             chosenDeck = readLine()
-            validDeck = Input.readlistAvailableDecks(chosenDeck!!, decksList)
+            validDeck = Input.readlistAvailableDecks(chosenDeck!!, decksOption)
             if(validDeck != null) return chosenDeck
         }
         return chosenDeck

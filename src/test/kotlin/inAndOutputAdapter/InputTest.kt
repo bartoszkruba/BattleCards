@@ -46,4 +46,19 @@ internal class InputTest {
         assertNull(Input.readCardToPlaceOnField("1", blackHand))
         assertNull(Input.readCardToPlaceOnField("2", blackHand))
     }
+
+    @Test
+    fun readlistAvailableDecks(){
+        val decksOption = listOf("test", "Demons", "Standard", "Rats")
+
+        assertNotNull(Input.readlistAvailableDecks("test", decksOption))
+        assertNotNull(Input.readlistAvailableDecks("Demons", decksOption))
+        assertNotNull(Input.readlistAvailableDecks("Standard", decksOption))
+        assertNotNull(Input.readlistAvailableDecks("Rats", decksOption))
+
+        assertNull(Input.readlistAvailableDecks("someDeckOption", decksOption))
+        assertNull(Input.readlistAvailableDecks("rats", decksOption))
+        assertNull(Input.readlistAvailableDecks("RATS", decksOption))
+
+    }
 }
