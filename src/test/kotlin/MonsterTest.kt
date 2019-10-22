@@ -1,30 +1,26 @@
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-
 import org.junit.jupiter.api.Assertions.*
-import java.util.*
 
 internal class MonsterTest {
 
     @Test
-    fun ConstructorTest() {
-        constructorWithNoArgument();
-        constructorWithArgument();
+    fun constructorTest() {
+        constructorWithNoArgument()
+        constructorWithArgument()
     }
 
-    fun constructorWithNoArgument() {
-        var monster = Monster()
-        var monster2 = Monster()
+    private fun constructorWithNoArgument() {
+        val monster = Monster()
+        val monster2 = Monster()
         assertNotEquals(monster.cardId, monster2.cardId)
         assertNotNull(monster)
         assertNotNull(monster2)
         assertNotSame(monster2, monster)
     }
 
-    fun constructorWithArgument(){
-        var monster = Monster("Ogre tok",6,4);
-        var monster2 = Monster("Ogre",6,4);
+    private fun constructorWithArgument(){
+        val monster = Monster("Ogre tok",6,4)
+        val monster2 = Monster("Ogre",6,4)
         assertNotSame(monster2, monster)
         assertNotEquals(monster2.cardId, monster.cardId)
         assertEquals("Ogre", monster2.name)
@@ -34,75 +30,91 @@ internal class MonsterTest {
     }
 
     @Test
-    fun takeDamge() {
-        var monster1 = Monster("Ogre", 6, 3);
-        var monster2 = Monster("Ogre", 7,4);
+    fun takeDamage() {
+        val monster1 = Monster("Ogre", 6, 3)
+        val monster2 = Monster("Ogre", 7,4)
 
-        var a = monster2.takeDamge(monster1)
+        val a = monster2.takeDamage(monster1)
         assertTrue(a)
 
-        var s = monster2.takeDamge(monster1)
+        val s = monster2.takeDamage(monster1)
         assertFalse(s)
     }
 
     @Test
     fun isDead() {
-        var monster1 = Monster("Ogre",4, 3);
-        var monster2 = Monster("Ogre",7,9);
+        val monster1 = Monster("Ogre",4, 3)
+        val monster2 = Monster("Ogre",7,9)
 
-        monster2.takeDamge(monster1)
+        monster2.takeDamage(monster1)
         assertFalse(monster2.isDead())
 
-        monster2.takeDamge(monster1)
+        monster2.takeDamage(monster1)
         assertFalse(monster2.isDead())
 
-        monster2.takeDamge(monster1)
+        monster2.takeDamage(monster1)
         assertTrue(monster2.isDead())
     }
 
     @Test
     fun toStringTest() {
-        val wolfCard = Monster("Wolf", 3, 6).toString()
+        val sleepTestArray: Array<Boolean> = arrayOf(true, false)
 
-        var atk = "${Settings.ANSI_BLUE}3 ${Settings.ANSI_RESET}"
-        var hp = "${Settings.ANSI_RED} 6${Settings.ANSI_RESET}"
-        var name = "${Settings.ANSI_GREEN}  Wolf     ${Settings.ANSI_RESET}"
-        val wolfCardTest = """
-            ___     
-           |   |    
-           |   |    
-         $atk|___|$hp  
-         $name
-        """.trimIndent()
+        repeat(2) {
+            val sleepTest = sleepTestArray[it]
+            val sleepStart = if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_RESET
+            val sleepEnd = Settings.ANSI_RESET
 
-        assertEquals(wolfCardTest, wolfCard, "The toString doesn't match")
+            val wolfCard = Monster("Wolf", 3, 6)
+            wolfCard.sleeping = sleepTest
+            var atk = "${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_BLUE}3 ${if(sleepTest) "" else Settings.ANSI_RESET}"
+            var hp =  "${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_RED} 6${Settings.ANSI_RESET}"
+            var name ="${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_GREEN}  Wolf     ${Settings.ANSI_RESET}"
 
-        val gnarlCard = Monster("Gnarl", 8, 5).toString()
-        atk = "${Settings.ANSI_BLUE}8 ${Settings.ANSI_RESET}"
-        hp = "${Settings.ANSI_RED} 5${Settings.ANSI_RESET}"
-        name = "${Settings.ANSI_GREEN}  Gnarl    ${Settings.ANSI_RESET}"
-        val gnarlCardTest = """
-            ___     
-           |   |    
-           |   |    
-         $atk|___|$hp  
-         $name
-        """.trimIndent()
+            val wolfCardLines: Array<String> = arrayOf(
+                "$sleepStart   ___     $sleepEnd",
+                "$sleepStart  |   |    $sleepEnd",
+                "$sleepStart  |   |    $sleepEnd",
+                         "$atk|___|$hp  ",
+                              name
+            )
+            val wolfCardTest = wolfCardLines.joinToString("\n")
 
-        assertEquals(gnarlCardTest, gnarlCard, "The toString doesn't match")
+            assertEquals(wolfCardTest, wolfCard.toString(), "The toString doesn't match")
 
-        val skeletonCard = Monster("Skeleton",10, 10).toString()
-        atk = "${Settings.ANSI_BLUE}10${Settings.ANSI_RESET}"
-        hp = "${Settings.ANSI_RED}10${Settings.ANSI_RESET}"
-        name = "${Settings.ANSI_GREEN}Skeleton   ${Settings.ANSI_RESET}"
-        val skeletonCardTest = """
-            ___     
-           |   |    
-           |   |    
-         $atk|___|$hp  
-         $name
-        """.trimIndent()
+            val gnarlCard = Monster("Gnarl", 8, 5)
+            gnarlCard.sleeping = sleepTest
+            atk = "${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_BLUE}8 ${if(sleepTest) "" else Settings.ANSI_RESET}"
+            hp =  "${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_RED} 5${Settings.ANSI_RESET}"
+            name ="${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_GREEN}  Gnarl    ${Settings.ANSI_RESET}"
 
-        assertEquals(skeletonCardTest, skeletonCard, "The toString doesn't match")
+            val gnarlCardLines: Array<String> = arrayOf(
+                "$sleepStart   ___     $sleepEnd",
+                "$sleepStart  |   |    $sleepEnd",
+                "$sleepStart  |   |    $sleepEnd",
+                         "$atk|___|$hp  ",
+                              name
+            )
+            val gnarlCardTest = gnarlCardLines.joinToString("\n")
+
+            assertEquals(gnarlCardTest, gnarlCard.toString(), "The toString doesn't match")
+
+            val skeletonCard = Monster("Skeleton",10, 10)
+            skeletonCard.sleeping = sleepTest
+            atk = "${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_BLUE}10${if(sleepTest) "" else Settings.ANSI_RESET}"
+            hp =  "${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_RED}10${Settings.ANSI_RESET}"
+            name ="${if(sleepTest) Settings.ANSI_WHITE else Settings.ANSI_GREEN}Skeleton   ${Settings.ANSI_RESET}"
+
+            val skeletonCardLines: Array<String> = arrayOf(
+                "$sleepStart   ___     $sleepEnd",
+                "$sleepStart  |   |    $sleepEnd",
+                "$sleepStart  |   |    $sleepEnd",
+                         "$atk|___|$hp  ",
+                              name
+            )
+            val skeletonCardTest = skeletonCardLines.joinToString("\n")
+
+            assertEquals(skeletonCardTest, skeletonCard.toString(), "The toString doesn't match")
+        }
     }
 }

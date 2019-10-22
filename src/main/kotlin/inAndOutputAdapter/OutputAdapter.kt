@@ -70,6 +70,7 @@ class OutputAdapter {
         }
 
         fun printBoard(game: Game) {
+            clear()
             val whiteTurn = game.turn % 2 != 0
 
             println(delimiter(ANSI_GREEN))
@@ -87,10 +88,10 @@ class OutputAdapter {
             }
 
             stringsToPrint.add(
-                "Hand: ${opponent.hand.size()}/${Settings.HAND_SIZE} | " +
+                "${ANSI_WHITE}Hand: ${opponent.hand.size()}/${Settings.HAND_SIZE} | " +
                         "Deck: ${opponent.deck.cardsInList().size}/${opponent.deck.maxSize}"
             )
-            stringsToPrint.add("*** ${opponent.name} ***")
+            stringsToPrint.add("*** ${opponent.name} ***${ANSI_RESET}")
             stringsToPrint.add("")
             stringsToPrint.add("==============================================================")
             stringsToPrint.add(opponent.field.toString())
@@ -100,11 +101,11 @@ class OutputAdapter {
             stringsToPrint.add("")
             stringsToPrint.add("Your Hand: ")
             stringsToPrint.add(currentPlayer.hand.toString())
-            stringsToPrint.add("")
+            stringsToPrint.add(Settings.ANSI_BOLD)
             stringsToPrint.add("*** ${currentPlayer.name} ***")
             stringsToPrint.add(
                 "Mana: ${currentPlayer.mana}/${Settings.PLAYER_MANA} | Deck: " +
-                        "${currentPlayer.deck.cardsInList().size}/${currentPlayer.deck.maxSize}"
+                        "${currentPlayer.deck.cardsInList().size}/${currentPlayer.deck.maxSize}${ANSI_RESET}"
             )
             stringsToPrint.add("")
 
@@ -154,8 +155,8 @@ class OutputAdapter {
             println(delimiter(ANSI_PURPLE))
 
             val range = when (game.turn % 2 != 0) {
-                true -> game.whitePlayer.field.size()
-                false -> game.blackPlayer.field.size()
+                true -> game.blackPlayer.field.size()
+                false -> game.whitePlayer.field.size()
             }
 
             println(centreLine("Choose Target (1 - $range)"))

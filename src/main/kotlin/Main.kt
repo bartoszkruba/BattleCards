@@ -4,4 +4,3 @@ fun main() {
     val gameController = GameController()
     gameController.printMainScreen()
 }
-

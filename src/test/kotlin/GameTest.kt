@@ -19,11 +19,17 @@ internal class GameTest {
     @Test
     internal fun nextTurn() {
         createMockData()
-        var game: Game = Game(player1.deck, player2.deck, player1.name, player2.name)
+        val game = Game(player1.deck, player2.deck, player1.name, player2.name)
         game.whitePlayer.mana = 0
         game.blackPlayer.mana = 0
         game.whitePlayer.field = player1.field
         game.blackPlayer.field = player2.field
+        game.whitePlayer.field.cardsInList().forEach { if (it is Monster){
+            it.sleeping = true}
+        }
+        game.blackPlayer.field.cardsInList().forEach { if (it is Monster){
+            it.sleeping = true}
+        }
         checkSleeping(game,true)
         game.nextTurn()
         checkSleeping(game,false)
@@ -33,7 +39,7 @@ internal class GameTest {
     }
 
     private fun checkSleeping(game:Game,shouldSleep:Boolean){
-        var errorMsg = if(shouldSleep) "Monster should be sleeping" else "Monster should not be sleeping"
+        val errorMsg = if(shouldSleep) "Monster should be sleeping" else "Monster should not be sleeping"
         game.whitePlayer.field.cardsInList().forEach{
             if (it is Monster){
                 assertEquals(shouldSleep, it.sleeping,errorMsg)
@@ -50,15 +56,15 @@ internal class GameTest {
     @Test
     internal fun placeCardOnFieldTest() {
         createMockData()
-        var game: Game = Game(player1.deck, player2.deck, player1.name, player2.name)
+        var game = Game(player1.deck, player2.deck, player1.name, player2.name)
 
         var index = 1
         for (i in 1..(Settings.FIELD_SIZE + 1) * 2) {
             game.whitePlayer.hand = Hand(arrayListOf(player1.deck.cardsInList()[i]))
             game.blackPlayer.hand = Hand(arrayListOf(player2.deck.cardsInList()[i]))
 
-            var placedCard = game.currentPlayer().hand.cardsInList()[0]
-            var result = game.placeCardOnField(game.currentPlayer().hand.cardsInList()[0])
+            val placedCard = game.currentPlayer().hand.cardsInList()[0]
+            val result = game.placeCardOnField(game.currentPlayer().hand.cardsInList()[0])
             if (index > Settings.FIELD_SIZE) {
                 assertFalse(result, "Should be false because field is full")
                 assertEquals(1, game.currentPlayer().hand.size(), "Card should not have been removed from hand")
@@ -122,8 +128,8 @@ internal class GameTest {
         var index = 1
         for (i in 1..(Settings.HAND_SIZE + 1) * 2) {
             val prevDeckSize = game.currentPlayer().deck.cardsInList().size
-            var drawnCard = game.currentPlayer().deck.cardsInList()[0]
-            var result = game.drawCardFromDeck()
+            val drawnCard = game.currentPlayer().deck.cardsInList()[0]
+            val result = game.drawCardFromDeck()
             if (index > Settings.HAND_SIZE) {
                 assertFalse(result)
                 assertEquals(
@@ -180,7 +186,7 @@ internal class GameTest {
     }
 
     private fun getListWithRandomAmountOfCards(maxSize: Int): ArrayList<Card> {
-        var listOfCards: ArrayList<Card> = arrayListOf()
+        val listOfCards: ArrayList<Card> = arrayListOf()
         for (i in 1..Random.nextInt(0, maxSize)) {
             listOfCards.add(Monster("Monster", 2, 5))
         }
@@ -209,7 +215,7 @@ internal class GameTest {
     @Test
     internal fun gameConstructorTest() {
         createMockData()
-        var game: Game = Game(player1.deck, player2.deck, player1.name, player2.name)
+        val game = Game(player1.deck, player2.deck, player1.name, player2.name)
         assertEquals(1, game.turn)
         assertEquals("", game.status)
         assertEquals(player1.name, game.whitePlayer.name)
@@ -217,53 +223,6 @@ internal class GameTest {
         assertEquals(player2.name, game.blackPlayer.name)
         assertEquals(player2.deck, game.blackPlayer.deck)
     }
-
-//    @Test
-//    fun validMovesTest() {
-//        val deckPrototype = DeckPrototype("aaaaa")
-//
-//        repeat(Settings.DECK_SIZE) { deckPrototype.addCard(MonsterPrototype(1, "aaaaa", 5, 5)) }
-//
-//        val game = Game(
-//            DeckFactory.createDeck(deckPrototype), DeckFactory.createDeck(deckPrototype),
-//            "player1", "player2"
-//        )
-//        game.whitePlayer.deck = Deck(arrayListOf(Monster("Wolf", 3, 2)))
-//        game.whitePlayer.hand = Hand(arrayListOf(Monster("Murloc", 1, 3)))
-//
-//        var testMapPattern = mapOf(
-//            1 to "Place Card",
-//            2 to "Draw Card",
-//            3 to "End Round"
-//        )
-//
-//        assertArrayEquals(testMapPattern.values.toTypedArray(), game.validMoves().values.toTypedArray())
-//
-//        testMapPattern = mapOf(
-//            1 to "Attack Monster",
-//            2 to "Place Card",
-//            3 to "Draw Card",
-//            4 to "End Round"
-//        )
-//        game.whitePlayer.field = Field(arrayListOf(Monster("Murloc", 1, 3)))
-//        assertArrayEquals(testMapPattern.values.toTypedArray(), game.validMoves().values.toTypedArray())
-//
-//        testMapPattern = mapOf(
-//            1 to "Attack Monster",
-//            2 to "End Round"
-//        )
-//        game.whitePlayer.deck = Deck()
-//        game.whitePlayer.hand = Hand()
-//        assertArrayEquals(testMapPattern.values.toTypedArray(), game.validMoves().values.toTypedArray())
-//
-//        testMapPattern = mapOf(
-//            1 to "Attack Monster",
-//            2 to "Draw Card",
-//            3 to "End Round"
-//        )
-//        game.whitePlayer.deck = Deck(arrayListOf(Monster("Murloc", 1, 3)))
-//        assertArrayEquals(testMapPattern.values.toTypedArray(), game.validMoves().values.toTypedArray())
-//    }
 
     @Test
     internal fun `validMoves(), all moves valid`() {
@@ -276,8 +235,12 @@ internal class GameTest {
         whiteP.field.addCard(whiteP.deck.drawCard()!!)
         whiteP.hand.addCard(whiteP.deck.drawCard()!!)
 
+        whiteP.field.wakeUpMonsters()
+
         val generatedMoves = ArrayList<String>()
-        game.validMoves().forEach { generatedMoves.add(it.value) }
+        game.validMoves().forEach {
+            generatedMoves.add(it.value)
+        }
 
         assertContains(
             arrayListOf(
@@ -285,6 +248,7 @@ internal class GameTest {
                 Settings.MENU_OPTION_END_ROUND, Settings.MENU_OPTION_PLACE_CARD
             ), generatedMoves
         )
+        assertEquals(4,generatedMoves.size)
     }
 
     @Test
@@ -295,6 +259,7 @@ internal class GameTest {
         game.validMoves().forEach { generatedMoves.add(it.value) }
 
         assertContains(arrayListOf(Settings.MENU_OPTION_DRAW_CARD, Settings.MENU_OPTION_END_ROUND), generatedMoves)
+        assertEquals(2,generatedMoves.size)
     }
 
     @Test
@@ -308,10 +273,13 @@ internal class GameTest {
         repeat(Settings.FIELD_SIZE) { whiteP.field.addCard(whiteP.deck.drawCard()!!) }
         repeat(Settings.HAND_SIZE) { whiteP.hand.addCard(whiteP.deck.drawCard()!!) }
 
+        whiteP.field.wakeUpMonsters()
+
         val generatedMoves = ArrayList<String>()
         game.validMoves().forEach { generatedMoves.add(it.value) }
 
         assertContains(arrayListOf(Settings.MENU_OPTION_END_ROUND, Settings.MENU_OPTION_ATTACK_MONSTER), generatedMoves)
+        assertEquals(2,generatedMoves.size)
     }
 
     @Test
@@ -326,6 +294,7 @@ internal class GameTest {
         game.validMoves().forEach { generatedMoves.add(it.value) }
 
         assertContains(arrayListOf(Settings.MENU_OPTION_END_ROUND, Settings.MENU_OPTION_PLACE_CARD), generatedMoves)
+        assertEquals(2,generatedMoves.size)
     }
 
     @Test
@@ -339,6 +308,8 @@ internal class GameTest {
         repeat(1) { whiteP.field.addCard(whiteP.deck.drawCard()!!) }
         repeat(Settings.HAND_SIZE) { whiteP.hand.addCard(whiteP.deck.drawCard()!!) }
 
+        whiteP.field.wakeUpMonsters()
+
         val generatedMoves = ArrayList<String>()
         game.validMoves().forEach { generatedMoves.add(it.value) }
 
@@ -350,6 +321,104 @@ internal class GameTest {
             ),
             generatedMoves
         )
+        assertEquals(3,generatedMoves.size)
+    }
+
+    @Test
+    internal fun `validMoves, only place and draw enabled`() {
+        createMockData()
+        val game = Game(player1.deck,player2.deck,player1.name,player2.name)
+
+        val whiteP = game.whitePlayer
+
+        whiteP.field = player1.field
+        whiteP.hand = Hand(arrayListOf(player1.hand.cardsInList()[0],player1.hand.cardsInList()[1]))
+
+        whiteP.field.removeCard(whiteP.field.cardsInList()[0])
+
+        val generatedMoves = ArrayList<String>()
+        game.validMoves().forEach {
+            generatedMoves.add(it.value)
+        }
+
+        assertContains(
+            arrayListOf(
+                Settings.MENU_OPTION_PLACE_CARD,
+                Settings.MENU_OPTION_END_ROUND,
+                Settings.MENU_OPTION_DRAW_CARD
+            ),
+            generatedMoves
+        )
+        assertEquals(3,generatedMoves.size)
+    }
+
+    @Test
+    internal fun `validMoves, sleepingMonsters no attack`() {
+        createMockData()
+        val game = Game(player1.deck,player2.deck,player1.name,player2.name)
+
+        val whiteP = game.whitePlayer
+        val blackP = game.blackPlayer
+
+        whiteP.field = player1.field
+        whiteP.hand = Hand(arrayListOf(player1.hand.cardsInList()[0],player1.hand.cardsInList()[1]))
+        blackP.field = player2.field
+
+        whiteP.field.cardsInList().forEach { if (it is Monster) it.sleeping = true }
+
+        whiteP.field.removeCard(whiteP.field.cardsInList()[0])
+
+        val generatedMoves = ArrayList<String>()
+        game.validMoves().forEach {
+            generatedMoves.add(it.value)
+        }
+
+        assertContains(
+            arrayListOf(
+                Settings.MENU_OPTION_PLACE_CARD,
+                Settings.MENU_OPTION_END_ROUND,
+                Settings.MENU_OPTION_DRAW_CARD
+            ),
+            generatedMoves
+        )
+        assertEquals(3,generatedMoves.size)
+    }
+
+    @Test
+    internal fun `validMoves, some sleeping monsters but not the hole field attack should be enabled`() {
+        createMockData()
+        val game = Game(player1.deck,player2.deck,player1.name,player2.name)
+
+        val whiteP = game.whitePlayer
+        val blackP = game.blackPlayer
+
+        whiteP.field = player1.field
+        whiteP.hand = Hand(arrayListOf(player1.hand.cardsInList()[0],player1.hand.cardsInList()[1]))
+        blackP.field = player2.field
+
+        whiteP.field.wakeUpMonsters()
+
+        var monsterToChange = whiteP.field.cardsInList()[0] as Monster
+        monsterToChange.sleeping = true
+
+        whiteP.field.removeCard(whiteP.field.cardsInList()[0])
+
+        val generatedMoves = ArrayList<String>()
+        game.validMoves().forEach {
+            generatedMoves.add(it.value)
+            println(it.value)
+        }
+
+        assertContains(
+            arrayListOf(
+                Settings.MENU_OPTION_ATTACK_MONSTER,
+                Settings.MENU_OPTION_PLACE_CARD,
+                Settings.MENU_OPTION_END_ROUND,
+                Settings.MENU_OPTION_DRAW_CARD
+            ),
+            generatedMoves
+        )
+        assertEquals(4,generatedMoves.size)
     }
 
     @Test
@@ -362,6 +431,8 @@ internal class GameTest {
         blackP.field.addCard(blackP.deck.drawCard()!!)
         repeat(Settings.FIELD_SIZE) { whiteP.field.addCard(whiteP.deck.drawCard()!!) }
 
+        whiteP.field.wakeUpMonsters()
+
         val generatedMoves = ArrayList<String>()
         game.validMoves().forEach { generatedMoves.add(it.value) }
 
@@ -373,6 +444,7 @@ internal class GameTest {
             ),
             generatedMoves
         )
+        assertEquals(3,generatedMoves.size)
     }
 
     private fun assertContains(required: ArrayList<String>, result: ArrayList<String>) {
@@ -400,7 +472,6 @@ internal class GameTest {
         game.nextTurn()
         assertTrue(game.turn % 2 == 0 && game.currentPlayer() == blackPlayer)
     }
-
 
     @Test
     internal fun attackMonsterTest() {
@@ -431,15 +502,7 @@ internal class GameTest {
             index++
             assertEquals(Settings.PLAYER_MANA - index, game.whitePlayer.mana, "Mana should have decreased")
         } while (index < game.blackPlayer.field.size())
-        println(
-            """
-            
-            --------------------------------
-            Player 2 field after attack
-            
-            """.trimIndent()
-        )
-        println(game.blackPlayer.field)
+
         assertEquals(3, game.blackPlayer.field.size(), "Dead cards wasn't removed from field")
 
         game.nextTurn()
@@ -465,41 +528,8 @@ internal class GameTest {
             index++
             assertEquals(Settings.PLAYER_MANA - index, game.blackPlayer.mana, "Mana should have decreased")
         } while (index < game.blackPlayer.field.cardsInList().size)
-        println(
-            """
-            
-            --------------------------------
-            Player 1 field after attack
 
-            """.trimIndent()
-        )
-        println(game.whitePlayer.field)
-        println()
         assertEquals(4, game.whitePlayer.field.size(), "Dead cards wasn't removed from field")
-    }
-
-    @Test
-    fun `printCurrentGame() test`() {
-        createMockData()
-        val game = Game(player1.deck, player2.deck, player1.name, player2.name)
-//        game.whitePlayer = player1
-//        game.blackPlayer = player2
-
-        val testPrint = """
-
-                     ${player1.name}
-
-${player1.field}
-
-_____________________________________________________
-
-${player2.field}
-
-                     ${player2.name}
-
-        """.trimIndent()
-
-//        assertEquals(println(testPrint), game.printCurrentGame())
     }
 
     private fun createMockData() {
