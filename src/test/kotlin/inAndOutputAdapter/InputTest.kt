@@ -41,6 +41,7 @@ internal class InputTest {
         assertNotNull(Input.readCardToPlaceOnField("1", whiteHand))
         assertNotNull(Input.readCardToPlaceOnField("2", whiteHand))
         assertNotNull(Input.readCardToPlaceOnField("3", whiteHand))
+        assertNotNull(Input.readCardToPlaceOnField("", whiteHand))
 
         assertNull(Input.readCardToPlaceOnField("1", blackHand))
         assertNull(Input.readCardToPlaceOnField("2", blackHand))
