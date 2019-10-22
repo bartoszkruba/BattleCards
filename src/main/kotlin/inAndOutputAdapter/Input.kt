@@ -110,6 +110,9 @@ class Input() {
         }
 
         fun readlistAvailableDecks(choice: String, decksList: Collection<String>): String? {
+            for (value in decksList) {
+                if (choice == value) return choice
+            }
             return null
         }
 
