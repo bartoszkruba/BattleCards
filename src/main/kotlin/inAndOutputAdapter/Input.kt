@@ -39,8 +39,12 @@ class Input() {
         }
 
         fun readCardToPlaceOnField(chosenCardToPlace: String, hand: Hand): Card? {
-            if(chosenCardToPlace.toInt() in 1..hand.size()){
-                return hand.cardsInList()[chosenCardToPlace.toInt()-1]
+            try {
+                if(chosenCardToPlace.toInt() in 1..hand.size()){
+                    return hand.cardsInList()[chosenCardToPlace.toInt()-1]
+                }
+            }catch (e: Exception) {
+                return null
             }
             return null
         }
