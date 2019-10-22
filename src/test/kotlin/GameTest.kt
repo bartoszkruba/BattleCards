@@ -20,6 +20,7 @@ internal class GameTest {
         const val MAX_ATTACK = Settings.MAX_DAMAGE
         const val MAX_HEALTH = Settings.MAX_HEALTH
         const val FIREBALL_DAMAGE = Settings.FIREBALL_DAMAGE
+        const val PLAYER_MANA = Settings.PLAYER_MANA
     }
 
     @Test
@@ -730,10 +731,12 @@ ${player2.field}
         assertEquals(1, wPlayer.hand.size())
         assertEquals(1, bPlayer.field.size())
 
+        assertEquals(PLAYER_MANA - 1, wPlayer.mana)
         assertEquals(MAX_HEALTH - FIREBALL_DAMAGE, (bPlayer.field.cardsInList()[0] as Monster).health)
 
         game.castFireball(1, 1)
 
+        assertEquals(PLAYER_MANA - 2, wPlayer.mana)
         assertEquals(0, wPlayer.hand.size())
         assertEquals(0, bPlayer.field.size())
     }
@@ -791,6 +794,7 @@ ${player2.field}
 
         game.castHeal(1, 1)
 
+        assertEquals(PLAYER_MANA - 1, wPlayer.mana)
         assertEquals(MAX_HEALTH + 5, (wPlayer.field.cardsInList()[0] as Monster).health)
     }
 

@@ -157,11 +157,48 @@ ${blackPlayer.field}
     }
 
     fun castFireball(cardIndex: Int, targetIndex: Int) {
+        val currentPlayer = currentPlayer()
+        val opponent = oppositePlayer()
 
+        val opponentFieldSize = opponent.field.size()
+        val currentPlayerHandSize = currentPlayer.hand.size()
+
+        if (cardIndex < 1 || cardIndex > currentPlayerHandSize) throw RuntimeException("Invalid Input")
+        if (targetIndex < 1 || targetIndex > opponentFieldSize) throw RuntimeException("Invalid Input")
+
+        val cardInHand = currentPlayer.hand.cardsInList()[cardIndex - 1]
+
+        if (cardInHand.type !== CardType.SPEll || (cardInHand as Spell).name != "Fireball")
+            throw RuntimeException("Invalid Spell")
+
+        val monster = opponent.field.cardsInList()[targetIndex - 1] as Monster
+        monster.takeDamage(Settings.FIREBALL_DAMAGE)
+
+        if (monster.isDead()) opponent.field.removeCard(monster)
+
+        currentPlayer.mana--
+        currentPlayer.hand.removeCard(cardInHand)
     }
 
     fun castHeal(cardIndex: Int, targetIndex: Int) {
+        val currentPlayer = currentPlayer()
 
+        val handSize = currentPlayer.hand.size()
+        val fieldSize = currentPlayer.field.size()
+
+        if (cardIndex < 1 || cardIndex > handSize) throw RuntimeException("Invalid Input")
+        if (targetIndex < 1 || targetIndex > fieldSize) throw RuntimeException("Invalid Input")
+
+        val cardInHand = currentPlayer.hand.cardsInList()[cardIndex - 1]
+
+        if (cardInHand.type !== CardType.SPEll || (cardInHand as Spell).name != "Heal")
+            throw RuntimeException("Invalid Spell")
+
+        val monster = currentPlayer.field.cardsInList()[targetIndex - 1] as Monster
+        monster.health += Settings.HEAL_VALUE
+
+        currentPlayer.mana--
+        currentPlayer.hand.removeCard(cardInHand)
     }
 
 }

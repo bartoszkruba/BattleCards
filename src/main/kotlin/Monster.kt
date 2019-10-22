@@ -31,6 +31,10 @@ class Monster : Card {
         }
     }
 
+    fun takeDamage(damage: Int){
+        this.health -= damage
+    }
+
     fun isDead() = this.health <= 0
 
     override fun toString(): String {
