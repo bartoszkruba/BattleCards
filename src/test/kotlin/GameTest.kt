@@ -22,10 +22,28 @@ internal class GameTest {
         var game: Game = Game(player1.deck, player2.deck, player1.name, player2.name)
         game.whitePlayer.mana = 0
         game.blackPlayer.mana = 0
+        game.whitePlayer.field = player1.field
+        game.blackPlayer.field = player2.field
+        checkSleeping(game,true)
         game.nextTurn()
+        checkSleeping(game,false)
         assertEquals(2, game.turn, "Turn should have increased by one")
         assertEquals(Settings.PLAYER_MANA, game.whitePlayer.mana)
         assertEquals(Settings.PLAYER_MANA, game.blackPlayer.mana)
+    }
+
+    private fun checkSleeping(game:Game,shouldSleep:Boolean){
+        var errorMsg = if(shouldSleep) "Monster should be sleeping" else "Monster should not be sleeping"
+        game.whitePlayer.field.cardsInList().forEach{
+            if (it is Monster){
+                assertEquals(shouldSleep, it.sleeping,errorMsg)
+            }
+        }
+        game.blackPlayer.field.cardsInList().forEach{
+            if (it is Monster){
+                assertEquals(shouldSleep, it.sleeping,errorMsg)
+            }
+        }
     }
 
 
@@ -72,6 +90,28 @@ internal class GameTest {
             game.placeCardOnField(player1.hand.cardsInList()[0]),
             "Should return false because no cards in hand"
         )
+    }
+
+    @Test
+    fun getWinner(){
+        createMockData()
+        val game = Game(player1.deck, player2.deck, player1.name, player2.name)
+        game.whitePlayer.deck
+        game.blackPlayer.deck
+        game.whitePlayer.hand
+        game.blackPlayer.hand
+        game.whitePlayer.field
+        game.blackPlayer.field
+        assertNull(game.getWinner())
+
+        game.whitePlayer.deck
+        game.blackPlayer.deck = Deck()
+        game.whitePlayer.hand
+        game.blackPlayer.hand = Hand()
+        game.whitePlayer.field
+        game.blackPlayer.field = Field()
+        assertEquals(game.whitePlayer ,game.getWinner())
+        assertNotEquals(game.blackPlayer ,game.getWinner())
     }
 
     @Test
@@ -376,6 +416,7 @@ internal class GameTest {
             val getsAttackedCopy: Monster = Utils.clone(getsAttacked) as Monster
 
             game.attackMonster(attacker, getsAttacked)
+            assertTrue(attacker.sleeping,"attacker should be sleeping")
             assertEquals(
                 getsAttackedCopy.health - attacker.attack,
                 getsAttacked.health,
@@ -409,6 +450,7 @@ internal class GameTest {
             val getsAttackedCopy: Monster = Utils.clone(getsAttacked) as Monster
 
             game.attackMonster(attacker, getsAttacked)
+            assertTrue(attacker.sleeping,"Attacker should be sleeping")
             assertEquals(
                 getsAttackedCopy.health - attacker.attack,
                 getsAttacked.health,

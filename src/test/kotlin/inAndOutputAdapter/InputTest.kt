@@ -1,46 +1,64 @@
 package inAndOutputAdapter
 
+import Game
+import factory.DeckFactory
+import models.Hand
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
+import prototype.CardLoader
 
 internal class InputTest {
 
     @Test
     fun userNameInput() {
-        var userInput = Input()
-
-        assertTrue(userInput.userNameInput("name", 1))
-        assertFalse(userInput.userNameInput("name", 0))
-        assertFalse(userInput.userNameInput("", 0))
-        assertFalse(userInput.userNameInput("1234", 3))
-        assertFalse(userInput.userNameInput("name77", -1))
-        assertFalse(userInput.userNameInput("name more than nine characters", 5))
+        assertNotNull(Input.readName("name"))
+        assertNotNull(Input.readName("NAME"))
+        assertNotNull(Input.readName("nWithöåä"))
+        assertNotNull(Input.readName("NWITHÖÅÄ"))
+        assertNull(Input.readName(""))
+        assertNull(Input.readName("1"))
+        assertNull(Input.readName("1234"))
+        assertNull(Input.readName("name more than nine characters"))
     }
 
     @Test
-    fun deckChoice() {
-        var userInput = Input()
-        val decks = listOf("one", "two", "three", "four")
+    fun readCardToPlaceOnField(){
+        val cardLoader = CardLoader()
 
-        assertTrue(userInput.deckChoice(decks.get(0), 1))
-        assertTrue(userInput.deckChoice(decks.get(3), 2))
-        assertFalse(userInput.deckChoice("random deck name", 2))
-        assertFalse(userInput.deckChoice("two", 0))
-        assertTrue(userInput.deckChoice("1", 1))
-        assertFalse(userInput.deckChoice("7", 2))
+        val deckPrototype = cardLoader.loadDeck("Standard")
+
+        val playerOneDeck = DeckFactory.createDeck(deckPrototype)
+        val playerTwoDeck = DeckFactory.createDeck(deckPrototype)
+        val game = Game(playerOneDeck, playerTwoDeck, "rami", "noha")
+
+        game.drawCardFromDeck()
+        game.drawCardFromDeck()
+        game.drawCardFromDeck()
+        val whiteHand= game.whitePlayer.hand //contain 3 cards in this case
+        val blackHand= game.blackPlayer.hand //contain 0 cards in this case
+
+        //if the hand has the number/name of the card and
+        assertNotNull(Input.readCardToPlaceOnField("1", whiteHand))
+        assertNotNull(Input.readCardToPlaceOnField("2", whiteHand))
+        assertNotNull(Input.readCardToPlaceOnField("3", whiteHand))
+
+        assertNull(Input.readCardToPlaceOnField("1", blackHand))
+        assertNull(Input.readCardToPlaceOnField("2", blackHand))
     }
 
     @Test
-    fun menu() {
-        var userInput = Input()
+    fun readlistAvailableDecks(){
+        val decksOption = listOf("test", "Demons", "Standard", "Rats")
 
-        assertNotNull(userInput.menu("2"))
-        assertNotNull(userInput.menu("Main Menu"))
-        assertNotNull(userInput.menu("1"))
-        assertNotNull(userInput.menu("Sub Menu"))
-        assertEquals("Sub Menu", userInput.menu("Sub Menu"))
-        assertNull(userInput.menu("something"))
-        assertNull(userInput.menu("3"))
+        assertNotNull(Input.readlistAvailableDecks("test", decksOption))
+        assertNotNull(Input.readlistAvailableDecks("Demons", decksOption))
+        assertNotNull(Input.readlistAvailableDecks("Standard", decksOption))
+        assertNotNull(Input.readlistAvailableDecks("Rats", decksOption))
+
+        assertNull(Input.readlistAvailableDecks("someDeckOption", decksOption))
+        assertNull(Input.readlistAvailableDecks("rats", decksOption))
+        assertNull(Input.readlistAvailableDecks("RATS", decksOption))
+
     }
 }

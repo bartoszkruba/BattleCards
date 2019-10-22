@@ -5,6 +5,7 @@ class Monster : Card {
     override val name: String
     var attack: Int
     var health: Int
+    var sleeping: Boolean = true
 
     constructor() : super("Wolf", CardType.MONSTER, UUID.randomUUID()){
         this.name = "Wolf"

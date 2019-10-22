@@ -1,4 +1,5 @@
 import models.Deck
+import models.Field
 import models.Player
 
 class Game(
@@ -30,10 +31,14 @@ class Game(
 
     fun currentPlayer() = if (turn % 2 != 0) whitePlayer else blackPlayer
 
+    fun oppositePlayer() = if (turn % 2 != 0) blackPlayer else whitePlayer
+
     fun nextTurn() {
         turn++
         whitePlayer.mana = Settings.PLAYER_MANA
         blackPlayer.mana = Settings.PLAYER_MANA
+        whitePlayer.field.wakeUpMonsters()
+        blackPlayer.field.wakeUpMonsters()
         checkGameOver()
     }
 
@@ -44,6 +49,7 @@ class Game(
             player.field.removeCard(toBeAttacked)
         }
         currentPlayer().mana--
+        attacker.sleeping = true
     }
 
     fun printCurrentGame() {
@@ -68,6 +74,16 @@ ${blackPlayer.field}
     fun checkGameOver(): Boolean {
         return (whitePlayer.deck.size() == 0 && whitePlayer.field.size() == 0 && whitePlayer.hand.size() == 0)
                 || (blackPlayer.deck.size() == 0 && blackPlayer.field.size() == 0 && blackPlayer.hand.size() == 0)
+    }
+
+    fun getWinner(): Player? {
+        return if (whitePlayer.deck.size() == 0 && whitePlayer.field.size() == 0 && whitePlayer.hand.size() == 0){
+            blackPlayer
+        }else if(blackPlayer.deck.size() == 0 && blackPlayer.field.size() == 0 && blackPlayer.hand.size() == 0){
+            whitePlayer
+        }else {
+            null
+        }
     }
 
     fun placeCardOnField(card: Card): Boolean {
