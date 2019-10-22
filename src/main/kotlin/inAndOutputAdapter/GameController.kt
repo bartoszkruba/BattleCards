@@ -3,6 +3,7 @@ package inAndOutputAdapter
 import Card
 import Game
 import Monster
+import SpellController
 import factory.DeckFactory
 import models.Deck
 import models.Hand
@@ -79,8 +80,12 @@ class GameController {
             }
             Settings.MENU_OPTION_PLACE_CARD -> {
                 val card = chooseCardToPlaceOnField()
-                game.placeCardOnField(card)
-                OutputAdapter.printBoard(this.game)
+                if(card.type == CardType.SPEll){
+                    SpellController().cast(game, game.currentPlayer().hand.cardsInList().indexOf(card) + 1)
+                }else{
+                    game.placeCardOnField(card)
+                    OutputAdapter.printBoard(this.game)
+                }
             }
             Settings.MENU_OPTION_ATTACK_MONSTER ->{
                 var cardToAttackWith = cardToAttackWith()

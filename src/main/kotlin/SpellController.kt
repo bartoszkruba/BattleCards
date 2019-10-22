@@ -27,6 +27,7 @@ class SpellController {
 
         if (opponent.field.size() == 0) return OutputAdapter.illegalInputInfo()
 
+        OutputAdapter.printChooseEnemyTarget(game)
         val targetIndex = Input.readEnemyTarget(game)
 
         game.castFireball(cardIndex, targetIndex)
@@ -40,8 +41,9 @@ class SpellController {
 
         if (currentPlayer.field.size() == 0) return OutputAdapter.illegalInputInfo()
 
+        OutputAdapter.printChooseFriendlyTarget(game)
         val targetIndex = Input.readFriendlyTarget(game)
 
-        game.castFireball(cardIndex, targetIndex)
+        game.castHeal(cardIndex, targetIndex)
     }
 }
