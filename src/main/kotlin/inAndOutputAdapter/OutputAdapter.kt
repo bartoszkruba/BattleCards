@@ -60,9 +60,9 @@ class OutputAdapter {
             print(centreLine("Your Name:") + " ")
         }
 
-        fun printDeckPrototype(deck: DeckPrototype) {
+        fun printDeckPrototype(deck: DeckPrototype, name: String) {
             println(delimiter(ANSI_PURPLE))
-            println(centreLine("YOUR Deck: ${deck.name}") + "\n")
+            println(centreLine("$name Your Deck: ${deck.name}") + "\n")
 
             for (line in deck.toString().lines()) {
                 println(centreLine(line))
@@ -253,82 +253,3 @@ fun clear() {
     println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 }
 
-fun main() {
-    val cardLoader = CardLoader()
-//    OutputAdapter.printWelcome()
-    OutputAdapter.printEnterName(1)
-    println()
-    OutputAdapter.printEnterName(2)
-    println()
-
-    OutputAdapter.printAvailableDecks(cardLoader.listAvailableDecks())
-
-    OutputAdapter.printChooseDeck("Ricardo")
-    println()
-    OutputAdapter.printChooseDeck("Dennis")
-    println()
-
-    val deckPrototype = cardLoader.loadDeck("Demons")
-
-    OutputAdapter.printDeckPrototype(deckPrototype)
-
-    OutputAdapter.illegalInputInfo()
-
-    val card = Monster(name = "Wolf", attack = 5, health = 7)
-
-    OutputAdapter.printDrawCardFromDeck(card)
-
-    val options = HashMap<Int, String>()
-    options[1] = "Pass"
-    options[2] = "Draw Card"
-    options[3] = "Play Card"
-    options[4] = "Attack Monster"
-
-
-    val playerOne = Player("Ricardo")
-    OutputAdapter.printGameOver(playerOne)
-
-    val game = Game(
-        player1Deck = DeckFactory.createDeck(deckPrototype),
-        player2Deck = DeckFactory.createDeck(deckPrototype),
-        player1Name = "Ricardo",
-        player2Name = "Dennis"
-    )
-
-    OutputAdapter.printGameOptions(game.validMoves())
-
-    OutputAdapter.printChooseCardToAttackWith(game)
-    println()
-    OutputAdapter.printChooseTarget(game)
-    println()
-
-    val white = game.whitePlayer
-    val black = game.blackPlayer
-
-    white.deck.shuffleDeck()
-    black.deck.shuffleDeck()
-
-    repeat(4) {
-        white.hand.addCard(white.deck.drawCard()!!)
-    }
-
-    repeat(0) {
-        black.hand.addCard(black.deck.drawCard()!!)
-    }
-
-    repeat(5) {
-        white.field.addCard(white.deck.drawCard()!!)
-    }
-
-    repeat(0) {
-        black.field.addCard(black.deck.drawCard()!!)
-    }
-
-    game.nextTurn()
-
-    OutputAdapter.printBoard(game)
-
-    OutputAdapter.printChooseCardToPlay(game)
-    println("")
-
-}

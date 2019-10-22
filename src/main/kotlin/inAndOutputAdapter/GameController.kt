@@ -20,8 +20,9 @@ class GameController {
         //OutputAdapter.printWelcome()
         playerOneName = userNameInput(1)
         playerTwoName = userNameInput(2)
-        val deckChoice = decksOptions()
-        val playerDecks = gameBoard(deckChoice)
+        val playerOneDeck = decksOptions(playerOneName!!)
+        val playerTwoDeck = decksOptions(playerTwoName!!)
+        val playerDecks = gameBoard(playerOneDeck!!, playerTwoDeck!!)
         startTheGame(playerDecks)
         OutputAdapter.printGameOver(game.getWinner()!!)
     }
@@ -45,10 +46,11 @@ class GameController {
         }
     }
 
-    private fun decksOptions(): String? {
+    private fun decksOptions(name: String): String? {
         decksList = CardLoader()
         val decksOption = decksList.listAvailableDecks()
         OutputAdapter.printAvailableDecks(decksOption)
+        OutputAdapter.printChooseDeck(name)
         var chosenDeck = readLine()
         var validDeck = Input.readlistAvailableDecks(chosenDeck!!, decksOption)
         while(validDeck == null){
@@ -60,13 +62,16 @@ class GameController {
         return chosenDeck
     }
 
-    private fun gameBoard(deckChoice: String?): Pair<Deck, Deck> {
-        val deckPrototype = decksList.loadDeck(deckChoice!!)
-        val playerOneDeck = DeckFactory.createDeck(deckPrototype)
-        val playerTwoDeck = DeckFactory.createDeck(deckPrototype)
+    private fun gameBoard(playerOneDeck: String, playerTwoDeck: String): Pair<Deck, Deck> {
+        val playerOneDeckPrototype = decksList.loadDeck(playerOneDeck!!)
+        val playerTwoDeckPrototype = decksList.loadDeck(playerTwoDeck!!)
+
+        val playerOneDeck = DeckFactory.createDeck(playerOneDeckPrototype)
+        val playerTwoDeck = DeckFactory.createDeck(playerTwoDeckPrototype)
 
         this.game = Game(playerOneDeck, playerTwoDeck, this.playerOneName!!, this.playerTwoName!!)
-        OutputAdapter.printDeckPrototype(deckPrototype)
+        OutputAdapter.printDeckPrototype(playerOneDeckPrototype, playerOneName!!)
+        OutputAdapter.printDeckPrototype(playerTwoDeckPrototype, playerTwoName!!)
         return Pair(playerOneDeck, playerTwoDeck)
     }
 
@@ -87,8 +92,8 @@ class GameController {
                 OutputAdapter.printBoard(this.game)
             }
             Settings.MENU_OPTION_ATTACK_MONSTER ->{
-                var cardToAttackWith = cardToAttackWith()
-                var targetCard = targetCard()
+                val cardToAttackWith = cardToAttackWith()
+                val targetCard = targetCard()
                 if (cardToAttackWith is Monster && targetCard is Monster)
                 game.attackMonster(cardToAttackWith, targetCard)
             }
