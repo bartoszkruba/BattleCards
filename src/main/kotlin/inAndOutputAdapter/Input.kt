@@ -117,11 +117,47 @@ class Input() {
         }
 
         fun readFriendlyTarget(game: Game): Int {
-            return 1
+            val currentPlayer = when (game.turn % 2 != 0) {
+                true -> game.whitePlayer
+                false -> game.blackPlayer
+            }
+
+            val range = currentPlayer.field.size()
+
+            while (true) {
+                try {
+                    val choice = readLine()!!.toInt()
+                    if (choice < 1 || choice > range) {
+                        OutputAdapter.illegalInputInfo()
+                    } else {
+                        return choice
+                    }
+                } catch (e: Exception) {
+                    OutputAdapter.illegalInputInfo()
+                }
+            }
         }
 
         fun readEnemyTarget(game: Game): Int {
-            return 2
+            val opponent = when (game.turn % 2 != 0) {
+                true -> game.blackPlayer
+                false -> game.whitePlayer
+            }
+
+            val range = opponent.field.size()
+
+            while (true) {
+                try {
+                    val choice = readLine()!!.toInt()
+                    if (choice < 1 || choice > range) {
+                        OutputAdapter.illegalInputInfo()
+                    } else {
+                        return choice
+                    }
+                } catch (e: Exception) {
+                    OutputAdapter.illegalInputInfo()
+                }
+            }
         }
     }
 
