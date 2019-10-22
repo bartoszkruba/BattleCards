@@ -1,7 +1,6 @@
 import inAndOutputAdapter.GameController
 
-fun main(args: Array<String>) {
+fun main() {
     val gameController = GameController()
     gameController.printMainScreen()
 }
-
