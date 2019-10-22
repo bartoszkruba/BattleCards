@@ -1,7 +1,6 @@
 package inAndOutputAdapter
 
 import Card
-import models.Field
 import models.Hand
 import Monster
 import Game
@@ -118,5 +117,13 @@ class Input() {
             }while (invalidInput)
             return choosenCard
         }
+
+        fun readlistAvailableDecks(choice: String, decksList: Collection<String>): String? {
+            for (value in decksList) {
+                if (choice == value) return choice
+            }
+            return null
+        }
+
     }
 }

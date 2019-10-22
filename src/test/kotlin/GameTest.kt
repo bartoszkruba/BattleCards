@@ -99,6 +99,28 @@ internal class GameTest {
     }
 
     @Test
+    fun getWinner(){
+        createMockData()
+        val game = Game(player1.deck, player2.deck, player1.name, player2.name)
+        game.whitePlayer.deck
+        game.blackPlayer.deck
+        game.whitePlayer.hand
+        game.blackPlayer.hand
+        game.whitePlayer.field
+        game.blackPlayer.field
+        assertNull(game.getWinner())
+
+        game.whitePlayer.deck
+        game.blackPlayer.deck = Deck()
+        game.whitePlayer.hand
+        game.blackPlayer.hand = Hand()
+        game.whitePlayer.field
+        game.blackPlayer.field = Field()
+        assertEquals(game.whitePlayer ,game.getWinner())
+        assertNotEquals(game.blackPlayer ,game.getWinner())
+    }
+
+    @Test
     internal fun drawCardFromDeckTest() {
         createMockData()
         var game = Game(player1.deck, player2.deck, player1.name, player2.name)
