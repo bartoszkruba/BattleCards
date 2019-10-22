@@ -47,7 +47,6 @@ class GameController {
         val playerTwoDeck = DeckFactory.createDeck(deckPrototype)
 
         this.game = Game(playerOneDeck, playerTwoDeck, this.playerOneName!!, this.playerTwoName!!)
-        OutputAdapter.printBoard(game)
         OutputAdapter.printDeckPrototype(deckPrototype)
         return Pair(playerOneDeck, playerTwoDeck)
     }
