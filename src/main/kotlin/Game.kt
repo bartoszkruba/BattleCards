@@ -77,11 +77,11 @@ ${blackPlayer.field}
     }
 
     fun getWinner(): Player? {
-        return if (whitePlayer.deck.size() == 0 && whitePlayer.field.size() == 0 && whitePlayer.hand.size() == 0){
+        return if (whitePlayer.deck.size() == 0 && whitePlayer.field.size() == 0 && whitePlayer.hand.size() == 0) {
             blackPlayer
-        }else if(blackPlayer.deck.size() == 0 && blackPlayer.field.size() == 0 && blackPlayer.hand.size() == 0){
+        } else if (blackPlayer.deck.size() == 0 && blackPlayer.field.size() == 0 && blackPlayer.hand.size() == 0) {
             whitePlayer
-        }else {
+        } else {
             null
         }
     }
@@ -155,5 +155,14 @@ ${blackPlayer.field}
 
         return moves
     }
+
+    fun castFireball(cardIndex: Int, targetIndex: Int) {
+
+    }
+
+    fun castHeal(cardIndex: Int, targetIndex: Int) {
+
+    }
+
 }
 
