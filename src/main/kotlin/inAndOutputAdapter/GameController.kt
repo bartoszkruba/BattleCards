@@ -11,15 +11,17 @@ import prototype.CardLoader
 class GameController {
     private var playerOneName: String? = null
     private var playerTwoName: String? = null
-    lateinit var game:Game
+    private lateinit var game: Game
     private var whiteTurn: Boolean? = null
     private var blackTurn: Boolean? = null
+    private lateinit var decksList: CardLoader
 
     fun printMainScreen() {
         //OutputAdapter.printWelcome()
         this.playerOneName = userNameInput(1)
         this.playerTwoName = userNameInput(2)
-        val playerDecks = printGameBoard()
+        val deckChoice = decksOptions()
+        val playerDecks = gameBoard(deckChoice)
         while (!game.checkGameOver()) {
             whiteTurn = game.currentPlayer() == game.whitePlayer
             blackTurn = game.currentPlayer() == game.blackPlayer
@@ -39,15 +41,27 @@ class GameController {
         OutputAdapter.printGameOver(game.getWinner()!!)
     }
 
-    private fun printGameBoard(): Pair<Deck, Deck> {
-        val cardLoader = CardLoader()
+    private fun decksOptions(): String? {
+        decksList = CardLoader()
+        val decksList = decksList.listAvailableDecks()
+        OutputAdapter.printAvailableDecks(decksList)
+        var chosenDeck = readLine()
+        var validDeck = Input.readlistAvailableDecks(chosenDeck!!, decksList)
+        while(validDeck == null){
+            OutputAdapter.illegalInputInfo()
+            chosenDeck = readLine()
+            validDeck = Input.readlistAvailableDecks(chosenDeck!!, decksList)
+            if(validDeck != null) return chosenDeck
+        }
+        return chosenDeck
+    }
 
-        val deckPrototype = cardLoader.loadDeck("Standard")
+    private fun gameBoard(deckChoice: String?): Pair<Deck, Deck> {
+        val deckPrototype = decksList.loadDeck(deckChoice!!)
         val playerOneDeck = DeckFactory.createDeck(deckPrototype)
         val playerTwoDeck = DeckFactory.createDeck(deckPrototype)
 
         this.game = Game(playerOneDeck, playerTwoDeck, this.playerOneName!!, this.playerTwoName!!)
-        OutputAdapter.printBoard(game)
         OutputAdapter.printDeckPrototype(deckPrototype)
         return Pair(playerOneDeck, playerTwoDeck)
     }
