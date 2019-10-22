@@ -2,7 +2,6 @@ package inAndOutputAdapter
 
 import Game
 import factory.DeckFactory
-import models.Hand
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
@@ -49,14 +48,21 @@ internal class InputTest {
 
     @Test
     fun readlistAvailableDecks(){
-        val decksOption = listOf("test", "Demons", "Standard", "Rats")
+        val decksOption = mutableMapOf(1 to "test", 2 to "Demons", 3 to "Standard", 4 to "Rats")
 
         assertNotNull(Input.readlistAvailableDecks("test", decksOption))
         assertNotNull(Input.readlistAvailableDecks("Demons", decksOption))
         assertNotNull(Input.readlistAvailableDecks("Standard", decksOption))
         assertNotNull(Input.readlistAvailableDecks("Rats", decksOption))
 
+        assertNotNull(Input.readlistAvailableDecks("1", decksOption))
+        assertNotNull(Input.readlistAvailableDecks("2", decksOption))
+        assertNotNull(Input.readlistAvailableDecks("3", decksOption))
+        assertNotNull(Input.readlistAvailableDecks("4", decksOption))
+
         assertNull(Input.readlistAvailableDecks("someDeckOption", decksOption))
+        assertNull(Input.readlistAvailableDecks("5", decksOption))
+        assertNull(Input.readlistAvailableDecks("0", decksOption))
         assertNull(Input.readlistAvailableDecks("rats", decksOption))
         assertNull(Input.readlistAvailableDecks("RATS", decksOption))
 
