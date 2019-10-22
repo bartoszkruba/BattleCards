@@ -1,8 +1,7 @@
 import inAndOutputAdapter.Input
 import inAndOutputAdapter.OutputAdapter
 
-// This dependency injection is only for testing purposes
-class SpellController(input: Input = Input(), outputAdapter: OutputAdapter = OutputAdapter()) {
+class SpellController {
 
     fun cast(game: Game, card: Card) {
 

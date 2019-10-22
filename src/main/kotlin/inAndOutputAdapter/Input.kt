@@ -116,14 +116,14 @@ class Input() {
             return null
         }
 
+        fun readFriendlyTarget(game: Game): Int {
+            return 1
+        }
+
+        fun readEnemyTarget(game: Game): Int {
+            return 2
+        }
     }
 
-    fun readFriendlyTarget(game: Game): Int {
-        return 1
-    }
-
-    fun readEnemyTarget(game: Game): Int {
-        return 2
-    }
 
 }
