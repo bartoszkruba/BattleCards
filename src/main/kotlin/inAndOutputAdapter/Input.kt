@@ -9,8 +9,8 @@ class Input() {
     companion object {
 
         fun readName(name: String): String? {
-            var validUserName = userNameValidation(name)
-            if (validUserName) return name else return null
+            val validUserName = userNameValidation(name)
+            return if (validUserName) name else null
         }
 
         private fun userNameValidation(name: String): Boolean {
@@ -39,15 +39,27 @@ class Input() {
         }
 
         fun readCardToPlaceOnField(chosenCardToPlace: String, hand: Hand): Card? {
-            if (chosenCardToPlace.toInt() in 1..hand.size()) {
-                return hand.cardsInList()[chosenCardToPlace.toInt() - 1]
+            try {
+                if (chosenCardToPlace.toInt() in 1..hand.size()) {
+                    return hand.cardsInList()[chosenCardToPlace.toInt() - 1]
+                }
+            }catch (e: Exception) {
+                return null
             }
             return null
+        }
+
+        fun printErrorField(game: Game, current: Boolean) {
+            OutputAdapter.printBoard(game)
+            OutputAdapter.illegalInputInfo()
+            if(current) OutputAdapter.printChooseCardToAttackWith(game)
+            else        OutputAdapter.printChooseTarget(game)
         }
 
         fun readChosenCardToAttackWith(game: Game): Card {
             var invalidInput = true
             var choosenCard: Card = Monster("Ugly", 1, 1)
+            OutputAdapter.printBoard(game)
             OutputAdapter.printChooseCardToAttackWith(game)
             do {
                 val input = readLine()
@@ -56,24 +68,24 @@ class Input() {
                     try {
                         choosenCardIndex = input.toInt() - 1
                     } catch (err: Exception) {
-                        OutputAdapter.illegalInputInfo()
+                        printErrorField(game, true)
                         continue
                     }
                     if (choosenCardIndex < game.currentPlayer().field.size()) {
                         choosenCard = game.currentPlayer().field.cardsInList()[choosenCardIndex]
                         if (choosenCard is Monster) {
                             if (choosenCard.sleeping) {
-                                OutputAdapter.illegalInputInfo()
+                                printErrorField(game, true)
                                 continue
                             }
                         }
                         return choosenCard
                     } else {
-                        OutputAdapter.illegalInputInfo()
+                        printErrorField(game, true)
                         continue
                     }
                 } else {
-                    OutputAdapter.illegalInputInfo()
+                    printErrorField(game, true)
                     continue
                 }
             } while (invalidInput)
@@ -83,6 +95,7 @@ class Input() {
         fun readTargetCard(game: Game): Card {
             var invalidInput = true
             var choosenCard: Card = Monster("Ugly", 1, 1)
+            OutputAdapter.printBoard(game)
             OutputAdapter.printChooseTarget(game)
             do {
                 val input = readLine()
@@ -91,29 +104,37 @@ class Input() {
                     try {
                         choosenCardIndex = input.toInt() - 1
                     } catch (err: Exception) {
-                        OutputAdapter.illegalInputInfo()
+                        printErrorField(game, false)
                         continue
                     }
-                    if (choosenCardIndex < game.currentPlayer().field.size()) {
+                    if (choosenCardIndex < game.oppositePlayer().field.size()) {
                         choosenCard = game.oppositePlayer().field.cardsInList()[choosenCardIndex]
                         return choosenCard
                     } else {
-                        OutputAdapter.illegalInputInfo()
+                        printErrorField(game, false)
                         continue
                     }
                 } else {
-                    OutputAdapter.illegalInputInfo()
+                    printErrorField(game, false)
                     continue
                 }
             } while (invalidInput)
             return choosenCard
         }
 
-        fun readlistAvailableDecks(choice: String, decksList: Collection<String>): String? {
-            for (value in decksList) {
-                if (choice == value) return choice
+        fun readlistAvailableDecks(choice: String, decksList: MutableMap<Int, String>): String? {
+            try {
+                for (value in decksList.values) {
+                    if (choice == value) return choice
+                }
+                return if (decksList[choice.toInt()] == null) {
+                    null
+                } else {
+                    decksList[choice.toInt()]!!
+                }
+            }catch (e: Exception) {
+                return null
             }
-            return null
         }
 
         fun readFriendlyTarget(game: Game): Int {
@@ -160,6 +181,5 @@ class Input() {
             }
         }
     }
-
 
 }

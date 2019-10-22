@@ -19,51 +19,66 @@ class GameController {
 
     fun printMainScreen() {
         //OutputAdapter.printWelcome()
-        this.playerOneName = userNameInput(1)
-        this.playerTwoName = userNameInput(2)
-        val deckChoice = decksOptions()
-        val playerDecks = gameBoard(deckChoice)
+        playerOneName = userNameInput(1)
+        playerTwoName = userNameInput(2)
+        val playerOneDeck = decksOptions(playerOneName!!)
+        val playerTwoDeck = decksOptions(playerTwoName!!)
+        val playersDecks = gameBoard(playerOneDeck!!, playerTwoDeck!!)
+        startTheGame(playersDecks)
+        OutputAdapter.printGameOver(game.getWinner()!!)
+    }
+
+    private fun startTheGame(playersDecks: Pair<Deck, Deck>) {
         while (!game.checkGameOver()) {
             whiteTurn = game.currentPlayer() == game.whitePlayer
             blackTurn = game.currentPlayer() == game.blackPlayer
             while (whiteTurn as Boolean) {
                 OutputAdapter.printBoard(game)
                 val chosenOption = gameOptions()
-                doTheChoice(chosenOption, playerDecks)
+                doTheChoice(chosenOption, playersDecks)
                 whiteTurn = game.currentPlayer() == game.whitePlayer
             }
             while (blackTurn as Boolean) {
                 OutputAdapter.printBoard(game)
                 val chosenOption = gameOptions()
-                doTheChoice(chosenOption, playerDecks)
+                doTheChoice(chosenOption, playersDecks)
                 blackTurn = game.currentPlayer() == game.blackPlayer
             }
         }
-        OutputAdapter.printGameOver(game.getWinner()!!)
     }
 
-    private fun decksOptions(): String? {
+    private fun decksOptions(name: String): String? {
+        var counter = 0
         decksList = CardLoader()
         val decksOption = decksList.listAvailableDecks()
-        OutputAdapter.printAvailableDecks(decksOption)
+        val availableDeckList = mutableMapOf<Int, String>()
+        decksOption.forEach { deck ->
+            counter++
+            availableDeckList[counter] = deck
+        }
+        OutputAdapter.printAvailableDecks(availableDeckList)
+        OutputAdapter.printChooseDeck(name)
         var chosenDeck = readLine()
-        var validDeck = Input.readlistAvailableDecks(chosenDeck!!, decksOption)
+        var validDeck = Input.readlistAvailableDecks(chosenDeck!!, availableDeckList)
         while(validDeck == null){
             OutputAdapter.illegalInputInfo()
             chosenDeck = readLine()
-            validDeck = Input.readlistAvailableDecks(chosenDeck!!, decksOption)
-            if(validDeck != null) return chosenDeck
+            validDeck = Input.readlistAvailableDecks(chosenDeck!!, availableDeckList)
+            if(validDeck != null) return validDeck
         }
-        return chosenDeck
+        return validDeck
     }
 
-    private fun gameBoard(deckChoice: String?): Pair<Deck, Deck> {
-        val deckPrototype = decksList.loadDeck(deckChoice!!)
-        val playerOneDeck = DeckFactory.createDeck(deckPrototype)
-        val playerTwoDeck = DeckFactory.createDeck(deckPrototype)
+    private fun gameBoard(playerOneDeck: String, playerTwoDeck: String): Pair<Deck, Deck> {
+        val playerOneDeckPrototype = decksList.loadDeck(playerOneDeck)
+        val playerTwoDeckPrototype = decksList.loadDeck(playerTwoDeck)
+
+        val playerOneDeck = DeckFactory.createDeck(playerOneDeckPrototype)
+        val playerTwoDeck = DeckFactory.createDeck(playerTwoDeckPrototype)
 
         this.game = Game(playerOneDeck, playerTwoDeck, this.playerOneName!!, this.playerTwoName!!)
-        OutputAdapter.printDeckPrototype(deckPrototype)
+        OutputAdapter.printDeckPrototype(playerOneDeckPrototype, playerOneName!!)
+        OutputAdapter.printDeckPrototype(playerTwoDeckPrototype, playerTwoName!!)
         return Pair(playerOneDeck, playerTwoDeck)
     }
 
@@ -88,8 +103,8 @@ class GameController {
                 }
             }
             Settings.MENU_OPTION_ATTACK_MONSTER ->{
-                var cardToAttackWith = cardToAttackWith()
-                var targetCard = targetCard()
+                val cardToAttackWith = cardToAttackWith()
+                val targetCard = targetCard()
                 if (cardToAttackWith is Monster && targetCard is Monster)
                 game.attackMonster(cardToAttackWith, targetCard)
             }
@@ -139,7 +154,6 @@ class GameController {
 
     private fun gameOptions(): String? {
         val gameOptions = game.validMoves()
-        //val gameOptions= mapOf( 1 to "draw card", 2 to "place card",3 to "attack monster", 4 to "end round")
         return Input.readGameOptions(gameOptions)
     }
 }

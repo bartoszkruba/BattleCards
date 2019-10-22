@@ -8,6 +8,6 @@ abstract class User(var name: String) {
     init {
         require(name.length < 11){"Name is too long, length is restricted to 1-10 characters"}
         require(name.isNotEmpty()){"Name is too short, length is restricted to 1-10 characters"}
-        require(!name.contains("[^A-Za-z0-9]+".toRegex()))
+        require(!name.contains("[^A-Za-z0-9åäöÅÄÖ]+".toRegex()))
     }
 }
