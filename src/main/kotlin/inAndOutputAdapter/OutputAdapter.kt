@@ -244,8 +244,31 @@ class OutputAdapter {
             println(centreLine("$player, Choose Your Deck"))
             print(centreLine("Your Choice: "))
         }
-    }
 
+        fun printChooseFriendlyTarget(game: Game) {
+            println(delimiter(ANSI_YELLOW))
+
+            val currentPlayer = when (game.turn % 2 != 0) {
+                true -> game.whitePlayer
+                false -> game.blackPlayer
+            }
+
+            println(centreLine("Choose Friendly Target (1 - ${currentPlayer.field.size()})"))
+            println(centreLine("Your Choice: "))
+        }
+
+        fun printChooseEnemyTarget(game: Game) {
+            println(delimiter(ANSI_YELLOW))
+
+            val opponent = when (game.turn % 2 != 0) {
+                true -> game.blackPlayer
+                false -> game.whitePlayer
+            }
+
+            println(centreLine("Choose Enemy Target (1 - ${opponent.field.size()})"))
+            println(centreLine("Your Choice: "))
+        }
+    }
 }
 
 
@@ -324,7 +347,7 @@ fun main() {
 //        black.field.addCard(black.deck.drawCard()!!)
 //    }
 
-    repeat(2){ game.drawCardFromDeck() }
+    repeat(2) { game.drawCardFromDeck() }
 //    game.nextTurn()
 //    repeat(2){ game.drawCardFromDeck() }
 //    print(game.turn)
