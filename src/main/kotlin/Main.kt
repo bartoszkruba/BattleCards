@@ -1,7 +1,7 @@
 import inAndOutputAdapter.GameController
 
-fun main(args: Array<String>) {
-    var gameController = GameController()
+fun main() {
+    val gameController = GameController()
     gameController.printMainScreen()
 }
 

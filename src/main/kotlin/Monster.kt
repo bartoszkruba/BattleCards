@@ -29,11 +29,11 @@ class Monster : Card {
     }
 
     fun takeDamge(card: Monster): Boolean {
-        if (this.health <= 0) {
-            return false
+        return if (this.health <= 0) {
+            false
         } else {
             this.health = this.health - card.attack
-            return true
+            true
         }
     }
 

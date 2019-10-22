@@ -18,10 +18,15 @@ class GameController {
 
     fun printMainScreen() {
         //OutputAdapter.printWelcome()
-        this.playerOneName = userNameInput(1)
-        this.playerTwoName = userNameInput(2)
+        playerOneName = userNameInput(1)
+        playerTwoName = userNameInput(2)
         val deckChoice = decksOptions()
         val playerDecks = gameBoard(deckChoice)
+        startTheGame(playerDecks)
+        OutputAdapter.printGameOver(game.getWinner()!!)
+    }
+
+    private fun startTheGame(playerDecks: Pair<Deck, Deck>) {
         while (!game.checkGameOver()) {
             whiteTurn = game.currentPlayer() == game.whitePlayer
             blackTurn = game.currentPlayer() == game.blackPlayer
@@ -38,7 +43,6 @@ class GameController {
                 blackTurn = game.currentPlayer() == game.blackPlayer
             }
         }
-        OutputAdapter.printGameOver(game.getWinner()!!)
     }
 
     private fun decksOptions(): String? {
@@ -134,7 +138,6 @@ class GameController {
 
     private fun gameOptions(): String? {
         val gameOptions = game.validMoves()
-        //val gameOptions= mapOf( 1 to "draw card", 2 to "place card",3 to "attack monster", 4 to "end round")
         return Input.readGameOptions(gameOptions)
     }
 }

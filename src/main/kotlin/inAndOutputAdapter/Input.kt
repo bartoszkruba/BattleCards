@@ -9,8 +9,8 @@ class Input() {
     companion object {
 
         fun readName(name: String): String? {
-            var validUserName = userNameValidation(name)
-            if(validUserName) return name else return null
+            val validUserName = userNameValidation(name)
+            return if(validUserName) name else null
         }
 
         private fun userNameValidation(name: String): Boolean {
