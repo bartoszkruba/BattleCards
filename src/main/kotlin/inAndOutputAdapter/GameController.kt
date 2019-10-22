@@ -22,49 +22,55 @@ class GameController {
         playerTwoName = userNameInput(2)
         val playerOneDeck = decksOptions(playerOneName!!)
         val playerTwoDeck = decksOptions(playerTwoName!!)
-        val playerDecks = gameBoard(playerOneDeck!!, playerTwoDeck!!)
-        startTheGame(playerDecks)
+        val playersDecks = gameBoard(playerOneDeck!!, playerTwoDeck!!)
+        startTheGame(playersDecks)
         OutputAdapter.printGameOver(game.getWinner()!!)
     }
 
-    private fun startTheGame(playerDecks: Pair<Deck, Deck>) {
+    private fun startTheGame(playersDecks: Pair<Deck, Deck>) {
         while (!game.checkGameOver()) {
             whiteTurn = game.currentPlayer() == game.whitePlayer
             blackTurn = game.currentPlayer() == game.blackPlayer
             while (whiteTurn as Boolean) {
                 OutputAdapter.printBoard(game)
                 val chosenOption = gameOptions()
-                doTheChoice(chosenOption, playerDecks)
+                doTheChoice(chosenOption, playersDecks)
                 whiteTurn = game.currentPlayer() == game.whitePlayer
             }
             while (blackTurn as Boolean) {
                 OutputAdapter.printBoard(game)
                 val chosenOption = gameOptions()
-                doTheChoice(chosenOption, playerDecks)
+                doTheChoice(chosenOption, playersDecks)
                 blackTurn = game.currentPlayer() == game.blackPlayer
             }
         }
     }
 
     private fun decksOptions(name: String): String? {
+        var counter = 0
         decksList = CardLoader()
         val decksOption = decksList.listAvailableDecks()
-        OutputAdapter.printAvailableDecks(decksOption)
+        val availableDeckList = mutableMapOf<Int, String>()
+        decksOption.forEach { deck ->
+            counter++
+            availableDeckList[counter] = deck
+        }
+        OutputAdapter.printAvailableDecks(availableDeckList)
         OutputAdapter.printChooseDeck(name)
         var chosenDeck = readLine()
-        var validDeck = Input.readlistAvailableDecks(chosenDeck!!, decksOption)
+        var validDeck = Input.readlistAvailableDecks(chosenDeck!!, availableDeckList)
         while(validDeck == null){
             OutputAdapter.illegalInputInfo()
             chosenDeck = readLine()
-            validDeck = Input.readlistAvailableDecks(chosenDeck!!, decksOption)
-            if(validDeck != null) return chosenDeck
+            validDeck = Input.readlistAvailableDecks(chosenDeck!!, availableDeckList)
+            if(validDeck != null) return validDeck
         }
-        return chosenDeck
+        return validDeck
     }
 
     private fun gameBoard(playerOneDeck: String, playerTwoDeck: String): Pair<Deck, Deck> {
-        val playerOneDeckPrototype = decksList.loadDeck(playerOneDeck!!)
-        val playerTwoDeckPrototype = decksList.loadDeck(playerTwoDeck!!)
+        val playerOneDeckPrototype = decksList.loadDeck(playerOneDeck)
+        val playerTwoDeckPrototype = decksList.loadDeck(playerTwoDeck)
 
         val playerOneDeck = DeckFactory.createDeck(playerOneDeckPrototype)
         val playerTwoDeck = DeckFactory.createDeck(playerTwoDeckPrototype)

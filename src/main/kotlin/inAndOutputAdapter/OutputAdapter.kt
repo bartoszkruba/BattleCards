@@ -2,8 +2,6 @@ package inAndOutputAdapter
 
 import Card
 import Game
-import Monster
-import factory.DeckFactory
 import Settings.Companion.ANSI_BLUE
 import Settings.Companion.ANSI_PURPLE
 import Settings.Companion.ANSI_RED
@@ -13,7 +11,6 @@ import Settings.Companion.ANSI_YELLOW
 import Settings.Companion.ANSI_CYAN
 import Settings.Companion.ANSI_WHITE
 import models.Player
-import prototype.CardLoader
 import prototype.DeckPrototype
 
 
@@ -226,12 +223,11 @@ class OutputAdapter {
 
         }
 
-        fun printAvailableDecks(decks: Collection<String>) {
+        fun printAvailableDecks(decks: MutableMap<Int, String>) {
             println(delimiter(ANSI_PURPLE))
-
             println(centreLine("Available Decks: "))
-            for (deck in decks) {
-                println(centreLine("- $deck"))
+            for ((key, value) in decks) {
+                println(centreLine("- $key: $value"))
             }
 
             println("")
