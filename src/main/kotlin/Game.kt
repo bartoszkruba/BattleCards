@@ -118,20 +118,20 @@ class Game(
         }
 
         if (currentPlayer.mana == 0) {
-            moves[++index] = "End Round"
+            moves[++index] = Settings.MENU_OPTION_END_ROUND
             return moves
         }
 
         if (!currentPlayer.field.empty && !opponent.field.empty && !currentPlayer.field.allCardsAreSleeping())
-            moves[++index] = "Attack Monster"
+            moves[++index] = Settings.MENU_OPTION_ATTACK_MONSTER
 
         if (!currentPlayer.hand.empty && currentPlayer.field.size() != Settings.FIELD_SIZE)
-            moves[++index] = "Place Card"
+            moves[++index] = Settings.MENU_OPTION_PLACE_CARD
 
         if (!currentPlayer.deck.empty && currentPlayer.hand.size() != Settings.HAND_SIZE)
-            moves[++index] = "Draw Card"
+            moves[++index] = Settings.MENU_OPTION_DRAW_CARD
 
-        moves[++index] = "End Round"
+        moves[++index] = Settings.MENU_OPTION_END_ROUND
 
         return moves
     }
