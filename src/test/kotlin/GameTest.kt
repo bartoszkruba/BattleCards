@@ -784,6 +784,42 @@ ${player2.field}
     }
 
     @Test
+    internal fun `castFireball, invalid spell`() {
+        val game = createGameForTesting()
+
+        val wPlayer = game.whitePlayer
+        val bPlayer = game.blackPlayer
+
+        repeat(2) { wPlayer.hand.addCard(Spell("dddd")) }
+        bPlayer.field.addCard(bPlayer.deck.drawCard()!!)
+
+        assertEquals(2, wPlayer.hand.size())
+        assertEquals(1, bPlayer.field.size())
+
+        assertThrows(RuntimeException::class.java) {
+            game.castFireball(1, 1)
+        }
+    }
+
+    @Test
+    internal fun `castFireball, monster instead of spell`() {
+        val game = createGameForTesting()
+
+        val wPlayer = game.whitePlayer
+        val bPlayer = game.blackPlayer
+
+        repeat(2) { wPlayer.hand.addCard(wPlayer.deck.drawCard()!!) }
+        bPlayer.field.addCard(bPlayer.deck.drawCard()!!)
+
+        assertEquals(2, wPlayer.hand.size())
+        assertEquals(1, bPlayer.field.size())
+
+        assertThrows(RuntimeException::class.java) {
+            game.castFireball(1, 1)
+        }
+    }
+
+    @Test
     internal fun `castHeal() goes right`() {
         val game = createGameForTesting()
 
@@ -832,6 +868,34 @@ ${player2.field}
 
         assertThrows(RuntimeException::class.java) {
             game.castHeal(1, 2)
+        }
+    }
+
+    @Test
+    internal fun `castHeal(), invalid spell`() {
+        val game = createGameForTesting()
+
+        val wPlayer = game.whitePlayer
+
+        wPlayer.hand.addCard(Spell("dd"))
+        wPlayer.field.addCard(wPlayer.deck.drawCard()!!)
+
+        assertThrows(RuntimeException::class.java) {
+            game.castHeal(1, 1)
+        }
+    }
+
+    @Test
+    internal fun `castHeal(), monster instead of spell`() {
+        val game = createGameForTesting()
+
+        val wPlayer = game.whitePlayer
+
+        wPlayer.hand.addCard(Spell("dd"))
+        wPlayer.field.addCard(wPlayer.deck.drawCard()!!)
+
+        assertThrows(RuntimeException::class.java) {
+            game.castHeal(1, 1)
         }
     }
 
