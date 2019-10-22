@@ -33,7 +33,7 @@ test {
 
 sonarqube {
     properties {
-//        sonar.projectKey bartoszkruba_BattleCards
+        property "sonar.projectKey", "bartoszkruba_BattleCards"
     }
 }
 

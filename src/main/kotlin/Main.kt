@@ -1,6 +1,6 @@
-import inAndOutputAdapter.OutputAdapter
+import inAndOutputAdapter.GameController
 
-fun main(args: Array<String>) {
-    var printMAnScreen = OutputAdapter()
+fun main() {
+    val gameController = GameController()
+    gameController.printMainScreen()
 }
-
