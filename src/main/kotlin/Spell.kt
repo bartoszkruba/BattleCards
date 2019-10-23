@@ -28,11 +28,11 @@ data class Spell(@JsonProperty("name") override val name: String) : Card(name, C
         val reset = Settings.ANSI_RESET
 
         val lines: Array<String> = arrayOf(
-            "$cyan   ___     ",
-            "  |   |    ",
-            "  |   |    ",
-            "  |___|    ",
-            cardName + reset
+            "$cyan   ___     $reset",
+            "$cyan  |   |    $reset",
+            "$cyan  |   |    $reset",
+            "$cyan  |___|    $reset",
+            cyan + cardName + reset
         )
 
         return lines.joinToString("\n")

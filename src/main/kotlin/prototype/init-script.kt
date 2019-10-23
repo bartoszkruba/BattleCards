@@ -85,9 +85,12 @@ class InitCards(private val cardLoader: CardLoader = CardLoader()) {
         val deckPrototypeFour = DeckPrototype("Spells")
 
         repeat(2) {
-            for (i in 0 until 13) {
+            for (i in 0 until 9) {
                 deckPrototypeFour.addCard(cards[i])
             }
+        }
+
+        repeat(6){
             for (i in 24 until 26) {
                 deckPrototypeFour.addCard(cards[i])
             }

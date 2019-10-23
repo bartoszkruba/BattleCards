@@ -106,11 +106,11 @@ abstract class CardList(var empty: Boolean, cards: ArrayList<Card>, var maxSize:
             val reset = Settings.ANSI_RESET
 
             val lines: Array<String> = arrayOf(
-                "$cyan   ___     ",
-                "  |   |    ",
-                "  | $index |    ",
-                "  |___|    ",
-                cardName + reset
+                "$cyan   ___     $reset",
+                "$cyan  |   |    $reset",
+                "$cyan  | $index |    $reset",
+                "$cyan  |___|    $reset",
+                cyan + cardName + reset
             )
             return lines.joinToString("\n")
         }
