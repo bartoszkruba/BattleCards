@@ -122,7 +122,7 @@ class Input() {
             return choosenCard
         }
 
-        fun readlistAvailableDecks(choice: String, decksList: MutableMap<Int, String>): String? {
+        fun readListAvailableDecks(choice: String, decksList: MutableMap<Int, String>): String? {
             try {
                 for (value in decksList.values) {
                     if (choice == value) return choice
