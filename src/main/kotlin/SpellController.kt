@@ -16,10 +16,11 @@ class SpellController {
         when (card.name) {
             "Fireball" -> castFireball(game, cardIndex)
             "Heal" -> castHeal(game, cardIndex)
+            "Void Hole" -> castVoidHole(game, cardIndex)
         }
     }
 
-    fun castFireball(game: Game, cardIndex: Int) {
+    private fun castFireball(game: Game, cardIndex: Int) {
         val opponent = when (game.turn % 2 != 0) {
             true -> game.blackPlayer
             false -> game.whitePlayer
@@ -33,7 +34,7 @@ class SpellController {
         game.castFireball(cardIndex, targetIndex)
     }
 
-    fun castHeal(game: Game, cardIndex: Int) {
+    private fun castHeal(game: Game, cardIndex: Int) {
         val currentPlayer = when (game.turn % 2 != 0) {
             true -> game.whitePlayer
             false -> game.blackPlayer
@@ -46,4 +47,6 @@ class SpellController {
 
         game.castHeal(cardIndex, targetIndex)
     }
+
+    private fun castVoidHole(game: Game, cardIndex: Int) = game.castVoidHole(cardIndex)
 }
