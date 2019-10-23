@@ -48,24 +48,24 @@ internal class InputTest {
     }
 
     @Test
-    fun readlistAvailableDecks(){
+    fun readListAvailableDecks(){
         val decksOption = mutableMapOf(1 to "test", 2 to "Demons", 3 to "Standard", 4 to "Rats")
 
-        assertNotNull(Input.readlistAvailableDecks("test", decksOption))
-        assertNotNull(Input.readlistAvailableDecks("Demons", decksOption))
-        assertNotNull(Input.readlistAvailableDecks("Standard", decksOption))
-        assertNotNull(Input.readlistAvailableDecks("Rats", decksOption))
+        assertNotNull(Input.readListAvailableDecks("test", decksOption))
+        assertNotNull(Input.readListAvailableDecks("Demons", decksOption))
+        assertNotNull(Input.readListAvailableDecks("Standard", decksOption))
+        assertNotNull(Input.readListAvailableDecks("Rats", decksOption))
 
-        assertNotNull(Input.readlistAvailableDecks("1", decksOption))
-        assertNotNull(Input.readlistAvailableDecks("2", decksOption))
-        assertNotNull(Input.readlistAvailableDecks("3", decksOption))
-        assertNotNull(Input.readlistAvailableDecks("4", decksOption))
+        assertNotNull(Input.readListAvailableDecks("1", decksOption))
+        assertNotNull(Input.readListAvailableDecks("2", decksOption))
+        assertNotNull(Input.readListAvailableDecks("3", decksOption))
+        assertNotNull(Input.readListAvailableDecks("4", decksOption))
 
-        assertNull(Input.readlistAvailableDecks("someDeckOption", decksOption))
-        assertNull(Input.readlistAvailableDecks("5", decksOption))
-        assertNull(Input.readlistAvailableDecks("0", decksOption))
-        assertNull(Input.readlistAvailableDecks("rats", decksOption))
-        assertNull(Input.readlistAvailableDecks("RATS", decksOption))
+        assertNull(Input.readListAvailableDecks("someDeckOption", decksOption))
+        assertNull(Input.readListAvailableDecks("5", decksOption))
+        assertNull(Input.readListAvailableDecks("0", decksOption))
+        assertNull(Input.readListAvailableDecks("rats", decksOption))
+        assertNull(Input.readListAvailableDecks("RATS", decksOption))
 
     }
 }
