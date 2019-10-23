@@ -895,7 +895,7 @@ internal class GameTest {
         game.castHeal(1, 1)
 
         assertEquals(PLAYER_MANA - 1, wPlayer.mana)
-        assertEquals(MAX_HEALTH + 5, (wPlayer.field.cardsInList()[0] as Monster).health)
+        assertEquals(MAX_HEALTH + Settings.HEAL_VALUE, (wPlayer.field.cardsInList()[0] as Monster).health)
     }
 
     @Test

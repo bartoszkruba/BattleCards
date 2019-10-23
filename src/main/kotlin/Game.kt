@@ -210,7 +210,18 @@ class Game(
     }
 
     fun castVoidHole(cardIndex: Int) {
+        val currentPlayer = currentPlayer()
 
+        val range = currentPlayer.hand.size()
+        if (cardIndex < 1 || cardIndex > range) throw RuntimeException("Invalid Input")
+
+        val card = currentPlayer.hand.cardsInList()[cardIndex - 1]
+        if (card.type != CardType.SPEll || card.name != "Void Hole") throw RuntimeException("Invalid Input")
+
+        currentPlayer.hand.removeCard(card)
+
+        whitePlayer.field.cardsInList().clear()
+        blackPlayer.field.cardsInList().clear()
     }
 }
 
