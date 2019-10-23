@@ -52,14 +52,38 @@ class Game(
     }
 
     fun checkGameOver(): Boolean {
-        return (whitePlayer.deck.size() == 0 && whitePlayer.field.size() == 0 && whitePlayer.hand.size() == 0)
-                || (blackPlayer.deck.size() == 0 && blackPlayer.field.size() == 0 && blackPlayer.hand.size() == 0)
+        var wMonstersInHand = 0
+        var wMonstersInDeck = 0
+
+        whitePlayer.hand.cardsInList().forEach { if (it.type == CardType.MONSTER) wMonstersInHand++ }
+        whitePlayer.deck.cardsInList().forEach { if (it.type == CardType.MONSTER) wMonstersInDeck++ }
+
+        var bMonstersInHand = 0
+        var bMonstersInDeck = 0
+
+        blackPlayer.hand.cardsInList().forEach { if (it.type == CardType.MONSTER) bMonstersInHand++ }
+        blackPlayer.deck.cardsInList().forEach { if (it.type == CardType.MONSTER) bMonstersInDeck++ }
+
+        return (wMonstersInDeck == 0 && whitePlayer.field.size() == 0 && wMonstersInHand == 0)
+                || (bMonstersInDeck == 0 && blackPlayer.field.size() == 0 && bMonstersInHand == 0)
     }
 
     fun getWinner(): Player? {
-        return if (whitePlayer.deck.size() == 0 && whitePlayer.field.size() == 0 && whitePlayer.hand.size() == 0) {
+        var wMonstersInHand = 0
+        var wMonstersInDeck = 0
+
+        whitePlayer.hand.cardsInList().forEach { if (it.type == CardType.MONSTER) wMonstersInHand++ }
+        whitePlayer.deck.cardsInList().forEach { if (it.type == CardType.MONSTER) wMonstersInDeck++ }
+
+        var bMonstersInHand = 0
+        var bMonstersInDeck = 0
+
+        blackPlayer.hand.cardsInList().forEach { if (it.type == CardType.MONSTER) bMonstersInHand++ }
+        blackPlayer.deck.cardsInList().forEach { if (it.type == CardType.MONSTER) bMonstersInDeck++ }
+
+        return if (wMonstersInDeck == 0 && whitePlayer.field.size() == 0 && wMonstersInHand == 0) {
             blackPlayer
-        } else if (blackPlayer.deck.size() == 0 && blackPlayer.field.size() == 0 && blackPlayer.hand.size() == 0) {
+        } else if (bMonstersInDeck == 0 && blackPlayer.field.size() == 0 && bMonstersInHand == 0) {
             whitePlayer
         } else {
             null
