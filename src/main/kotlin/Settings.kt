@@ -19,7 +19,7 @@ abstract class Settings {
         const val MIN_DECK_NAME_LENGTH = 1
 
         const val FIREBALL_DAMAGE = 6
-        const val HEAL_VALUE = 5
+        const val HEAL_VALUE = 8
 
         const val ANSI_RESET = "\u001B[0m"
         const val ANSI_BLACK = "\u001B[30m"

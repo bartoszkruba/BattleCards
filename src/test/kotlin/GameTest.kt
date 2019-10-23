@@ -542,7 +542,7 @@ internal class GameTest {
             assertTrue(getsAttacked.cardId == getsAttackedCopy.cardId, "Attacked card isn't the same after attack")
             index++
             assertEquals(Settings.PLAYER_MANA - index, game.whitePlayer.mana, "Mana should have decreased")
-        } while (index < game.blackPlayer.field.size())
+        } while (index < game.blackPlayer.field.size() || index < game.whitePlayer.field.size())
 
         assertEquals(3, game.blackPlayer.field.size(), "Dead cards wasn't removed from field")
 
@@ -570,7 +570,7 @@ internal class GameTest {
             assertEquals(Settings.PLAYER_MANA - index, game.blackPlayer.mana, "Mana should have decreased")
         } while (index < game.blackPlayer.field.cardsInList().size)
 
-        assertEquals(4, game.whitePlayer.field.size(), "Dead cards wasn't removed from field")
+        assertEquals(2, game.whitePlayer.field.size(), "Dead cards wasn't removed from field")
     }
 
     private fun createMockData() {
@@ -848,7 +848,7 @@ internal class GameTest {
     }
 
     @Test
-    internal fun `castFireball, invalid spell`() {
+    internal fun `castFireball(), invalid spell`() {
         val game = createGameForTesting()
 
         val wPlayer = game.whitePlayer
@@ -961,6 +961,54 @@ internal class GameTest {
         assertThrows(RuntimeException::class.java) {
             game.castHeal(1, 1)
         }
+    }
+
+    @Test
+    internal fun `castVoidHole() goes right`() {
+        val game = createGameForTesting()
+
+        val wPlayer = game.whitePlayer
+        val bPlayer = game.blackPlayer
+
+        repeat(Settings.FIELD_SIZE) {
+            wPlayer.field.addCard(wPlayer.deck.drawCard()!!)
+            bPlayer.field.addCard(bPlayer.deck.drawCard()!!)
+        }
+
+        wPlayer.hand.addCard(Spell("Void Hole"))
+
+        game.castVoidHole(1)
+
+        assertEquals(0, wPlayer.hand.size())
+
+        assertEquals(0, wPlayer.field.size())
+        assertEquals(0, bPlayer.field.size())
+    }
+
+    @Test
+    internal fun `castVoidHole, invalid index`() {
+        val game = createGameForTesting()
+
+        val wPlayer = game.whitePlayer
+
+        assertThrows(RuntimeException::class.java) {
+            game.castVoidHole(1)
+        }
+
+        assertThrows(RuntimeException::class.java) {
+            game.castVoidHole(0)
+        }
+
+        assertThrows(RuntimeException::class.java) {
+            game.castVoidHole(5)
+        }
+
+        wPlayer.hand.addCard(Spell("Void Hole"))
+
+        assertThrows(RuntimeException::class.java) {
+            game.castVoidHole(2)
+        }
+
     }
 
     fun createGameForTesting(): Game {

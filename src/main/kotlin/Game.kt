@@ -43,9 +43,13 @@ class Game(
 
     fun attackMonster(attacker: Monster, toBeAttacked: Monster) {
         toBeAttacked.takeDamage(attacker)
+        attacker.takeDamage(toBeAttacked)
         if (toBeAttacked.isDead()) {
             val player = if (currentPlayer() == whitePlayer) blackPlayer else whitePlayer
             player.field.removeCard(toBeAttacked)
+        }
+        if (attacker.isDead()) {
+            currentPlayer().field.removeCard(attacker)
         }
         currentPlayer().mana--
         attacker.sleeping = true
@@ -205,5 +209,8 @@ class Game(
         currentPlayer.hand.removeCard(cardInHand)
     }
 
+    fun castVoidHole(cardIndex: Int) {
+
+    }
 }
 

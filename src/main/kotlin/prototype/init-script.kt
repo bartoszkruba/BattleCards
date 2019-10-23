@@ -42,6 +42,7 @@ class InitCards(private val cardLoader: CardLoader = CardLoader()) {
         cards.add(newMonster("Abyss Imp", 2, 8))
         cards.add(newSpell("Fireball"))
         cards.add(newSpell("Heal"))
+        cards.add(newSpell("Void Hole"))
 
         println("Saving new cards...")
         cardLoader.saveCards(cards)
@@ -90,8 +91,8 @@ class InitCards(private val cardLoader: CardLoader = CardLoader()) {
             }
         }
 
-        repeat(6){
-            for (i in 24 until 26) {
+        repeat(4){
+            for (i in 24 until 27) {
                 deckPrototypeFour.addCard(cards[i])
             }
         }
