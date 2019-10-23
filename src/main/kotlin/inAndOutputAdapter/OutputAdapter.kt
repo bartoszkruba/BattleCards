@@ -11,7 +11,9 @@ import Settings.Companion.ANSI_YELLOW
 import Settings.Companion.ANSI_CYAN
 import Settings.Companion.ANSI_WHITE
 import models.Player
+import prototype.CardLoader
 import prototype.DeckPrototype
+import prototype.SpellPrototype
 
 
 class OutputAdapter {
@@ -43,6 +45,28 @@ class OutputAdapter {
             println("\n\n")
 
             Thread.sleep(2000)
+        }
+
+        fun printSpellDescriptions() {
+            println(delimiter(ANSI_PURPLE))
+
+            val cards = CardLoader().loadCards()
+            val spells = HashMap<String, String>()
+
+            cards.filter { it.type == CardType.SPEll }
+                .forEach {
+                    it as SpellPrototype
+                    spells[it.name] = it.description
+                }
+
+            println(centreLine("Spells: "))
+            for (entry in spells.entries) {
+                println(centreLine("- $ANSI_YELLOW${entry.key}$ANSI_RESET: ${entry.value}"))
+            }
+
+            println()
+
+            println(delimiter(ANSI_PURPLE))
         }
 
         fun printEnterName(player: Int) {
@@ -275,5 +299,6 @@ fun clear() {
 
 
 fun main() {
-    OutputAdapter.printWelcome()
+//    OutputAdapter.printWelcome()
+    OutputAdapter.printSpellDescriptions()
 }

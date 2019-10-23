@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class SpellPrototype(
     @JsonProperty("id") override val id: Int,
-    @JsonProperty("name") override val name: String
+    @JsonProperty("name") override val name: String,
+    @JsonProperty("description") val description: String = "Does Something"
 ) : CardPrototype(id, name, CardType.SPEll) {
 
     init {

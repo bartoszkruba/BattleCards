@@ -18,12 +18,13 @@ class GameController {
     private lateinit var decksList: CardLoader
 
     fun printMainScreen() {
-        //OutputAdapter.printWelcome()
+        OutputAdapter.printWelcome()
         playerOneName = userNameInput(1)
         playerTwoName = userNameInput(2)
         val playerOneDeck = decksOptions(playerOneName!!)
         val playerTwoDeck = decksOptions(playerTwoName!!)
         val playersDecks = gameBoard(playerOneDeck!!, playerTwoDeck!!)
+        OutputAdapter.printSpellDescriptions()
         startTheGame(playersDecks)
         OutputAdapter.printGameOver(game.getWinner()!!)
     }
