@@ -48,10 +48,7 @@ class DeckPrototype(val name: String) {
 
     fun cardsCopy(): HashMap<CardPrototype, Int> {
         val map = HashMap<CardPrototype, Int>()
-        for (entry in cards.entries) {
-            val key = entry.key
-            if (key is MonsterPrototype) map[key.copy()] = entry.value
-        }
+        cards.entries.forEach { map[it.key.clone()] = it.value }
         return map
     }
 

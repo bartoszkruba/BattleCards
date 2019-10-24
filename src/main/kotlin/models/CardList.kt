@@ -2,6 +2,7 @@ package models
 
 import Card
 import Monster
+import Spell
 import utilities.Utils
 import kotlin.math.floor
 
@@ -13,7 +14,7 @@ abstract class CardList(var empty: Boolean, cards: ArrayList<Card>, var maxSize:
         this.cards = cards.map { Utils.clone(it) as Card } as ArrayList<Card>
     }
 
-    fun size(): Int{
+    fun size(): Int {
         return cards.size
     }
 
@@ -60,38 +61,59 @@ abstract class CardList(var empty: Boolean, cards: ArrayList<Card>, var maxSize:
     }
 
     fun cardToString(card: Card, id: Int): String {
-        card as Monster
-        var atk = if(card.attack > 9) "${card.attack}" else "${card.attack} "
-        var hp = if(card.health > 9) "${card.health}" else " ${card.health}"
-        hp = if(card.health <= 0) " 0" else hp
-        atk =   (if(card.sleeping) Settings.ANSI_WHITE else Settings.ANSI_BLUE) +
-                atk +
-                if(card.sleeping) "" else Settings.ANSI_RESET
-
-        hp =    (if(card.sleeping) Settings.ANSI_WHITE else Settings.ANSI_RED) +
-                hp +
-                Settings.ANSI_RESET
-        val sb = StringBuilder()
-        repeat((4 - floor(card.name.length * 0.5)).toInt()) { sb.append(" ") }
-        var cardName = "$sb${card.name}"
-        sb.clear()
-        repeat(11 - cardName.length) { sb.append(" ") }
-        cardName += sb
-        cardName = (if(card.sleeping) Settings.ANSI_WHITE else Settings.ANSI_GREEN) +
-                cardName +
-                Settings.ANSI_RESET
-        val sleepStart = if(card.sleeping) Settings.ANSI_WHITE else Settings.ANSI_RESET
-        val sleepEnd = Settings.ANSI_RESET
         val index: Int = id + 1
+        val sb = StringBuilder()
 
-        val lines: Array<String> = arrayOf(
-            "$sleepStart   ___     $sleepEnd",
-            "$sleepStart  |   |    $sleepEnd",
-           "$sleepStart  | $index |    $sleepEnd",
-                      "$atk|___|$hp  ",
-                         cardName
-        )
+        if (card is Monster) {
+            var atk = if (card.attack > 9) "${card.attack}" else "${card.attack} "
+            var hp = if (card.health > 9) "${card.health}" else " ${card.health}"
+            hp = if (card.health <= 0) " 0" else hp
+            atk = (if (card.sleeping) Settings.ANSI_WHITE else Settings.ANSI_BLUE) +
+                    atk +
+                    if (card.sleeping) "" else Settings.ANSI_RESET
+            hp = (if (card.sleeping) Settings.ANSI_WHITE else Settings.ANSI_RED) +
+                    hp +
+                    Settings.ANSI_RESET
+            repeat((4 - floor(card.name.length * 0.5)).toInt()) { sb.append(" ") }
+            var cardName = "$sb${card.name}"
+            sb.clear()
+            repeat(11 - cardName.length) { sb.append(" ") }
+            cardName += sb
+            cardName = (if (card.sleeping) Settings.ANSI_WHITE else Settings.ANSI_GREEN) +
+                    cardName +
+                    Settings.ANSI_RESET
+            val sleepStart = if (card.sleeping) Settings.ANSI_WHITE else Settings.ANSI_RESET
+            val sleepEnd = Settings.ANSI_RESET
 
-        return lines.joinToString("\n")
+            val lines: Array<String> = arrayOf(
+                "$sleepStart   ___     $sleepEnd",
+                "$sleepStart  |   |    $sleepEnd",
+                "$sleepStart  | $index |    $sleepEnd",
+                "$atk|___|$hp  ",
+                cardName
+            )
+
+            return lines.joinToString("\n")
+        } else if (card is Spell) {
+            repeat((4 - floor(card.name.length * 0.5)).toInt()) { sb.append(" ") }
+            var cardName = "$sb${card.name}"
+            sb.clear()
+            repeat(11 - cardName.length) { sb.append(" ") }
+            cardName += sb
+            cardName = Settings.ANSI_GREEN + cardName + Settings.ANSI_RESET
+
+            val cyan = Settings.ANSI_CYAN
+            val reset = Settings.ANSI_RESET
+
+            val lines: Array<String> = arrayOf(
+                "$cyan   ___     $reset",
+                "$cyan  |   |    $reset",
+                "$cyan  | $index |    $reset",
+                "$cyan  |___|    $reset",
+                cyan + cardName + reset
+            )
+            return lines.joinToString("\n")
+        }
+        return ""
     }
 }

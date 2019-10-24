@@ -10,7 +10,7 @@ class Input() {
 
         fun readName(name: String): String? {
             val validUserName = userNameValidation(name)
-            return if(validUserName) name else null
+            return if (validUserName) name else null
         }
 
         private fun userNameValidation(name: String): Boolean {
@@ -18,7 +18,7 @@ class Input() {
             return name.length in 1..9 && regex.matches(name)
         }
 
-        fun readGameOptions(optionsList:  Map<Int, String>): String? {
+        fun readGameOptions(optionsList: Map<Int, String>): String? {
             while (true) {
                 OutputAdapter.printGameOptions(optionsList)
                 try {
@@ -40,8 +40,8 @@ class Input() {
 
         fun readCardToPlaceOnField(chosenCardToPlace: String, hand: Hand): Card? {
             try {
-                if(chosenCardToPlace.toInt() in 1..hand.size()){
-                    return hand.cardsInList()[chosenCardToPlace.toInt()-1]
+                if (chosenCardToPlace.toInt() in 1..hand.size()) {
+                    return hand.cardsInList()[chosenCardToPlace.toInt() - 1]
                 }
             }catch (e: Exception) {
                 return null
@@ -58,67 +58,67 @@ class Input() {
 
         fun readChosenCardToAttackWith(game: Game): Card {
             var invalidInput = true
-            var choosenCard:Card = Monster("Ugly",1,1)
+            var choosenCard: Card = Monster("Ugly", 1, 1)
             OutputAdapter.printBoard(game)
             OutputAdapter.printChooseCardToAttackWith(game)
             do {
                 val input = readLine()
-                val choosenCardIndex:Int
-                if (input is String){
+                val choosenCardIndex: Int
+                if (input is String) {
                     try {
-                        choosenCardIndex = input.toInt() -1
-                    }catch (err:Exception){
+                        choosenCardIndex = input.toInt() - 1
+                    } catch (err: Exception) {
                         printErrorField(game, true)
                         continue
                     }
-                    if (choosenCardIndex < game.currentPlayer().field.size()){
+                    if (choosenCardIndex < game.currentPlayer().field.size()) {
                         choosenCard = game.currentPlayer().field.cardsInList()[choosenCardIndex]
-                        if(choosenCard is Monster){
-                            if (choosenCard.sleeping){
+                        if (choosenCard is Monster) {
+                            if (choosenCard.sleeping) {
                                 printErrorField(game, true)
                                 continue
                             }
                         }
                         return choosenCard
-                    }else{
+                    } else {
                         printErrorField(game, true)
                         continue
                     }
-                }else{
+                } else {
                     printErrorField(game, true)
                     continue
                 }
-            }while (invalidInput)
+            } while (invalidInput)
             return choosenCard
         }
 
-        fun readTargetCard(game: Game): Card{
+        fun readTargetCard(game: Game): Card {
             var invalidInput = true
-            var choosenCard:Card = Monster("Ugly",1,1)
+            var choosenCard: Card = Monster("Ugly", 1, 1)
             OutputAdapter.printBoard(game)
             OutputAdapter.printChooseTarget(game)
             do {
                 val input = readLine()
-                val choosenCardIndex:Int
-                if (input is String){
+                val choosenCardIndex: Int
+                if (input is String) {
                     try {
-                        choosenCardIndex = input.toInt() -1
-                    }catch (err:Exception){
+                        choosenCardIndex = input.toInt() - 1
+                    } catch (err: Exception) {
                         printErrorField(game, false)
                         continue
                     }
-                    if (choosenCardIndex < game.oppositePlayer().field.size()){
+                    if (choosenCardIndex < game.oppositePlayer().field.size()) {
                         choosenCard = game.oppositePlayer().field.cardsInList()[choosenCardIndex]
                         return choosenCard
-                    }else{
+                    } else {
                         printErrorField(game, false)
                         continue
                     }
-                }else{
+                } else {
                     printErrorField(game, false)
                     continue
                 }
-            }while (invalidInput)
+            } while (invalidInput)
             return choosenCard
         }
 
@@ -136,5 +136,50 @@ class Input() {
                 return null
             }
         }
+
+        fun readFriendlyTarget(game: Game): Int {
+            val currentPlayer = when (game.turn % 2 != 0) {
+                true -> game.whitePlayer
+                false -> game.blackPlayer
+            }
+
+            val range = currentPlayer.field.size()
+
+            while (true) {
+                try {
+                    val choice = readLine()!!.toInt()
+                    if (choice < 1 || choice > range) {
+                        OutputAdapter.illegalInputInfo()
+                    } else {
+                        return choice
+                    }
+                } catch (e: Exception) {
+                    OutputAdapter.illegalInputInfo()
+                }
+            }
+        }
+
+        fun readEnemyTarget(game: Game): Int {
+            val opponent = when (game.turn % 2 != 0) {
+                true -> game.blackPlayer
+                false -> game.whitePlayer
+            }
+
+            val range = opponent.field.size()
+
+            while (true) {
+                try {
+                    val choice = readLine()!!.toInt()
+                    if (choice < 1 || choice > range) {
+                        OutputAdapter.illegalInputInfo()
+                    } else {
+                        return choice
+                    }
+                } catch (e: Exception) {
+                    OutputAdapter.illegalInputInfo()
+                }
+            }
+        }
     }
+
 }

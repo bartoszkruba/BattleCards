@@ -11,7 +11,9 @@ import Settings.Companion.ANSI_YELLOW
 import Settings.Companion.ANSI_CYAN
 import Settings.Companion.ANSI_WHITE
 import models.Player
+import prototype.CardLoader
 import prototype.DeckPrototype
+import prototype.SpellPrototype
 
 
 class OutputAdapter {
@@ -43,6 +45,28 @@ class OutputAdapter {
             println("\n\n")
 
             Thread.sleep(2000)
+        }
+
+        fun printSpellDescriptions() {
+            println(delimiter(ANSI_PURPLE))
+
+            val cards = CardLoader().loadCards()
+            val spells = HashMap<String, String>()
+
+            cards.filter { it.type == CardType.SPEll }
+                .forEach {
+                    it as SpellPrototype
+                    spells[it.name] = it.description
+                }
+
+            println(centreLine("Spells: "))
+            for (entry in spells.entries) {
+                println(centreLine("- $ANSI_YELLOW${entry.key}$ANSI_RESET: ${entry.value}"))
+            }
+
+            println()
+
+            println(delimiter(ANSI_PURPLE))
         }
 
         fun printEnterName(player: Int) {
@@ -241,8 +265,31 @@ class OutputAdapter {
             println(centreLine("$player, Choose Your Deck"))
             print(centreLine("Your Choice: "))
         }
-    }
 
+        fun printChooseFriendlyTarget(game: Game) {
+            println(delimiter(ANSI_YELLOW))
+
+            val currentPlayer = when (game.turn % 2 != 0) {
+                true -> game.whitePlayer
+                false -> game.blackPlayer
+            }
+
+            println(centreLine("Choose Friendly Target (1 - ${currentPlayer.field.size()})"))
+            println(centreLine("Your Choice: "))
+        }
+
+        fun printChooseEnemyTarget(game: Game) {
+            println(delimiter(ANSI_YELLOW))
+
+            val opponent = when (game.turn % 2 != 0) {
+                true -> game.blackPlayer
+                false -> game.whitePlayer
+            }
+
+            println(centreLine("Choose Enemy Target (1 - ${opponent.field.size()})"))
+            println(centreLine("Your Choice: "))
+        }
+    }
 }
 
 
@@ -250,3 +297,8 @@ fun clear() {
     println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 }
 
+
+fun main() {
+//    OutputAdapter.printWelcome()
+    OutputAdapter.printSpellDescriptions()
+}

@@ -2,7 +2,7 @@ abstract class Settings {
     companion object {
         const val MENU_OPTION_ATTACK_MONSTER = "Attack Monster"
         const val MENU_OPTION_DRAW_CARD = "Draw Card"
-        const val MENU_OPTION_PLACE_CARD = "Place Card"
+        const val MENU_OPTION_PLACE_CARD = "Play Card"
         const val MENU_OPTION_END_ROUND = "End Round"
 
         const val DECK_SIZE: Int = 30
@@ -17,6 +17,9 @@ abstract class Settings {
         const val MIN_CARD_NAME_LENGTH = 1
         const val MAX_DECK_NAME_LENGTH = 20
         const val MIN_DECK_NAME_LENGTH = 1
+
+        const val FIREBALL_DAMAGE = 6
+        const val HEAL_VALUE = 8
 
         const val ANSI_RESET = "\u001B[0m"
         const val ANSI_BLACK = "\u001B[30m"

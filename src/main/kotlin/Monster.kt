@@ -3,16 +3,12 @@ import kotlin.math.floor
 
 class Monster : Card {
     override var name: String
-    override val cardId: UUID
-    private val cardType: CardType
     var attack: Int
     var health: Int
     var sleeping: Boolean = false
 
     constructor() : super("Wolf", CardType.MONSTER, UUID.randomUUID()){
         this.name = "Wolf"
-        this.cardId = UUID.randomUUID()
-        this.cardType =  CardType.MONSTER
         this.attack = 7
         this.health = 5
     }
@@ -21,8 +17,6 @@ class Monster : Card {
         val regex = Regex("^[a-zA-Z]+(?:\\s[a-zA-Z]+)*$")
         if(name.length in 1..9 && regex.matches(name) && attack in 1..10  && health in 1..10) {
             this.name = name
-            this.cardId = UUID.randomUUID()
-            this.cardType = CardType.MONSTER
             this.attack = attack
             this.health = health
         }else{throw RuntimeException("Invalid properties of object")}
@@ -35,6 +29,10 @@ class Monster : Card {
             this.health = this.health - card.attack
             true
         }
+    }
+
+    fun takeDamage(damage: Int){
+        this.health -= damage
     }
 
     fun isDead() = this.health <= 0
