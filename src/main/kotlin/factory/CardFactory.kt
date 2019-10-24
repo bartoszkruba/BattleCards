@@ -2,10 +2,12 @@ package factory
 
 import Card
 import Monster
+import Spell
 import prototype.CardPrototype
 import prototype.MonsterPrototype
+import prototype.SpellPrototype
 
-class CardFactory() {
+class CardFactory {
 
     companion object {
         fun createCard(card: CardPrototype): Card {
@@ -15,7 +17,8 @@ class CardFactory() {
                     Monster(name = card.name, health = card.baseHealth, attack = card.baseAttack)
                 }
                 CardType.SPEll -> {
-                    throw RuntimeException("Not implemented yet")
+                    card as SpellPrototype
+                    Spell(name = card.name)
                 }
             }
         }

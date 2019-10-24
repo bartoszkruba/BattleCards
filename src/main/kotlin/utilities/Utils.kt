@@ -9,7 +9,7 @@ class Utils {
 
         fun clone(obj: Any): Any {
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-            var clone = mapper.writeValueAsString(obj)
+            val clone = mapper.writeValueAsString(obj)
             val type = mapper.typeFactory.constructType(obj::class.java)
             return mapper.readValue(clone, type)
         }

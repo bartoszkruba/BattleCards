@@ -50,7 +50,7 @@ internal class DeckTest {
 
         assertFalse(deck.empty)
 
-        val cardsBeforeShuffle = deck.cardsInList()
+        val cardsBeforeShuffle = ArrayList(deck.cardsInList())
 
         deck.shuffleDeck()
         val cardsAfterShuffle = deck.cardsInList()

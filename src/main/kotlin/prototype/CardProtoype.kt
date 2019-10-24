@@ -11,14 +11,13 @@ abstract class CardPrototype(open val id: Int, open val name: String, val type: 
     }
 
     override fun equals(other: Any?): Boolean {
+        if (other == null) return false
         if (this === other) return true
-        if (javaClass != other?.javaClass) return false
 
-        other as CardPrototype
 
-        if (id != other.id) return false
-
-        return true
+        return if (other is CardPrototype) {
+            id == other.id
+        } else false
     }
 
     override fun hashCode(): Int {

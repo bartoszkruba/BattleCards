@@ -9,8 +9,8 @@ import kotlin.RuntimeException
 internal class MonsterPrototypeTest {
 
     companion object {
-        private const val NAME = "name"
-        private const val ID = 1
+        private const val ID_ONE = 1
+        private const val ID_TWO = 2
 
         private const val MAX_HEALTH = Settings.MAX_HEALTH
         private const val MIN_HEALTH = Settings.MIN_HEALTH
@@ -20,12 +20,28 @@ internal class MonsterPrototypeTest {
         private const val MIN_NAME_LENGTH = Settings.MIN_CARD_NAME_LENGTH
     }
 
+    private val NAME_ONE: String
+    private val NAME_TWO: String
+
+    init {
+        val sbA = StringBuilder()
+        val sbB = StringBuilder()
+
+        repeat(MAX_NAME_LENGTH) {
+            sbA.append("a")
+            sbB.append("b")
+        }
+
+        NAME_ONE = sbA.toString()
+        NAME_TWO = sbB.toString()
+    }
+
     @Test
     internal fun `Constructor works as it should`() {
-        val monsterPrototype = MonsterPrototype(ID, NAME, MIN_HEALTH, MIN_ATTACK)
+        val monsterPrototype = MonsterPrototype(ID_ONE, NAME_ONE, MIN_HEALTH, MIN_ATTACK)
 
-        assertEquals(NAME, monsterPrototype.name)
-        assertEquals(ID, monsterPrototype.id)
+        assertEquals(NAME_ONE, monsterPrototype.name)
+        assertEquals(ID_ONE, monsterPrototype.id)
         assertEquals(MIN_HEALTH, monsterPrototype.baseHealth)
         assertEquals(MIN_HEALTH, monsterPrototype.baseAttack)
         assertEquals(CardType.MONSTER, monsterPrototype.type)
@@ -33,9 +49,9 @@ internal class MonsterPrototypeTest {
 
     @Test
     internal fun `Equals method returns true`() {
-        val monsterOne = MonsterPrototype(ID, "o ne", MAX_HEALTH, MAX_ATTACK)
+        val monsterOne = MonsterPrototype(ID_ONE, "o ne", MAX_HEALTH, MAX_ATTACK)
 
-        val monsterTwo = MonsterPrototype(ID, "two", MAX_HEALTH, MAX_ATTACK)
+        val monsterTwo = MonsterPrototype(ID_ONE, "two", MAX_HEALTH, MAX_ATTACK)
 
         assertEquals(monsterOne, monsterTwo)
         assertEquals(monsterTwo, monsterOne)
@@ -44,8 +60,8 @@ internal class MonsterPrototypeTest {
 
     @Test
     internal fun `Equals method returns false`() {
-        val monsterOne = MonsterPrototype(1, NAME, MAX_HEALTH, MAX_ATTACK)
-        val monsterTwo = MonsterPrototype(2, NAME, MAX_HEALTH, MAX_ATTACK)
+        val monsterOne = MonsterPrototype(1, NAME_ONE, MAX_HEALTH, MAX_ATTACK)
+        val monsterTwo = MonsterPrototype(2, NAME_ONE, MAX_HEALTH, MAX_ATTACK)
 
 
         assertNotEquals(monsterOne, monsterTwo)
@@ -54,22 +70,22 @@ internal class MonsterPrototypeTest {
 
     @Test
     internal fun `Constructor with too high base health throws exception`() = shouldThrowRuntimeException(Executable {
-        MonsterPrototype(ID, NAME, MAX_HEALTH + 1, MAX_ATTACK)
+        MonsterPrototype(ID_ONE, NAME_ONE, MAX_HEALTH + 1, MAX_ATTACK)
     })
 
     @Test
     internal fun `Constructor with too high attack throws exception`() = shouldThrowRuntimeException(Executable {
-        MonsterPrototype(ID, NAME, MAX_HEALTH, MAX_ATTACK + 1)
+        MonsterPrototype(ID_ONE, NAME_ONE, MAX_HEALTH, MAX_ATTACK + 1)
     })
 
     @Test
     internal fun `Constructor with too low attack throws exception`() = shouldThrowRuntimeException(Executable {
-        MonsterPrototype(ID, NAME, MAX_HEALTH, MIN_ATTACK - 1)
+        MonsterPrototype(ID_ONE, NAME_ONE, MAX_HEALTH, MIN_ATTACK - 1)
     })
 
     @Test
     internal fun `Constructor with too low base health throws exception`() = shouldThrowRuntimeException(Executable {
-        MonsterPrototype(ID, NAME, MIN_HEALTH - 1, MIN_ATTACK)
+        MonsterPrototype(ID_ONE, NAME_ONE, MIN_HEALTH - 1, MIN_ATTACK)
     })
 
     @Test
@@ -78,7 +94,7 @@ internal class MonsterPrototypeTest {
         repeat(MIN_NAME_LENGTH - 1) { stringBuilder.append("a") }
         val name = stringBuilder.toString()
 
-        MonsterPrototype(ID, name, MAX_HEALTH, MAX_ATTACK)
+        MonsterPrototype(ID_ONE, name, MAX_HEALTH, MAX_ATTACK)
     })
 
     @Test
@@ -87,25 +103,47 @@ internal class MonsterPrototypeTest {
         repeat(MAX_NAME_LENGTH + 1) { stringBuilder.append("a") }
         val name = stringBuilder.toString()
 
-        MonsterPrototype(ID, name, MAX_HEALTH, MAX_ATTACK)
+        MonsterPrototype(ID_ONE, name, MAX_HEALTH, MAX_ATTACK)
     })
 
     @Test
     internal fun `Constructor with invalid name throws exception`() = shouldThrowRuntimeException(Executable {
-        MonsterPrototype(ID, " 2#_?!<.)", MAX_HEALTH, MAX_ATTACK)
+        MonsterPrototype(ID_ONE, " 2#_?!<.)", MAX_HEALTH, MAX_ATTACK)
     })
 
-    // todo test equals with other CardPrototype classes
+    @Test
+    internal fun `Test equals with SpellPrototype, returns true`() {
+        val monster = MonsterPrototype(ID_ONE, NAME_ONE, MAX_HEALTH, MAX_ATTACK)
+        val spell = SpellPrototype(ID_ONE, NAME_TWO)
+
+        assertTrue(monster.equals(spell))
+    }
+
+    @Test
+    internal fun `Test equals with SpellPrototype, return false`() {
+        val monster = MonsterPrototype(ID_ONE, NAME_ONE, MAX_HEALTH, MAX_ATTACK)
+        val spell = SpellPrototype(ID_TWO, NAME_ONE)
+
+        assertFalse(monster.equals(spell))
+    }
+
+    @Test
+    internal fun `Test equals with another class`() {
+        val monster = MonsterPrototype(ID_ONE, NAME_ONE, MAX_HEALTH, MAX_ATTACK)
+        val string = ""
+
+        assertFalse(monster.equals(string))
+    }
 
     @Test
     internal fun `Test clone`() {
-        val original = MonsterPrototype(ID, NAME, MAX_HEALTH, MAX_ATTACK)
+        val original = MonsterPrototype(ID_ONE, NAME_ONE, MAX_HEALTH, MAX_ATTACK)
         val copy = original.copy()
 
         assertTrue(original == copy)
         assertFalse(original === copy)
-        assertEquals(ID, copy.id)
-        assertEquals(NAME, copy.name)
+        assertEquals(ID_ONE, copy.id)
+        assertEquals(NAME_ONE, copy.name)
         assertEquals(MAX_HEALTH, copy.baseHealth)
         assertEquals(MAX_ATTACK, copy.baseAttack)
         assertEquals(CardType.MONSTER, copy.type)
